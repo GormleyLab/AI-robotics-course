@@ -23,6 +23,7 @@ The arm is being recreated as Python models with the text-to-cad `cad` skill (ca
 - Run Python through cadgen's pinned environment, not the project `.venv`: `uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python ...`, from `CAD/`.
 - Replica first: recreated parts must match the Fusion STEP files (keep each part's Fusion local frame). Don't fix the issues in `design.md` §8 during recreation; fix them later, one per commit.
 - Locked interfaces are listed in `design.md` §5. Changing one is a breaking change and must be called out.
+- Every design change must update `CAD/docs/design.md` in the same commit: the affected part rows, interface table (§5), ratios and link lengths (§1), and issue log (§8, marking issues fixed with the commit that fixed them). If a change makes a snapshot in `CAD/docs/img/` out of date, re-render it.
 - Exploratory scripts and snapshots go in `CAD/tmp/` (git-ignored); reusable checks go in `CAD/checks/`.
 
 ## Cross-file consistency
