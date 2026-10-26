@@ -14,6 +14,16 @@ Students build a multi-axis robotic arm (Arduino + Python, machine vision via Op
 - `Assignments.md` — weekly assignment table (week, due date, topic, resources). Due dates are from the previous offering and need to be re-dated for each new semester.
 - `arduino_motor_control_handout.md` — long-form handout for the Phase 1 motors module, with embedded Arduino C++ sketches and ASCII wiring diagrams.
 - `CAD/` — robotic arm part models as STEP files (belt drive arm, joints 1–2, two-stage 16:1 planetary gearbox). Earlier Fusion 360 `.f3z` versions remain in git history.
+- `CAD/docs/design.md` — design documentation for the Fusion baseline: parts, interfaces, gear and belt data, issue log. `CAD/docs/migration-log.md` tracks the multi-session Fusion → text-to-cad migration; read its "Next session" section before continuing.
+
+## CAD work (text-to-cad plugin)
+
+The arm is being recreated as Python models with the text-to-cad `cad` skill (cadgen + build123d). Load that skill before any CAD work.
+
+- Run Python through cadgen's pinned environment, not the project `.venv`: `uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python ...`, from `CAD/`.
+- Replica first: recreated parts must match the Fusion STEP files (keep each part's Fusion local frame). Don't fix the issues in `design.md` §8 during recreation; fix them later, one per commit.
+- Locked interfaces are listed in `design.md` §5. Changing one is a breaking change and must be called out.
+- Exploratory scripts and snapshots go in `CAD/tmp/` (git-ignored); reusable checks go in `CAD/checks/`.
 
 ## Cross-file consistency
 
