@@ -1,16 +1,19 @@
 # Smart Prosthetics and Robotic Systems
 
 **Course Number:** 14:125:444  
+**Semester:** Spring 2027  
 **Schedule:** Tuesdays, 2–5 PM  
 **Instructor:** Dr. Adam Gormley  
 **Email:** adam.gormley@rutgers.edu  
 **Office:** BME-220
 
+> **Note:** This course will be offered again in Spring 2027 on the same day, time, and location. Course materials are currently being updated in preparation for the upcoming semester, so content in this repository may change.
+
 ---
 
 ## Course Description
 
-Smart Prosthetics and Robotic Systems (formally, Biomechanical Measurements) is a senior-level elective in biomedical engineering that blends artificial intelligence, robotics, and human-centered device design. Students will gain hands-on experience in programming, mechanical design, rapid prototyping, electronics, kinematics, machine vision, and natural language interfaces.
+Smart Prosthetics and Robotic Systems (formerly, Biomechanical Measurements) is a senior-level elective in biomedical engineering that blends artificial intelligence, robotics, and human-centered device design. Students will gain hands-on experience in programming, mechanical design, rapid prototyping, electronics, kinematics, machine vision, and natural language interfaces.
 
 Working in teams, students will design, fabricate, and program a multi-axis robotic arm inspired by prosthetic applications. The robotic arm will be controlled through Python on an Arduino, equipped with cameras for machine vision, and integrated with an AI chatbot capable of interpreting natural language commands such as: *"Place the green boxes in the yellow bin."*
 
