@@ -191,10 +191,10 @@ y = 3.5 / 76.5 and z = 3.5 / 40.5), which form the 73 × 37 link interface.
    driven, then **20T** driver. It turns on two 6×8×10 bushings on a 6×30 dowel pin.
 3. The dual pulley drives `GT2-80 output` (80T), which is keyed by a **21.65 AF
    hex socket** (circumradius 12.5, the same as the coupling shaft) onto two
-   `Pin` hex shafts. It is meant to sit on J3 at (160, 40), but Fusion places it
-   at (165.59, 47.15), 9.08 mm off the axis ([I‑6](#8-observed-issues-and-open-questions)).
+   `Pin` hex shafts. It sits on J3 at (160, 40). Fusion places it at
+   (165.59, 47.15), 9.08 mm off the axis ([I‑6](#8-observed-issues-and-open-questions), fixed in the recreation).
 4. The intended center distance is 85 for both stages, which gives a 274.3 mm
-   open-belt pitch length. As modelled, stage 2 is 90.87 (open belt 285.8 mm).
+   open-belt pitch length. (In Fusion, stage 2 is 90.87, open belt 285.8 mm, I‑6.)
    A 280 mm (140T) loop *(inferred)* would be taken up by the idlers.
 5. Each belt has a `GT2-20 idler` on a 6×30 dowel pin with 5 / 15 mm spacers.
    The dowels sit in **slots in both plates (y 20 ↔ 65)**, so the idler slides to
@@ -202,8 +202,8 @@ y = 3.5 / 76.5 and z = 3.5 / 40.5), which form the 73 × 37 link interface.
    from above. The dowels stop at the plate faces (z 7 / 37), so the slots
    presumably take M5 clamp screws *(inferred)*. At the y = 20 slot end
    (the Fusion position) the stage-1 idler deflects the belt 1.8 mm (274.4 mm
-   loop; 277.7 mm at y = 30). The stage-2 idler misses its belt by 2.0 mm
-   because of the off-axis output pulley.
+   loop; 277.7 mm at y = 30). Since the I‑6 fix, stage 2 has the same layout and the
+   same 1.8 mm deflection (274.4 mm loop). In Fusion its idler misses the belt by 2.0 mm.
 6. The pulley bands are not in line axially ([I‑15](#8-observed-issues-and-open-questions)):
    - stage 1: the motor 20T band (z 15.2–22.2) sits 3 mm above the dual 80T band (12.2–19.2);
    - stage 2: the dual 20T band (22.2–29.2) sits 1 mm below the output 80T band (23.2–30.2).
@@ -214,11 +214,12 @@ y = 3.5 / 76.5 and z = 3.5 / 40.5), which form the 73 × 37 link interface.
    a Ø25 × 10 journal, and a 21.48 AF × 15 hex (circumradius 12.4, 0.17 under
    the sockets).
 2. The Pins enter the Output block and the GT2‑80 output from below (Pin 1) and
-   above (Pin 2, flipped and turned 137.23°). The block is keyed to them: a
+   above (Pin 2, flipped). The block is keyed to them: a
    21.65 AF hex socket (corners on ±Y) runs through both prongs and two
    Ø28.5 × 1 bosses with R1 rounded edges that bear on the 6805 inner races.
-   As modelled, the Pin hexes are 30° (Pin 1) and 17.2° (Pin 2) off the block
-   socket (I‑6).
+   The Pin hexes and the GT2‑80 output socket also have their corners on ±Y, so
+   all three hexes line up. In Fusion, Pin 1 has its corners on ±X (30° off) and
+   Pin 2 is turned 137.23° (17.2° off) (I‑6).
 3. `Output block` (80 × 44 × 90) is a 20 mm distal end plate with a 35 × 28 fork
    that runs back to J3 between the plates. The fork is split by a 10.5 mm slot
    (z 21.7–32.2) for the GT2‑80 output, and joins the end plate with R5 fillets,
@@ -235,7 +236,7 @@ y = 3.5 / 76.5 and z = 3.5 / 40.5), which form the 73 × 37 link interface.
 | `Wall` | 1 | Print | 203.5 × 80 × 30 | U-frame: 7 mm end wall and side rails with half-round R3.5 ends at x = 160; 7 × Ø4.2 vertical insert holes through the full 30 (used from both faces). |
 | `Top` | 1 | Print | 240 × 80 × 8.7 | Ø37 6805 seat. Ø10 × 1.7 dowel boss underneath with a Ø6.1 socket. Idler slots y 20 ↔ 65 (Ø5.3 × 2 from below, then Ø8). 7 × M3 to the Wall (Ø3.3, Ø6 × 3 counterbore from the top). Proximal Ø4.2 × 10 inserts. No motor holes. |
 | `Dual GT2 pulley` | 1 | Print | Ø52.4 × 20 | Flanged GT2 80T (band z 12.2–19.2) + flanged 20T (band 22.2–29.2) on one body, Ø8 bore |
-| `GT2-80 output` | 1 | Print | Ø52.4 × 10 | Flanged GT2 80T, 21.65 AF hex socket; 9.08 mm off J3 as placed (I‑6) |
+| `GT2-80 output` | 1 | Print | Ø52.4 × 10 | Flanged GT2 80T, 21.65 AF hex socket with corners on ±Y, on J3. Fusion: turned 90° and 9.08 mm off J3 (I‑6) |
 | `Pin` | 2 | Print | Ø30 × 27 | Flange / journal / 21.48 AF hex, as above |
 | `Output block` | 1 | Print | 80 × 44 × 90 | J3 output bracket (fork, 21.65 AF socket, bosses) and link interface |
 | `Spacer 5mm` / `Spacer 15mm` | 2 / 2 | Print | Ø10 / Ø6.3 | Idler height spacers |
@@ -264,7 +265,7 @@ Segment 2 (J4) is an identical copy of this segment.
 | IF‑7 | Gearbox output hex | Carrier p2 output ↔ Coupling shaft | 21.65 AF hex in a 21.65 AF socket (circumradius 12.5, line-to-line); Ø25 shaft |
 | IF‑8 | **Link interface** | Coupling shaft, arm proximal end, Output block | 4 × M3 on 73 × 37, arm thickness 44, width 80. The pattern is symmetric; the arm mounts with its Base plate toward the right cheek (§7). The Output block holes are at arm z 3.7 / 40.7, so the next segment sits 0.2 mm above the previous one |
 | IF‑9 | NEMA17 | All three motors | 31 × 31 M3, Ø22 pilot, 5 mm shaft |
-| IF‑10 | J3 hex | Pin ↔ GT2‑80 output ↔ Output block | Pin 21.48 AF (circumradius 12.4) in 21.65 AF sockets (circumradius 12.5); Ø25 journal; 6805 seats at (160, 40) |
+| IF‑10 | J3 hex | Pin ↔ GT2‑80 output ↔ Output block | Pin 21.48 AF (circumradius 12.4) in 21.65 AF sockets (circumradius 12.5); Ø25 journal; 6805 seats at (160, 40). Since the I‑6 fix all three hexes are on J3 with corners on ±Y. Sizes and seats are unchanged; the Pin and pulley hexes turned 90°, which matches the Output block socket |
 | IF‑11 | GT2 geometry | All pulleys | 2 mm pitch; 20T / 80T / 160T; 6 mm belt; 7 mm tooth width |
 
 ---
@@ -297,7 +298,7 @@ During the **replica phase**, every part keeps its Fusion local frame, so that
 `checks/compare_to_fusion.py` can compare like with like. Each subassembly
 keeps its Fusion frame:
 - `Joint 1 and 2`: origin at the box corner; top of `Box bottom` at z = 0; J1 at (75, 75). The joint12 parts are modelled in this frame as placed (`src/joint12/common.py`). The gearbox frame maps into it by `Pos(-17, 75, 70.5) * Rot(0, 0, 90) * Rot(-90, 0, 0)` (`GEARBOX_PLACEMENT`), which is the same for every gearbox part. Fusion places it at z = 70.0 (I‑1); the recreation uses 70.5 since the I‑1 fix.
-- `Belt Drive Arm`: origin at the proximal end + 40, on the Base underside; plates in XY; J3 at (160, 40). The belt_arm parts are modelled in this frame as placed (`src/belt_arm/common.py`); only Pin 2 needs a placement (`PIN_2_PLACEMENT`).
+- `Belt Drive Arm`: origin at the proximal end + 40, on the Base underside; plates in XY; J3 at (160, 40). The belt_arm parts are modelled in this frame as placed (`src/belt_arm/common.py`); only Pin 2 needs a placement (`PIN_2_PLACEMENT`, a flip about X). Since the I‑6 fix, the Pin and GT2‑80 output are their Fusion parts turned 90° about J3 (the output is also moved onto J3); their gate entries in `checks/fusion_map.json` carry the transform back.
 
 The **full-arm assembly** (`src/full_arm/`, Session 6) uses a robot frame:
 - origin on the J1 axis at the top surface of `Box top` (base frame (75, 75, 12));
@@ -323,7 +324,7 @@ the last offering are marked 🔧.
 | I‑3 | Medium 🔧 | **Gear wear and backlash.** m1.5 (transverse) 15° helical PLA gears with 9 mm face width at 16:1 near the output. The helix adds an axial thrust that the carriers and washers must react. There is no clearance or backlash allowance; the planets mesh at nominal center distance. | gear data |
 | I‑4 | Medium 🔧 | **Belt tensioning.** The arm idlers slide in slots with no positive lock, and J1 relies on a friction-locked motor slot. The idler dowels are only clamped between the plates (they stop at the plate faces). | geometry |
 | I‑5 | Medium | The `GT2-20 idler` has a 5 mm bore but sits on a 6 mm dowel pin (86 mm³ overlap). The part actually used is unknown. | interference |
-| I‑6 | Medium | **The J3 output is misplaced in the model.** The `GT2-80 output` is centred at (165.59, 47.15), 9.08 mm off the J3 axis, so the Pins overlap it by 98 and 1812 mm³ and stage 2 runs at a 90.87 center distance instead of 85; its idler then misses the belt by 2.0 mm. The Pin hexes are also turned in their sockets: Pin 1 is 30° off the `Output block` socket (374 mm³) and Pin 2, rotated 137.2°, is 17.2° off (83 mm³). The socket depths are fine (Session 5). The intended design is clearly all three hexes on J3, aligned. Because the pulley is off-axis, turning J3 makes it orbit instead of spin: in the full arm it rubs the Wall from +5° (76 mm³ at +54°). | interference; `checks/inspect/world_faces.py` (Session 5); `checks/joint_clearance.py` (Session 6) |
+| I‑6 | Medium **Fixed** (Session 7, commit "Fix I-6") | **The J3 output is misplaced in the model.** The `GT2-80 output` is centred at (165.59, 47.15), 9.08 mm off the J3 axis, so the Pins overlap it by 98 and 1812 mm³ and stage 2 runs at a 90.87 center distance instead of 85; its idler then misses the belt by 2.0 mm. The Pin hexes are also turned in their sockets: Pin 1 is 30° off the `Output block` socket (374 mm³) and Pin 2, rotated 137.2°, is 17.2° off (83 mm³). The socket depths are fine (Session 5). The intended design is clearly all three hexes on J3, aligned. Because the pulley is off-axis, turning J3 makes it orbit instead of spin: in the full arm it rubs the Wall from +5° (76 mm³ at +54°). **Fix:** the GT2‑80 output is centred on J3, and the Pin and pulley hexes are turned 90° so their corners are on ±Y, like the Output block socket. The block keeps its orientation because it leaves 5 mm fork walls; corners on ±X would leave 3.5 mm behind J3. A 90° turn maps the 80T teeth onto themselves, so both parts stay rigid motions of their Fusion originals, and the gate passes through explicit transforms. Stage 2 is now 85 mm, the same as stage 1. | Before: interference (as above), `checks/joint_clearance.py`. After: all four J3-output overlaps are 0; the stage‑2 idler deflects its belt 1.83 mm (274.4 mm loop); the pulley no longer rubs the Wall (J3/J4 clear at +5° and ±54°) |
 | I‑7 | Low | Planets overlap the ring and sun by 25–65 mm³: they sit at the Fusion tooth phases, which don't mesh. This is cosmetic. The recreated gearbox reproduces it: sun × planet 65.0 mm³ (Fusion 65.0); ring × planet 54 / 52 mm³ (Fusion 36 / 26, from the remaining ring tip-shape difference). | interference |
 | I‑8 | Low | The J1 motor, J1 20T pulley, all belts, all fasteners, segment 2, J4 and the end effector are missing from the CAD. The recreation adds the J1 motor and 20T pulley (Session 4, assumed mid-slot placement), the two arm belt envelopes (Session 5), and segment 2 with J4 (Session 6, full arm). The J1 belt, fasteners and end effector are still missing. | tree |
 | I‑9 | Low | Naming errors: `GT2-120` is 160T; `Pin 6x11mm` is 22 long; `Component1/2/7` wrappers; an empty `Component2`; a `test` product in the arm. | tree |
@@ -334,7 +335,7 @@ the last offering are marked 🔧.
 | I‑14 | Medium | **J1 yaw is limited by the J1 motor** (found once the motor was modelled, Session 4). The hinge floor corners sweep r = 55.7 about J1; the motor frame's near face is 53.85 from the axis at mid-slot, so the hinge hits it. Clear range around 0° (10° steps): ±20° at x = 140, ±40° at x = 150 (blocked at ±50°, clear again from ±60° to ±110°), ±120° at x = 160. Beyond about ±120° the gearbox (ring gear, carriers, covers) hits the motor at every slot position. Assumes the motor square to the box; belt not modelled. | `checks/j1_yaw_clearance.py` |
 | I‑15 | Low | **Arm pulley bands are out of line axially.** Stage 1: the motor 20T band (z 15.2–22.2) is 3 mm above the dual 80T band (12.2–19.2), so a 6 mm belt centred on the 80T band runs 3.5 mm on the motor pulley. Stage 2: the dual 20T band (22.2–29.2) is 1 mm below the output 80T band (23.2–30.2). The motor pulley can slide on its shaft; the dual pulley's split cannot. | Session 5 assembly, belt envelopes |
 | I‑16 | Low 🔧 | **J2 travel is ±63°.** With the arm on the coupling shaft, the segment‑1 motor body (a standard 40 mm NEMA17, as on the built arm; the stand-in matches it) touches the right hinge cheek at ±64°. Centred 30 mm from the link face, it hangs 40 mm below the Base plate. The coupling's rounded block hits the hinge next, at about ±80°. **Accepted:** the instructor rates ±63° as acceptable and not a priority (Session 6). | `checks/joint_clearance.py --joint j2_shoulder` (Session 6) |
-| I‑17 | **High** 🔧 | **J3 and J4 travel is ±54°; target ±90° or more** (instructor, Session 6: limited on the built arm, a design flaw to fix). The Output block fork (35 wide, from 16 behind J3 to the end plate) sweeps into the Wall's distal rail ends (x 160–163.5, the inserts at (160, 3.5) / (160, 76.5)) at ±55°. The overlap reaches 2400 mm³ at ±90°. Travel is currently ±54°, and the Wall is the only obstacle out to about ±100° (apart from the I‑6 pulley rub). Angles between 100° and 120° were not tested; by ±120° the end plate also reaches the Base and Top plates. So clearing the Wall's distal end against the fork (and fixing I‑6) should reach ±90° without changing the plates. | `checks/joint_clearance.py --joint j3_elbow` (Session 6) |
+| I‑17 | **High** 🔧 | **J3 and J4 travel is ±54°; target ±90° or more** (instructor, Session 6: limited on the built arm, a design flaw to fix). The Output block fork (35 wide, from 16 behind J3 to the end plate) sweeps into the Wall's distal rail ends (x 160–163.5, the inserts at (160, 3.5) / (160, 76.5)) at ±55°. The overlap reaches 2400 mm³ at ±90°. Travel is currently ±54°, and the Wall is the only obstacle out to about ±100° (the I‑6 pulley rub is gone since the I‑6 fix: 179 mm³ at ±60°, 2403 at ±90°, 2996 at ±95°, all Output block × Wall). Angles between 100° and 120° were not tested; by ±120° the end plate also reaches the Base and Top plates. So clearing the Wall's distal end against the fork should reach ±90° without changing the plates. | `checks/joint_clearance.py --joint j3_elbow` (Session 6) |
 
 ### Open questions (deferred)
 - Q1: The belt lengths actually bought, for J1 and the arm stages.

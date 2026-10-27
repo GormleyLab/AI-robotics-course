@@ -9,7 +9,8 @@ The fork is split by a 10.5 slot (z 21.7..32.2, to x = 199.175) for the
 GT2-80 output. On J3, a 21.65 AF hex socket (circumradius 12.5, corners on
 ±Y) runs through both prongs and through two Ø28.5 x 1 bosses with R1
 rounded edges that bear on the 6805 inner races (z 7.2 / 37.2). The Pin
-hexes are 30 deg (Pin:1) and 17.2 deg (Pin:2) off this socket (I-6).
+hexes and the GT2-80 output socket line up with it (I-6 fixed; in Fusion
+the Pins are 30 and 17.2 deg off).
 """
 from cadgen import build123d as bd
 from cadgen import step

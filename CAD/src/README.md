@@ -84,8 +84,10 @@ Both vendor 20T files are plain Ø15.23 bands, not toothed (a GT2 20T has OD 12.
 
 Arm frame: the Fusion "Belt Drive Arm" frame as-is (plates in XY, Base
 underside at z = 0, proximal end at x = -40, J3 ‖ Z through (160, 40)).
-Parts are modelled in place; `common.py` holds the shared positions,
-`OUTPUT_PULLEY_XY` (9.08 mm off J3, I-6) and `PIN_2_PLACEMENT`.
+Parts are modelled in place; `common.py` holds the shared positions and
+`PIN_2_PLACEMENT`. Since the I-6 fix the GT2-80 output and the Pin hexes sit
+on J3 in line with the Output block socket; their gate entries carry the
+transform back to the Fusion placement.
 
 | Script | Fusion part | Notes |
 | --- | --- | --- |

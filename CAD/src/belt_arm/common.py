@@ -24,12 +24,10 @@ Z_BASE_TOP = 7.0
 Z_WALL_TOP = 37.0
 Z_TOP_TOP = 44.0
 
-# GT2-80 output centre as placed in Fusion: 9.08 mm off the J3 axis (I-6).
-OUTPUT_PULLEY_XY = (165.593496, 47.152225)
-
-# Pin:2 is the Pin:1 model flipped onto the Top and turned 137.23 deg (I-6).
-PIN_2_PLACEMENT = (bd.Pos(J3_X, J3_Y, 47.4) * bd.Rot(-180, 0, 137.23053694471352)
-                   * bd.Pos(-J3_X, -J3_Y, 2.8))
+# Pin:2 is the Pin:1 model flipped onto the Top. The flip keeps the hex
+# corners on ±Y, in line with the Output block socket. Fusion also turned it
+# 137.23 deg and put the GT2-80 output 9.08 mm off J3 (I-6, fixed).
+PIN_2_PLACEMENT = bd.Pos(J3_X, J3_Y, 47.4) * bd.Rot(-180, 0, 0) * bd.Pos(-J3_X, -J3_Y, 2.8)
 
 # M3 screws from the Base / Top into Ø4.2 inserts through the Wall.
 WALL_SCREW_XY = ((75.0, 76.5), (0.0, 3.5), (75.0, 3.5), (160.0, 76.5), (-36.5, 40.0), (0.0, 76.5), (160.0, 3.5))

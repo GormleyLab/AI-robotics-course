@@ -276,14 +276,56 @@
     "ref": "#o1.23.1",
     "frame": "world",
     "slice_axis": "z",
-    "method": "sliced"
+    "method": "sliced",
+    "transform": [
+      [
+        "pos",
+        -160.0,
+        -40.0,
+        0.0
+      ],
+      [
+        "rot",
+        0.0,
+        0.0,
+        -90.0
+      ],
+      [
+        "pos",
+        165.593496,
+        47.152225,
+        0.0
+      ]
+    ],
+    "note": "I-6 fix: generated part is the Fusion part turned 90 deg about J3 and moved from (165.59, 47.15) onto it; transform undoes it"
   },
   {
     "generated": "STEP/belt_arm/pin.step",
     "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
     "ref": "#o1.20",
     "frame": "world",
-    "slice_axis": "z"
+    "slice_axis": "z",
+    "transform": [
+      [
+        "pos",
+        -160.0,
+        -40.0,
+        0.0
+      ],
+      [
+        "rot",
+        0.0,
+        0.0,
+        -90.0
+      ],
+      [
+        "pos",
+        160.0,
+        40.0,
+        0.0
+      ]
+    ],
+    "note": "I-6 fix: generated part is the Fusion part turned 90 deg about J3; transform undoes it"
   },
   {
     "generated": "STEP/belt_arm/pin.step",
@@ -291,6 +333,24 @@
     "ref": "#o1.21",
     "frame": "world",
     "transform": [
+      [
+        "pos",
+        -160.0,
+        -40.0,
+        0.0
+      ],
+      [
+        "rot",
+        0.0,
+        0.0,
+        -90.0
+      ],
+      [
+        "pos",
+        160.0,
+        40.0,
+        0.0
+      ],
       [
         "pos",
         -160.0,
@@ -310,7 +370,8 @@
         47.4
       ]
     ],
-    "slice_axis": "z"
+    "slice_axis": "z",
+    "note": "I-6 fix: generated part is the Fusion part turned 90 deg about J3 (then Fusion's Pin:2 placement); transform undoes it"
   },
   {
     "generated": "STEP/belt_arm/output_block.step",

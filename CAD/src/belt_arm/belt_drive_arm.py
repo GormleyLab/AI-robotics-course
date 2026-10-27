@@ -1,23 +1,25 @@
 """Belt drive arm segment assembly (J3 elbow), arm frame.
 
 Printed parts are modelled in place; purchased parts use the Fusion
-placements, so I-5 (5 mm idler bores on the 6 mm dowels) and I-6 (GT2-80
-output 9.08 mm off J3, Pin hexes rotated in their sockets) are reproduced.
+placements, so I-5 (5 mm idler bores on the 6 mm dowels) is reproduced.
+I-6 is fixed: the GT2-80 output and both Pin hexes sit on J3, in line with
+the Output block socket.
 
 Belts are not in Fusion (I-8) and are added here as envelopes (not gated):
 the GT2 pitch line over the pitch circles from lib/gt2.py, offset to the
 land (pulley OD) and the belt back, teeth left out, 6 mm wide and centred on each stage's driven
 80T band. An idler is wrapped (on the belt back) only if it reaches the
-strand at its Fusion position, at the y = 20 slot end: the stage-1 idler
-deflects the belt 1.8 mm; the stage-2 idler misses it by 2.0 mm, because
-the output pulley is off-axis (I-6), so that belt is an open loop.
+strand at its Fusion position, at the y = 20 slot end. Both stages are now
+the same 85 mm 20T -> 80T layout, so both idlers deflect their belts 1.8 mm.
+(With Fusion's off-axis output pulley, I-6, the stage-2 idler missed its belt
+by 2.0 mm.)
 """
 from cadgen import build123d as bd
 from cadgen import step
 
 from belt_arm.base import base
 from belt_arm.common import DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y, MOTOR_X, MOTOR_Y, \
-    OUTPUT_PULLEY_XY, PIN_2_PLACEMENT, Z_BASE_TOP
+    PIN_2_PLACEMENT, Z_BASE_TOP
 from belt_arm.dual_gt2_pulley import dual_gt2_pulley
 from belt_arm.gt2_80_output import gt2_80_output
 from belt_arm.output_block import output_block
@@ -53,7 +55,7 @@ def stage_circles(driver_xy, driven_xy, idler_xy):
 
 
 STAGE_1 = stage_circles((MOTOR_X, MOTOR_Y), (DUAL_X, DUAL_Y), (IDLER_XS[0], IDLER_SLOT_Y[0]))
-STAGE_2 = stage_circles((DUAL_X, DUAL_Y), OUTPUT_PULLEY_XY, (IDLER_XS[1], IDLER_SLOT_Y[0]))
+STAGE_2 = stage_circles((DUAL_X, DUAL_Y), (J3_X, J3_Y), (IDLER_XS[1], IDLER_SLOT_Y[0]))
 
 
 def _named(shape, label):
