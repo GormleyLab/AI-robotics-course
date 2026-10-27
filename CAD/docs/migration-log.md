@@ -78,5 +78,5 @@ during recreation.
 1. Recreate in `src/joint12/`: `box_bottom.py`, `box_top.py`, `hinge.py`, `coupling_shaft.py`, `gt2_pulley_160t.py` (the Fusion "GT2-120"; use `lib/gt2.py`, and check its groove against Fusion with a section like the gear checks).
 2. Get features with `checks/inspect/part_features.py "STEP/imported/fusion/Joint 1 and 2.step" REF --to-part 0,0,0`, and tooth phases with `tooth_phase.py`.
 3. Pick one clean frame for the base, e.g. the Fusion "Joint 1 and 2" frame as-is (axes already clean: J1 at (75, 75), J2 ‖ X). Place the gearbox with `TO_FUSION` composed with the gearbox's placement in that file. The gearbox axis is at z = 70.0 and the hinge at 70.5 (I‑1): reproduce it.
-4. Add the J1 NEMA17 + 20T pulley under the box top slot at mid-travel (x = 150, y = 75). They aren't in Fusion, so they're not gated; record the placement assumption.
+4. Add the J1 NEMA17 on top of the box top, shaft down through the slot at mid-travel (x = 150, y = 75), with the 20T pulley on the shaft level with the 160T teeth (z ≈ −11.5…−4.5) (design.md §2). They aren't in Fusion, so they're not gated; record the placement assumption.
 5. Assembly `src/joint12/joint_1_and_2.py`; gate all parts with `frame: world` against `Joint 1 and 2.step`; run the interference check; reproduce I‑1/I‑2/I‑10/I‑12.
