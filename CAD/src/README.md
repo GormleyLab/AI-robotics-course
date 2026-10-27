@@ -7,7 +7,7 @@ PY="uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python"
 PYTHONPATH=src $PY src/purchased/nema17.py
 ```
 
-Unchanged models report `current`. Assemblies (Sessions 3–6) build their children.
+Unchanged models report `current`. Committed STEPs use the nominal `FUSION` fit profile; to print, see [Printing the parts](../README.md#printing-the-parts). Assemblies (Sessions 3–6) build their children.
 
 ## Shared library (`lib/`, not entrypoints)
 

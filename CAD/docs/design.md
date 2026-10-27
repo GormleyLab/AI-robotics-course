@@ -285,7 +285,9 @@ Segment 2 (J4) is an identical copy of this segment.
 
 ---
 
-## 6. Fastener and print conventions (as found)
+## 6. Fasteners and print fits
+
+The hole table is the convention as found in Fusion; Print fits below is the recreation's allowance system.
 
 | Hole | Meaning *(inferred)* |
 |---|---|
