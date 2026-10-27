@@ -1,7 +1,13 @@
 """Two-stage 16:1 planetary gearbox assembly (joint 2), gearbox frame.
 
-Placements reproduce the Fusion gearbox, including the planets' tooth
-phases, so the Fusion meshing overlaps (issue I-7) are reproduced too.
+Placements reproduce the Fusion gearbox, except the rotating parts' tooth
+phases (I-7 fixed): Fusion's planets did not mesh (25-65 mm^3 overlaps).
+The output hex can only turn in 60 deg steps (0 mod the 24 deg tooth pitch),
+so the stage-1 carrier (with the stage-2 sun on it) turns to mesh stage 2,
+and the input shaft turns to mesh stage 1. Mesh condition for 15/15/45, with
+every phase taken at one z (the helices keep it along z): planet tooth phase
+3*ring - 2*a - 12 and sun 4*a - 3*ring + 204 (mod 24 deg), for a planet at
+angle a and a ring tooth at ``ring`` (derived in design.md I-7).
 ``gearbox.common.TO_FUSION`` maps this frame onto the Fusion gearbox frame.
 """
 from cadgen import build123d as bd
@@ -27,13 +33,15 @@ from purchased.planet_pin_6x22 import planet_pin_6x22
 from purchased.washer_6 import washer_6
 
 R = params.PLANET_CENTRE_R
+STAGE1_TURN = 6.2947      # stage-1 carrier and its stage-2 sun, from the Fusion pose (I-7)
+INPUT_TURN = 9.1834       # input shaft (stage-1 sun), from the Fusion pose (I-7)
 # Per stage: planet angles about the axis, planet z range bottom, tooth phase
-# at the planet's bottom face (absolute, measured from Fusion), pin bottom,
-# bushing bottom and the two washer bottoms.
+# at the planet's bottom face (absolute; meshing, I-7 fixed: Fusion 4.830 and
+# 3.530), pin bottom, bushing bottom and the two washer bottoms.
 STAGES = {
-    1: dict(angles=(26.41, 146.41, -93.59), planet_z=-10.2, phase=4.830,
+    1: dict(angles=tuple(a + STAGE1_TURN for a in (26.41, 146.41, -93.59)), planet_z=-10.2, phase=21.0469,
             pin_z=-17.0, bushing_z=-10.7, washer_z=(-12.0, -0.3)),
-    2: dict(angles=(43.46, 163.46, -76.54), planet_z=-34.2, phase=3.530,
+    2: dict(angles=(43.46, 163.46, -76.54), planet_z=-34.2, phase=22.8541,
             pin_z=-41.0, bushing_z=-34.7, washer_z=(-36.0, -24.3)),
 }
 MOTOR_FACE_Z = 24.0
@@ -51,9 +59,9 @@ def planetary_gearbox():
         _named(back_cover(), "back_cover"),
         _named(front_cover(), "front_cover"),
         _named(nema17_mount(), "nema17_mount"),
-        _named(input_shaft(), "input_shaft"),
-        _named(carrier_plate(), "carrier_plate:stage1"),
-        _named(carrier_stage1_output(), "carrier_stage1_output"),
+        _named(bd.Rot(0, 0, INPUT_TURN) * input_shaft(), "input_shaft"),
+        _named(bd.Rot(0, 0, STAGE1_TURN) * carrier_plate(), "carrier_plate:stage1"),
+        _named(bd.Rot(0, 0, STAGE1_TURN) * carrier_stage1_output(), "carrier_stage1_output"),
         _named(STAGE2_PLACEMENT * carrier_plate(), "carrier_plate:stage2"),
         _named(carrier_stage2_output(), "carrier_stage2_output"),
         _named(bd.Pos(0, 0, 7.0) * bearing_6803(), "bearing_6803:input"),

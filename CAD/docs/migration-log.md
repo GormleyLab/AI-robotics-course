@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑15, I‑17 done; I‑4 J1, I‑10, I‑16 accepted) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑15, I‑17 done; I‑4 J1, I‑10, I‑16 accepted) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -216,9 +216,10 @@ during recreation.
 - Still open under I‑4: a jack screw for the J1 motor slot in Box top.
 - **I‑4 (J1) accepted** (commit "Close I-4 (J1)"; instructor's choice, docs only). A push screw must sit between the motor and J1, which the hinge floor sweeps (r 55.7, underside z 15, 3 mm above Box top). A pull screw needs a new printed sled (breaking IF‑3, travel x 140–152). An idler on the slack strand takes up only about 2 mm of loop over 8 mm of travel (`tmp/i4_j1_belt.py`). The tensioning procedure is in design.md §2 Load path item 2.
 - Finding: `checks/j1_yaw_clearance.py --slot-x 155,158,159,160` clears ±120° at every one of them. So a 366–372 mm J1 belt (motor at x ≈ 155.7–159.2) gives ±120° instead of the mid-slot ±40°. Recorded in §1, §2, the belt row and I‑14 (still open). `J1_LIMITS` stays (−40, 40) because the model's motor is at mid-slot.
+- **I‑7 fixed** (commit "Fix I-7"; assembly only, no printed part or gate change). Done before I‑3 so that backlash can be checked from a meshing pose. Mesh condition (15/15/45, phases at one z): planet 3·ring − 2a − 12, sun 4a − 3·ring + 204 (mod 24°), checked on 2D sections (`tmp/i7_phase.py`). The output hex fixes stage 2's carrier (60° steps are 0 mod 24°), so the stage‑1 carrier turns +6.2947° and the input shaft +9.1834°; planet phases are 21.0469° / 22.8541°. Interference: the 12 gear pairs (3.4–65.0 mm³) went to none above 0.001 mm³; input shaft × stand-in NEMA17 9.8 mm³ is unchanged. Rebuilt planetary_gearbox, joint_1_and_2 and robot_arm; the part STEPs' float-noise rewrites were restored. No snapshot shows the planet phases (`gearbox_exploded.png` is a viewer view), so none was re-rendered.
 
 ### Next steps (continue Session 7 or start Session 8)
-1. Fix order: I‑1, I‑2, I‑5, I‑6, I‑15 and I‑17 done, I‑4 done for the arm (J1 accepted); I‑10 and I‑16 accepted. Next: pick the next open §8 issue (I‑14 may be settled by the J1 belt choice: ±120° at x ≥ 155).
+1. Fix order: I‑1, I‑2, I‑5, I‑6, I‑7, I‑15 and I‑17 done, I‑4 done for the arm (J1 accepted); I‑10 and I‑16 accepted. Next: I‑3 (gear backlash), from the meshing pose. I‑14 may be settled by the J1 belt choice (±120° at x ≥ 155).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
