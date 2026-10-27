@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑5, I‑6, I‑15, I‑17 done; I‑10, I‑16 accepted) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑15, I‑17 done; I‑4 J1, I‑10, I‑16 accepted) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -214,9 +214,11 @@ during recreation.
   - **J3/J4 negative travel is now −94°**: the idler‑2 screw head meets the Output block end plate at −95° at slack (−97° at a 280 loop, −105° at y 40). +103° is unchanged. `J3_LIMITS` / `J4_LIMITS` are (−94, 103), verified clear at −94° and hit at −95°. This is still past the ±90° target. A pull screw from y = 80 would move the conflict to +103°, and the head cannot be recessed with a 20 mm stroke in a 7 mm rail.
 - Re-rendered `docs/img/belt_arm_iso.png` (`--display parts --camera iso`). `belt_arm_internals.png` was not re-rendered: its top-hidden view was made in the viewer, and the screws are outside the plates it shows.
 - Still open under I‑4: a jack screw for the J1 motor slot in Box top.
+- **I‑4 (J1) accepted** (commit "Close I-4 (J1)"; instructor's choice, docs only). A push screw must sit between the motor and J1, which the hinge floor sweeps (r 55.7, underside z 15, 3 mm above Box top). A pull screw needs a new printed sled (breaking IF‑3, travel x 140–152). An idler on the slack strand takes up only about 2 mm of loop over 8 mm of travel (`tmp/i4_j1_belt.py`). The tensioning procedure is in design.md §2 Load path item 2.
+- Finding: `checks/j1_yaw_clearance.py --slot-x 155,158,159,160` clears ±120° at every one of them. So a 366–372 mm J1 belt (motor at x ≈ 155.7–159.2) gives ±120° instead of the mid-slot ±40°. Recorded in §1, §2, the belt row and I‑14 (still open). `J1_LIMITS` stays (−40, 40) because the model's motor is at mid-slot.
 
 ### Next steps (continue Session 7 or start Session 8)
-1. Fix order: I‑1, I‑2, I‑5, I‑6, I‑15 and I‑17 done, I‑4 done for the arm; I‑10 and I‑16 accepted. Next: the I‑4 J1 motor jack screw (Box top slot, x 140–160).
+1. Fix order: I‑1, I‑2, I‑5, I‑6, I‑15 and I‑17 done, I‑4 done for the arm (J1 accepted); I‑10 and I‑16 accepted. Next: pick the next open §8 issue (I‑14 may be settled by the J1 belt choice: ±120° at x ≥ 155).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
