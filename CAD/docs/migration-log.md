@@ -203,8 +203,20 @@ during recreation.
 - Checks: idler × axle went from 86.4 mm³ to 0 on both idlers. New: nut × Top 9.8 mm³ on both, because the Top slot's R4 end stops the nut 0.62 mm short of the y = 20 end (corners at 4.62), and the slot is line-to-line with the nut's flats. Both are logged under I‑4, whose jack-screw rework touches these slots.
 - I‑4 plan agreed with the instructor: an M3 jack screw in a heat-set insert in the y = 0 Wall rail at each idler, pushing toward +y (compression only, turned from outside), then tighten the M5. J1 motor next, in its own commit.
 
+- **I‑4 (arm) fixed** (commit "Fix I-4 (arm)"). An M3 × 35 ISO 4762 jack screw (step.parts `iso4762_socket_head_cap_screw_m3x35`, `purchased/socket_head_m3x35.py`) sits in a Ø4.2 insert through the y = 0 Wall rail at each idler. It pushes the 15 mm spacer at mid-height (idler 1 at z 29.5, idler 2 at z 14.5). Constants are in `belt_arm/common.py` (`JACK_SCREW_XZ`, `ycyl`).
+  - Loop length against idler y: 274.4 at 20, 277.7 at 30, 280.3 at 34, 285.6 at 40. A 280 loop is at about y 33.8; the stroke reaches y 40.
+  - The model shows the screws backed off to slack (seat y −20).
+  - The Top nut slots run 1 mm further at each end (y 19 ↔ 66), so nut × Top went from 9.8 mm³ to 0. The slot width stays 8 (line-to-line, I‑11).
+- Gate: the Wall and Top departures drifted (13.111 → 13.312 %, 0.412 → 0.550 %), and the gate caught it. Both are re-recorded as `"I-17, I-4"`. All belt_arm entries pass or depart as recorded.
+- Checks:
+  - jack strokes y 0 → 35 are clear;
+  - J2 is unchanged;
+  - **J3/J4 negative travel is now −94°**: the idler‑2 screw head meets the Output block end plate at −95° at slack (−97° at a 280 loop, −105° at y 40). +103° is unchanged. `J3_LIMITS` / `J4_LIMITS` are (−94, 103), verified clear at −94° and hit at −95°. This is still past the ±90° target. A pull screw from y = 80 would move the conflict to +103°, and the head cannot be recessed with a 20 mm stroke in a 7 mm rail.
+- Re-rendered `docs/img/belt_arm_iso.png` (`--display parts --camera iso`). `belt_arm_internals.png` was not re-rendered: its top-hidden view was made in the viewer, and the screws are outside the plates it shows.
+- Still open under I‑4: a jack screw for the J1 motor slot in Box top.
+
 ### Next steps (continue Session 7 or start Session 8)
-1. Fix order: I‑1, I‑2, I‑5, I‑6, I‑15 and I‑17 done; I‑10 and I‑16 accepted. Next: I‑4, the arm idler jack screws (plan in the I‑5 entry), then the J1 motor jack screw.
+1. Fix order: I‑1, I‑2, I‑5, I‑6, I‑15 and I‑17 done, I‑4 done for the arm; I‑10 and I‑16 accepted. Next: the I‑4 J1 motor jack screw (Box top slot, x 140–160).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.

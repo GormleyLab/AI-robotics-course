@@ -3,7 +3,11 @@
 7 mm plate z 37..44 with the R40 distal end. Ø37 6805 seat through at
 J3. Ø10 x 1.7 boss underneath at the dual pulley with a Ø6.1 dowel socket
 (floor at the plate underside). Idler slots y 20..65 at both idler x:
-Ø5.3 x 2 from below, Ø8 above. 7 x M3 to the Wall (Ø3.3, Ø6 x 3
+Ø5.3 x 2 from below, then an 8 mm nut slot (end centres y 19..66) above:
+the M5 nut (8 AF) slides in it flats-first. The nut slot runs 1 mm past the
+Ø5.3 slot at each end, so the nut's corners (4.62 from its centre) clear the
+R4 ends with the screw at either end (I-4 fix; Fusion: y 20..65, nut
+0.62 mm short). 7 x M3 to the Wall (Ø3.3, Ø6 x 3
 counterbore from the top) and two Ø4.2 x 10 proximal inserts at z = 40.5.
 No motor holes.
 """
@@ -16,7 +20,8 @@ from lib import params
 
 BOSS_BOTTOM = 35.3
 IDLER_SLOT_W, IDLER_SLOT_Z = 5.3, 39.0
-IDLER_CBORE_W = 8.0
+IDLER_CBORE_W = 8.0                # M5 nut 8 AF, line-to-line (fit allowance: I-11)
+IDLER_NUT_SLOT_Y = (IDLER_SLOT_Y[0] - 1.0, IDLER_SLOT_Y[1] + 1.0)   # I-4 fixed: Fusion = IDLER_SLOT_Y
 WALL_CBORE_Z = 41.0
 INSERT_Z = 40.5
 
@@ -28,7 +33,7 @@ def top_body():
     body -= zcyl(params.BEARING_6805_SEAT_D, J3_X, J3_Y, Z_WALL_TOP, Z_TOP_TOP)
     for x in IDLER_XS:
         body -= yslot(x, *IDLER_SLOT_Y, IDLER_SLOT_W, Z_WALL_TOP, IDLER_SLOT_Z)
-        body -= yslot(x, *IDLER_SLOT_Y, IDLER_CBORE_W, IDLER_SLOT_Z, Z_TOP_TOP)
+        body -= yslot(x, *IDLER_NUT_SLOT_Y, IDLER_CBORE_W, IDLER_SLOT_Z, Z_TOP_TOP)
     for x, y in WALL_SCREW_XY:
         body -= zcyl(M3_CLEAR, x, y, Z_WALL_TOP, WALL_CBORE_Z)
         body -= zcyl(M3_CBORE, x, y, WALL_CBORE_Z, Z_TOP_TOP)

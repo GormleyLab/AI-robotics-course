@@ -37,6 +37,7 @@ Frame: axis +Z, end face (motor: mounting face) at z = 0.
 | `dowel_pin_6x30.py` | Stand-in | Dual-pulley axle (×1 per segment; the idler dowels became M5 screws, I-5) |
 | `button_head_m5x40.py` | step.parts `button_head_screw_m5_l0040_simple`, flipped so the shank runs +Z from the head seat | Idler axles (×2 per segment) |
 | `hex_nut_m5.py` | step.parts `iso4032_hex_nut_m5` | Idler axle nuts (×2 per segment) |
+| `socket_head_m3x35.py` | step.parts `iso4762_socket_head_cap_screw_m3x35`, flipped so the shank runs +Z from the head seat | Idler jack screws (×2 per segment, I-4) |
 | `planet_pin_6x22.py` | Stand-in (Fusion "Pin 6x11mm") | Planets (×6) |
 | `bushing_6x8x10.py` | Stand-in | Planets (×6), dual pulley (×2 per segment) |
 | `washer_6.py` | Stand-in 6.2×11.8×1.3 | Planets (×12) |
@@ -94,8 +95,8 @@ transform back to the Fusion placement.
 | Script | Fusion part | Notes |
 | --- | --- | --- |
 | `base.py` | Base | Motor pilot, J3 6805 seat, dowel boss, idler slots |
-| `wall.py` | Wall | U-frame, 7 insert holes; rails end at `RAIL_END_X` = 130 (Fusion 160, I-17) |
-| `top.py` | Top | |
+| `wall.py` | Wall | U-frame, 7 insert holes; rails end at `RAIL_END_X` = 130 (Fusion 160, I-17); 2 jack-screw inserts in the y = 0 rail (I-4) |
+| `top.py` | Top | Idler nut slots 1 mm longer at each end (I-4) |
 | `dual_gt2_pulley.py` | Dual GT2 pulley | 80T + 20T flanged, `lib/gt2.flanged_pulley`. I-15 departure: bands moved up 1.3 / 1.0 on a Ø12 hub |
 | `gt2_80_output.py` | GT2-80 output | 21.65 AF socket; gated with `"method": "sliced"` (the 3D boolean returns a wrong result) |
 | `pin.py` | Pin (×2) | Modelled as Pin:1; Pin:2 at `PIN_2_PLACEMENT` |

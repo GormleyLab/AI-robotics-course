@@ -4,6 +4,8 @@ Printed parts are modelled in place; purchased parts use the Fusion
 placements. I-5 is fixed: the idler axles are M5 x 40 button head screws
 (head in the Base's Ø10 slot, seat at z 3) with an M5 nut in the Top's 8 mm
 slot (z 39..43), as built; Fusion had 6 x 30 dowels in the 5 mm idler bores.
+I-4 is fixed: an M3 x 35 jack screw through the y = 0 Wall rail pushes each
+idler's 15 mm spacer to set belt tension, shown backed off to the slack end.
 I-6 is fixed: the GT2-80 output and both Pin hexes sit on J3, in line with
 the Output block socket. I-15 is fixed: every band on a belt is in line with
 it (the motor 20T slides down its shaft; the dual pulley changed).
@@ -21,8 +23,8 @@ from cadgen import build123d as bd
 from cadgen import step
 
 from belt_arm.base import base
-from belt_arm.common import DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y, MOTOR_X, MOTOR_Y, \
-    PIN_2_PLACEMENT, Z_BASE_TOP
+from belt_arm.common import DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y, JACK_SCREW_LEN, JACK_SCREW_XZ, \
+    MOTOR_X, MOTOR_Y, PIN_2_PLACEMENT, SPACER_R, Z_BASE_TOP
 from belt_arm.dual_gt2_pulley import dual_gt2_pulley
 from belt_arm.gt2_80_output import gt2_80_output
 from belt_arm.output_block import output_block
@@ -40,6 +42,7 @@ from purchased.gt2_idler_20t import gt2_idler_20t
 from purchased.gt2_pulley_20t import gt2_pulley_20t
 from purchased.hex_nut_m5 import hex_nut_m5
 from purchased.nema17 import nema17
+from purchased.socket_head_m3x35 import socket_head_m3x35
 
 # Belt planes (I-15 fixed): stage 1 centred at z 17.0 on the idler-1 band, stage 2 at
 # 26.7 on the GT2-80 output band (idler 2 is 0.3 high, inside the output's 0.5 slot play).
@@ -50,6 +53,9 @@ BELT_Z = (14.0, 23.7)                  # belt bottoms: centred on the 80T bands 
 BUSHING_Z = (10.7, 21.7)               # bushing bottoms in the dual pulley bore 10.7..31.7 (Fusion 10.7, 20.7)
 IDLER_SCREW_Z = 3.0                    # button head seat: top of the Base's Ø10 x 3 slot (I-5)
 IDLER_NUT_Z = 39.0                     # nut seat: floor of the Top's 8 mm slot (I-5)
+# Jack screws (I-4) touch the 15 mm spacers with the idlers at the slack end (y = 20):
+# head seat 20 mm out from the rail. A 280 mm loop needs y ~33.8; the screw reaches y 40.
+JACK_SCREW_SEAT_Y = IDLER_SLOT_Y[0] - SPACER_R - JACK_SCREW_LEN
 
 R_PITCH_20 = gt2.pitch_diameter(params.GT2_TEETH_MOTOR) / 2
 R_PITCH_80 = gt2.pitch_diameter(params.GT2_TEETH_ARM_DRIVEN) / 2
@@ -99,6 +105,8 @@ def segment_parts():
         _named(bd.Pos(*idler_2, IDLER_NUT_Z) * hex_nut_m5(), "hex_nut_m5:idler_2"),
         _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[0]) * bushing_6x8x10(), "bushing:lower"),
         _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[1]) * bushing_6x8x10(), "bushing:upper"),
+        *(_named(bd.Pos(x, JACK_SCREW_SEAT_Y, z) * bd.Rot(-90, 0, 0) * socket_head_m3x35(),
+                 f"socket_head_m3x35:jack_{i}") for i, (x, z) in enumerate(JACK_SCREW_XZ, 1)),
         _named(bd.Pos(*idler_1, IDLER_Z[0]) * gt2_idler_20t(), "gt2_idler_20t:1"),
         _named(bd.Pos(*idler_2, IDLER_Z[1]) * gt2_idler_20t(), "gt2_idler_20t:2"),
         _named(bd.Pos(J3_X, J3_Y, 0.2) * bearing_6805(), "bearing_6805:base"),

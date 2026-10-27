@@ -38,6 +38,14 @@ RAIL_END_X = 130.0
 # distal ones sit at the rail ends (Fusion: x = 160, I-17).
 WALL_SCREW_XY = ((75.0, 76.5), (0.0, 3.5), (75.0, 3.5), (RAIL_END_X, 76.5), (-36.5, 40.0), (0.0, 76.5),
                  (RAIL_END_X, 3.5))
+# Idler jack screws (I-4): an M3 x 35 in a Ø4.2 heat-set insert through the y = 0
+# Wall rail at each idler, pushing the idler's 15 mm spacer (R5) toward +y. The
+# belt pushes the idler back toward -y, so the screw works in compression only.
+# (x, z) per idler: mid-height of its 15 mm spacer (z 22..37 / 7..22).
+JACK_SCREW_XZ = ((IDLER_XS[0], 29.5), (IDLER_XS[1], 14.5))
+JACK_SCREW_LEN = 35.0
+SPACER_R = 5.0
+
 # Ø4.2 insert holes in the proximal end faces of Base and Top (IF-8).
 PROXIMAL_INSERT_Y = (3.5, 76.5)
 PROXIMAL_INSERT_DEPTH = 10.0
@@ -52,6 +60,12 @@ DOWEL_BOSS_D = 10.0
 def plate(z0: float, z1: float) -> bd.Part:
     """Arm outline (x -40..160 with the R40 end about J3), z0..z1."""
     return box(X_PROXIMAL, J3_X, 0, params.ARM_WIDTH, z0, z1) + zcyl(2 * END_R, J3_X, J3_Y, z0, z1)
+
+
+def ycyl(d: float, x: float, z: float, y0: float, y1: float) -> bd.Part:
+    """Cylinder of diameter d along Y through (x, z) from y0 to y1."""
+    return bd.Pos(x, y0, z) * bd.Rot(-90, 0, 0) * bd.Cylinder(
+        d / 2, y1 - y0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
 
 
 def yslot(x: float, y0: float, y1: float, width: float, z0: float, z1: float) -> bd.Part:

@@ -61,10 +61,12 @@ UP = (0.0, 0.0, 1.0)
 PITCH = (0.0, 1.0, 0.0)
 
 # Joint limits (deg), from checks/joint_clearance.py (I-14, I-16; J3/J4 after the I-17 fix).
+# J3/J4 negative side: the Output block meets the idler-2 jack screw head at -95 deg
+# with the screw backed out to slack (-97 at a 280 mm loop), I-4; +103 is the Wall.
 J1_LIMITS = (-40, 40)
 J2_LIMITS = (-63, 63)
-J3_LIMITS = (-103, 103)
-J4_LIMITS = (-103, 103)
+J3_LIMITS = (-94, 103)
+J4_LIMITS = (-94, 103)
 
 
 def placement(pair):

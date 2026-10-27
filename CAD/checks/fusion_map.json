@@ -270,11 +270,11 @@
     "frame": "world",
     "slice_axis": "z",
     "departure": {
-      "issue": "I-17",
-      "why": "side rails end at x = 130 (half-round centres), not 160, to clear the Output block fork; the two distal insert holes move with them",
+      "issue": "I-17, I-4",
+      "why": "I-17: side rails end at x = 130 (half-round centres), not 160, to clear the Output block fork; the two distal insert holes move with them. I-4: two horizontal Ø4.2 jack-screw insert holes through the y = 0 rail at the idlers",
       "bbox": 30.0,
-      "vol_pct": 13.111,
-      "symdiff_pct": 13.111
+      "vol_pct": 13.312,
+      "symdiff_pct": 13.312
     }
   },
   {
@@ -284,11 +284,11 @@
     "frame": "world",
     "slice_axis": "z",
     "departure": {
-      "issue": "I-17",
-      "why": "the two distal Wall screws (clearance + counterbore) move from x = 160 to 130 with the shortened Wall rails",
+      "issue": "I-17, I-4",
+      "why": "I-17: the two distal Wall screws (clearance + counterbore) move from x = 160 to 130 with the shortened Wall rails. I-4: the 8 mm idler nut slots run 1 mm further at each end (centres y 19..66)",
       "bbox": 0.0,
-      "vol_pct": 0.0,
-      "symdiff_pct": 0.412
+      "vol_pct": 0.138,
+      "symdiff_pct": 0.55
     }
   },
   {
