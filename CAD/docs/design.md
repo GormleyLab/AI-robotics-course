@@ -41,11 +41,30 @@ The kinematic chain is: base → J1 hinge → J2 coupling shaft → segment 1 �
 J3 output block → segment 2 → J4 output block → end effector. J2, J3 and J4 are
 parallel, so the arm is a planar 3-link arm that yaws on J1.
 
-**Link lengths** *(inferred from interface positions)*:
+**Link lengths** (measured on the assembled full arm, `src/full_arm/`, Session 6):
+- Box top surface → J2 (hinge axis): 58.5 (the gearbox axis is 58.0, I‑1)
 - J2 axis → segment‑1 mounting face: 30.0
 - J2 → J3: 230.0
-- J3 → J4: 274.2
-- J4 → end-effector mounting face: 74.2
+- J3 → J4: 274.175 (Output block face 74.175 from J3, plus the 200 from segment 2's proximal face to its J3)
+- J4 → end-effector mounting face: 74.175
+- End-effector face at zero: 636.85 above the box top
+
+**Joints in the robot frame** ([§7](#7-coordinate-frames-for-the-rewrite); zero = arm vertical). These are
+the travel limits measured with `checks/joint_clearance.py`, before any contact. They are
+declared as the kinematic limits of `STEP/full_arm/robot_arm.step`:
+
+| Joint | Axis origin | Direction | Clear travel | First contact |
+|---|---|---|---|---|
+| J1 waist | (0, 0, 0) | +Z | ±40° (motor at mid-slot) | Hinge × J1 motor ([I‑14](#8-observed-issues-and-open-questions)) |
+| J2 shoulder | (0, 0, 58.5) | +Y | ±63° | Segment‑1 motor × right hinge cheek ([I‑16](#8-observed-issues-and-open-questions)) |
+| J3 elbow | (0, −21.8, 288.5) | +Y | ±54° | Output block fork × Wall ([I‑17](#8-observed-issues-and-open-questions)) |
+| J4 wrist | (0, −21.6, 562.675) | +Y | ±54° | Same as J3, on segment 2 |
+
+A positive J2–J4 angle tips the arm toward +X. The segments' mid-planes are 0.2 mm
+(segment 1) and 0.4 mm (segment 2) off J1 in +Y, from the coupling block (centred at
+x = 74.8 in the base frame, not 75) and the Output block's 0.2 mm step.
+
+![Full arm, zero pose](img/robot_arm_zero.png) ![Full arm, "pick" pose](img/robot_arm_pick.png)
 
 **Universal M3 link interface.** Every link-to-link joint uses the same bolted
 pattern: 4 × M3 on a **73 × 37 mm** rectangle. It appears on:
@@ -243,7 +262,7 @@ Segment 2 (J4) is an identical copy of this segment.
 | IF‑5 | Gearbox ↔ hinge | Front cover ↔ hinge left cheek | 6 × M3 on r = 39.25 (5 present in the hinge) |
 | IF‑6 | Gearbox internal | Ring, covers, carriers | Transverse m1.5, 20°, 15° helix, 15/15/45T, planet radius 22.5, face width 9; ring Ø85 |
 | IF‑7 | Gearbox output hex | Carrier p2 output ↔ Coupling shaft | 21.65 AF hex in a 21.65 AF socket (circumradius 12.5, line-to-line); Ø25 shaft |
-| IF‑8 | **Link interface** | Coupling shaft, arm proximal end, Output block | 4 × M3 on 73 × 37, arm thickness 44, width 80 |
+| IF‑8 | **Link interface** | Coupling shaft, arm proximal end, Output block | 4 × M3 on 73 × 37, arm thickness 44, width 80. The pattern is symmetric; the arm mounts with its Base plate toward the right cheek (§7). The Output block holes are at arm z 3.7 / 40.7, so the next segment sits 0.2 mm above the previous one |
 | IF‑9 | NEMA17 | All three motors | 31 × 31 M3, Ø22 pilot, 5 mm shaft |
 | IF‑10 | J3 hex | Pin ↔ GT2‑80 output ↔ Output block | Pin 21.48 AF (circumradius 12.4) in 21.65 AF sockets (circumradius 12.5); Ø25 journal; 6805 seats at (160, 40) |
 | IF‑11 | GT2 geometry | All pulleys | 2 mm pitch; 20T / 80T / 160T; 6 mm belt; 7 mm tooth width |
@@ -280,10 +299,15 @@ keeps its Fusion frame:
 - `Joint 1 and 2`: origin at the box corner; top of `Box bottom` at z = 0; J1 at (75, 75). The joint12 parts are modelled in this frame as placed (`src/joint12/common.py`). The gearbox frame maps into it by `Pos(-17, 75, 70) * Rot(0, 0, 90) * Rot(-90, 0, 0)` (`GEARBOX_PLACEMENT`), which is the same for every gearbox part.
 - `Belt Drive Arm`: origin at the proximal end + 40, on the Base underside; plates in XY; J3 at (160, 40). The belt_arm parts are modelled in this frame as placed (`src/belt_arm/common.py`); only Pin 2 needs a placement (`PIN_2_PLACEMENT`).
 
-The **full-arm assembly** (Session 6) uses a robot frame:
-- origin on the J1 axis at the top surface of `Box top`;
-- +Z up; +X along the arm at J1 = 0 *(direction to confirm in Session 6)*;
+The **full-arm assembly** (`src/full_arm/`, Session 6) uses a robot frame:
+- origin on the J1 axis at the top surface of `Box top` (base frame (75, 75, 12));
+- +Z up; +X along the arm's reach at J1 = 0, which is base-frame +Y; +Y toward the gearbox (base-frame −X). J2–J4 point along +Y, so positive angles tip the arm toward +X. The base frame has no front, so this choice is a convention;
 - joint zero is the Fusion pose (arm vertical).
+
+Placements (`src/full_arm/common.py`):
+- base → robot: `p = (y − 75, 75 − x, z − 12)`;
+- segment 1 → base: `p = (96.8 − z, 35 + y, 140.5 + x)`. The arm's proximal face goes on the coupling top, arm +X up, and its Base plate (arm z = 0) faces base +X (the right cheek). The mirror mounting, Base plate toward the gearbox, puts the segment motor into the ring gear, front cover and hinge (2150 mm³ at J2 = 0), so it cannot be the built one;
+- segment 2 → segment 1: `p = (x + 274.175, y, z + 0.2)`.
 
 ---
 
@@ -299,9 +323,9 @@ the last offering are marked 🔧.
 | I‑3 | Medium 🔧 | **Gear wear and backlash.** m1.5 (transverse) 15° helical PLA gears with 9 mm face width at 16:1 near the output. The helix adds an axial thrust that the carriers and washers must react. There is no clearance or backlash allowance; the planets mesh at nominal center distance. | gear data |
 | I‑4 | Medium 🔧 | **Belt tensioning.** The arm idlers slide in slots with no positive lock, and J1 relies on a friction-locked motor slot. The idler dowels are only clamped between the plates (they stop at the plate faces). | geometry |
 | I‑5 | Medium | The `GT2-20 idler` has a 5 mm bore but sits on a 6 mm dowel pin (86 mm³ overlap). The part actually used is unknown. | interference |
-| I‑6 | Medium | **The J3 output is misplaced in the model.** The `GT2-80 output` is centred at (165.59, 47.15), 9.08 mm off the J3 axis, so the Pins overlap it by 98 and 1812 mm³ and stage 2 runs at a 90.87 center distance instead of 85; its idler then misses the belt by 2.0 mm. The Pin hexes are also turned in their sockets: Pin 1 is 30° off the `Output block` socket (374 mm³) and Pin 2, rotated 137.2°, is 17.2° off (83 mm³). The socket depths are fine (Session 5). The intended design is clearly all three hexes on J3, aligned. | interference; `checks/inspect/world_faces.py` (Session 5) |
+| I‑6 | Medium | **The J3 output is misplaced in the model.** The `GT2-80 output` is centred at (165.59, 47.15), 9.08 mm off the J3 axis, so the Pins overlap it by 98 and 1812 mm³ and stage 2 runs at a 90.87 center distance instead of 85; its idler then misses the belt by 2.0 mm. The Pin hexes are also turned in their sockets: Pin 1 is 30° off the `Output block` socket (374 mm³) and Pin 2, rotated 137.2°, is 17.2° off (83 mm³). The socket depths are fine (Session 5). The intended design is clearly all three hexes on J3, aligned. Because the pulley is off-axis, turning J3 makes it orbit instead of spin: in the full arm it rubs the Wall from +5° (76 mm³ at +54°). | interference; `checks/inspect/world_faces.py` (Session 5); `checks/joint_clearance.py` (Session 6) |
 | I‑7 | Low | Planets overlap the ring and sun by 25–65 mm³: they sit at the Fusion tooth phases, which don't mesh. This is cosmetic. The recreated gearbox reproduces it: sun × planet 65.0 mm³ (Fusion 65.0); ring × planet 54 / 52 mm³ (Fusion 36 / 26, from the remaining ring tip-shape difference). | interference |
-| I‑8 | Low | The J1 motor, J1 20T pulley, all belts, all fasteners, segment 2, J4 and the end effector are missing from the CAD. The recreation adds the J1 motor and 20T pulley (Session 4, assumed mid-slot placement) and the two arm belt envelopes (Session 5). | tree |
+| I‑8 | Low | The J1 motor, J1 20T pulley, all belts, all fasteners, segment 2, J4 and the end effector are missing from the CAD. The recreation adds the J1 motor and 20T pulley (Session 4, assumed mid-slot placement), the two arm belt envelopes (Session 5), and segment 2 with J4 (Session 6, full arm). The J1 belt, fasteners and end effector are still missing. | tree |
 | I‑9 | Low | Naming errors: `GT2-120` is 160T; `Pin 6x11mm` is 22 long; `Component1/2/7` wrappers; an empty `Component2`; a `test` product in the arm. | tree |
 | I‑10 | Low | The hinge left cheek has 5 of the 6 front-cover bolt holes. | features |
 | I‑11 | Info | All bearing seats are at the nominal OD; PLA needs a press-fit allowance. | features |
@@ -309,6 +333,8 @@ the last offering are marked 🔧.
 | I‑13 | Info | The hinge has two R42.5 boss profiles at different heights (z = 62.5 and 70.5). Check whether the offset is intentional. | features |
 | I‑14 | Medium | **J1 yaw is limited by the J1 motor** (found once the motor was modelled, Session 4). The hinge floor corners sweep r = 55.7 about J1; the motor frame's near face is 53.85 from the axis at mid-slot, so the hinge hits it. Clear range around 0° (10° steps): ±20° at x = 140, ±40° at x = 150 (blocked at ±50°, clear again from ±60° to ±110°), ±120° at x = 160. Beyond about ±120° the gearbox (ring gear, carriers, covers) hits the motor at every slot position. Assumes the motor square to the box; belt not modelled. | `checks/j1_yaw_clearance.py` |
 | I‑15 | Low | **Arm pulley bands are out of line axially.** Stage 1: the motor 20T band (z 15.2–22.2) is 3 mm above the dual 80T band (12.2–19.2), so a 6 mm belt centred on the 80T band runs 3.5 mm on the motor pulley. Stage 2: the dual 20T band (22.2–29.2) is 1 mm below the output 80T band (23.2–30.2). The motor pulley can slide on its shaft; the dual pulley's split cannot. | Session 5 assembly, belt envelopes |
+| I‑16 | Medium | **J2 travel is ±63°.** With the arm on the coupling shaft, the segment‑1 motor body (40 mm stand-in, centred 30 mm from the link face, hanging 40 mm below the Base plate) touches the right hinge cheek at ±64°. The coupling's rounded block hits the hinge next, at about ±80°. A shorter motor, or the motor moved further from the proximal end, gains up to ~17°. The real motor length is unknown (the stand-in is NEMA17 L40). | `checks/joint_clearance.py --joint j2_shoulder` (Session 6) |
+| I‑17 | Medium | **J3 and J4 travel is ±54°.** The Output block fork (35 wide, from 16 behind J3 to the end plate) sweeps into the Wall's distal rail ends (x 160–163.5, the inserts at (160, 3.5) / (160, 76.5)) at ±55°, and the overlap reaches 2400 mm³ at ±90°. A planar 3-link arm with ±54° elbows cannot fold back on itself. Field travel is unknown. | `checks/joint_clearance.py --joint j3_elbow` (Session 6) |
 
 ### Open questions (deferred)
 - Q1: The belt lengths actually bought, for J1 and the arm stages.

@@ -39,9 +39,9 @@ def _named(shape, label):
     return shape
 
 
-@step(out="../../STEP/joint12/joint_1_and_2.step")
-def joint_1_and_2():
-    parts = [
+def joint12_parts():
+    """Labelled parts of the base, in the base frame (also used by the full arm)."""
+    return [
         _named(box_bottom(), "box_bottom"),
         _named(box_top(), "box_top"),
         _named(hinge(), "hinge"),
@@ -58,7 +58,11 @@ def joint_1_and_2():
                "nema17:j1"),
         _named(bd.Pos(J1_MOTOR_X, params.J1_MOTOR_SLOT_Y, J1_PULLEY_Z) * gt2_pulley_20t(), "gt2_pulley_20t:j1"),
     ]
-    return bd.Compound(children=parts, label="joint_1_and_2")
+
+
+@step(out="../../STEP/joint12/joint_1_and_2.step")
+def joint_1_and_2():
+    return bd.Compound(children=joint12_parts(), label="joint_1_and_2")
 
 
 if __name__ == "__main__":

@@ -14,8 +14,8 @@ during recreation.
 | 3 | Planetary gearbox parts + assembly | Done |
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
-| 6 | Full arm (two segments), kinematics, optional URDF | Next |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks | |
+| 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | Next |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -136,10 +136,30 @@ during recreation.
   - the fork has a slot, a hex socket and bosses;
   - the Top has no motor holes.
 
-### Next session (6): full arm
-1. Fix the robot frame (design.md §7): origin on J1 at the top of `Box top`, +Z up; confirm the +X direction.
-2. Place the arm on the coupling shaft through IF‑8. Find the transform from the arm frame (proximal end face x = −40, insert holes at y 3.5 / 76.5, z 3.5 / 40.5) to the coupling shaft's link face in the base frame. Segment 2 mounts on the Output block's distal face (x = 234.175, M3 at y 3.5 / 76.5, z 3.7 / 40.7): note the 0.2 mm z offset against the proximal inserts (3.5 / 40.5).
-3. Assembly `src/arm.py` (or similar, avoiding package names): joint12 base, segment 1, segment 2 (identical copy).
-4. Kinematics: J1–J4 axes and link lengths into design.md §1; joint zero = the Fusion pose (arm vertical). Declare kinematics per the cad skill's `references/kinematics.md`. Snapshot a few poses.
-5. Optional URDF (`$urdf` skill) from the same frames.
-6. Use the J3 axis (160, 40) for the kinematics, not the GT2-80 output centre (I‑6). The replica keeps the Fusion placement.
+## Session 6 — 2026-10-27
+- Robot frame fixed (design.md §7): origin on J1 at the top of `Box top`, +Z up, +X = base-frame +Y (the base has no front, so this is a convention), +Y toward the gearbox. J2–J4 point along +Y; positive angles tip the arm toward +X.
+- IF‑8 mounting: the hole pattern is symmetric, so there are two ways to mount the arm. With the Base plate toward the gearbox, the segment motor hits the ring gear, front cover and hinge (2150 mm³). With the Base plate toward the right cheek, it is clear. The second is used: segment 1 → base is `p = (96.8 − z, 35 + y, 140.5 + x)`. Segment 2 sits on the Output block face, at +274.175 in x and +0.2 in z.
+- `src/full_arm/`:
+  - `common.py`: the placements as plain (rotation, translation) pairs, plus the joint axes and limits. The module touches no kernel objects.
+  - `robot_arm.py`: the assembly, regrouped into five links (base, waist, upper arm, forearm, wrist), with `revolute` mates J1–J4 and poses zero / reach / pick / folded.
+  - `joint_1_and_2.py` and `belt_drive_arm.py` now expose `joint12_parts()` and `segment_parts()`; their STEP bytes are unchanged.
+- Verified in the saved STEP: the bearing centres sit on the declared axes. J2 is at z 58.5, J3 at 288.5, J4 at 562.675; the end-effector face is at 636.85. Link lengths and the joint table are in design.md §1.
+- New check `checks/joint_clearance.py`: turns one joint (reading the mates from the sidecar) and reports overlap growth over the zero pose. Clear travel:
+  - J1 ±40° (I‑14 unchanged with the arm on).
+  - J2 ±63°: the segment‑1 motor hits the right hinge cheek. **New I‑16.**
+  - J3/J4 ±54°: the Output block fork hits the Wall's distal rail ends. **New I‑17.**
+  - The off-axis GT2‑80 output (I‑6) orbits and rubs the Wall from +5°. Noted under I‑6.
+- Known artefacts in the check (not issues):
+  - `gt2_80_output × belt:stage_2`: the belt is static while its pulley orbits.
+  - `coupling_shaft × carrier_stage2_output` grows by about 20 mm³ at +63°, because the gearbox rides the waist rigidly.
+- Simplifications: no pulley, idler or gearbox output spins with its joint. `STEP/full_arm/robot_arm.step` is 34 MB.
+- Pre-existing build hint, not fixed: `gearbox/common.py` (`TO_FUSION`) and the other `common.py` modules build kernel objects at import, so every rerun pays the kernel import.
+- Snapshots: `docs/img/robot_arm_zero.png` and `robot_arm_pick.png`.
+- URDF deferred: it needs a mesh per link in link frames, and nothing downstream uses it yet.
+
+### Next session (7): design review, I‑1 first
+1. Agree the fix order for design.md §8 with the instructor. I‑1 (J2 axis 0.5 mm offset, three bearings) is first, then I‑2 and I‑6 (hex alignment, J3 output on axis).
+2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it as an intentional departure in `checks/fusion_map.json` or retire its entry), update design.md (part rows, §5, §8 with the commit).
+3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
+4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
+5. Optional URDF (`$urdf`) from `full_arm/common.py`: one STL per link, in the link's joint frame.

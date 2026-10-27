@@ -101,6 +101,18 @@ Parts are modelled in place; `common.py` holds the shared positions,
 
 Helper (not an entrypoint): `common.py`.
 
+## Full arm (`full_arm/` → `STEP/full_arm/`), Session 6
+
+Robot frame: origin on J1 at the top of the box top, +Z up, +X = base-frame
++Y, J2–J4 along +Y (design.md §7). `common.py` holds the placements
+(base → robot, segment → base, segment 2 → segment 1), joint axes and limits.
+
+| Script | Contents | Notes |
+| --- | --- | --- |
+| `robot_arm.py` | Base + segment 1 + segment 2 | Five links (base, waist, upper arm, forearm, wrist) with `revolute` mates J1–J4 and poses `zero`, `reach`, `pick`, `folded`. Built from `joint12_parts()` and `segment_parts()`. Not gated |
+
+Helper (not an entrypoint): `common.py`. Check: `checks/joint_clearance.py --joint <name> --angles ...` (I-14, I-16, I-17).
+
 ## Printed parts still to come
 
 None for the replica. Every printed part needs an entry in `checks/fusion_map.json`, and must pass `python checks/compare_to_fusion.py --map checks/fusion_map.json`.

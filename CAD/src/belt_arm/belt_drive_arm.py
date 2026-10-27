@@ -61,11 +61,11 @@ def _named(shape, label):
     return shape
 
 
-@step(out="../../STEP/belt_arm/belt_drive_arm.step")
-def belt_drive_arm():
+def segment_parts():
+    """Labelled parts of one segment, in the arm frame (also used by the full arm)."""
     idler_1 = (IDLER_XS[0], IDLER_SLOT_Y[0])
     idler_2 = (IDLER_XS[1], IDLER_SLOT_Y[0])
-    parts = [
+    return [
         _named(base(), "base"),
         _named(wall(), "wall"),
         _named(top(), "top"),
@@ -92,7 +92,11 @@ def belt_drive_arm():
         _named(bd.Pos(0, 0, BELT_Z[0]) * gt2.belt_envelope(STAGE_1), "belt:stage_1"),
         _named(bd.Pos(0, 0, BELT_Z[1]) * gt2.belt_envelope(STAGE_2), "belt:stage_2"),
     ]
-    return bd.Compound(children=parts, label="belt_drive_arm")
+
+
+@step(out="../../STEP/belt_arm/belt_drive_arm.step")
+def belt_drive_arm():
+    return bd.Compound(children=segment_parts(), label="belt_drive_arm")
 
 
 if __name__ == "__main__":
