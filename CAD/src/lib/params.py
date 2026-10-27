@@ -29,8 +29,7 @@ J1_MOTOR_SLOT_Y = 75.0
 J1_MOTOR_SCREW_SLOT_Y = (59.5, 90.5)
 
 # --- IF-4/5: J2 axis and gearbox-to-hinge bolt circle
-J2_AXIS_YZ_HINGE = (75.0, 70.5)    # hinge 6805 seats and coupling shaft
-J2_AXIS_YZ_GEARBOX = (75.0, 70.0)  # gearbox (0.5 mm low: issue I-1, reproduced)
+J2_AXIS_YZ = (75.0, 70.5)  # hinge 6805 seats, coupling shaft and gearbox (I-1 fixed: gearbox was at 70.0)
 BEARING_6805_SEAT_D = 37.0
 GEARBOX_BOLT_CIRCLE_R = 39.25
 GEARBOX_BOLT_COUNT = 6

@@ -32,7 +32,7 @@ through a 8:1 or 16:1 reduction:
 | Joint | Motion | Axis (in source frame) | Drive | Ratio |
 |---|---|---|---|---|
 | J1 | Waist yaw | Vertical, through (75, 75) in `Joint 1 and 2` | NEMA17 → GT2 20T → GT2 160T belt | **8:1** |
-| J2 | Shoulder pitch | Horizontal ‖ X at y = 75, z = 70.5 (hinge) / 70.0 (gearbox), see [I‑1](#8-observed-issues-and-open-questions) | NEMA17 → two-stage planetary | **16:1** |
+| J2 | Shoulder pitch | Horizontal ‖ X at y = 75, z = 70.5 (hinge, coupling and gearbox; Fusion had the gearbox at 70.0, [I‑1](#8-observed-issues-and-open-questions), fixed) | NEMA17 → two-stage planetary | **16:1** |
 | J3 | Elbow pitch | ⟂ to the arm plates at (160, 40) in `Belt Drive Arm` | NEMA17 on segment 1 → two GT2 20T→80T belt stages | **16:1** |
 | J4 | Wrist pitch | Same as J3, on segment 2 | Segment 2 is an identical copy of segment 1 | **16:1** |
 | — | End effector | Bolts to segment 2's Output block (not modeled) | — | — |
@@ -42,7 +42,7 @@ J3 output block → segment 2 → J4 output block → end effector. J2, J3 and J
 parallel, so the arm is a planar 3-link arm that yaws on J1.
 
 **Link lengths** (measured on the assembled full arm, `src/full_arm/`, Session 6):
-- Box top surface → J2 (hinge axis): 58.5 (the gearbox axis is 58.0, I‑1)
+- Box top surface → J2: 58.5 (the gearbox axis was 58.0 in Fusion, I‑1, fixed)
 - J2 axis → segment‑1 mounting face: 30.0
 - J2 → J3: 230.0
 - J3 → J4: 274.175 (Output block face 74.175 from J3, plus the 200 from segment 2's proximal face to its J3)
@@ -258,7 +258,7 @@ Segment 2 (J4) is an identical copy of this segment.
 | IF‑1 | J1 axis | Box top, Hinge, GT2‑160, bearings | Axis (75, 75); 6807 seat Ø47 × 7; thrust recesses Ø60/Ø61; Ø35 shaft; 608 seat Ø22 |
 | IF‑2 | Base box fasteners | Box top ↔ Box bottom | 7 × M5 at the listed positions |
 | IF‑3 | J1 motor mount | Box top | Slot 25 wide, x 140–160; M3 slots at y = 59.5 / 90.5 |
-| IF‑4 | J2 axis | Hinge, gearbox, coupling | Hinge 6805 seats Ø37; **axis height: see I‑1** |
+| IF‑4 | J2 axis | Hinge, gearbox, coupling | Hinge 6805 seats Ø37; one axis at y = 75, z = 70.5 for the hinge seats, coupling and gearbox (I‑1 fix: gearbox raised 0.5 mm, no part changed) |
 | IF‑5 | Gearbox ↔ hinge | Front cover ↔ hinge left cheek | 6 × M3 on r = 39.25 (5 present in the hinge) |
 | IF‑6 | Gearbox internal | Ring, covers, carriers | Transverse m1.5, 20°, 15° helix, 15/15/45T, planet radius 22.5, face width 9; ring Ø85 |
 | IF‑7 | Gearbox output hex | Carrier p2 output ↔ Coupling shaft | 21.65 AF hex in a 21.65 AF socket (circumradius 12.5, line-to-line); Ø25 shaft |
@@ -296,7 +296,7 @@ named tolerance parameter (`lib/tolerances.py`, Session 2).
 During the **replica phase**, every part keeps its Fusion local frame, so that
 `checks/compare_to_fusion.py` can compare like with like. Each subassembly
 keeps its Fusion frame:
-- `Joint 1 and 2`: origin at the box corner; top of `Box bottom` at z = 0; J1 at (75, 75). The joint12 parts are modelled in this frame as placed (`src/joint12/common.py`). The gearbox frame maps into it by `Pos(-17, 75, 70) * Rot(0, 0, 90) * Rot(-90, 0, 0)` (`GEARBOX_PLACEMENT`), which is the same for every gearbox part.
+- `Joint 1 and 2`: origin at the box corner; top of `Box bottom` at z = 0; J1 at (75, 75). The joint12 parts are modelled in this frame as placed (`src/joint12/common.py`). The gearbox frame maps into it by `Pos(-17, 75, 70.5) * Rot(0, 0, 90) * Rot(-90, 0, 0)` (`GEARBOX_PLACEMENT`), which is the same for every gearbox part. Fusion places it at z = 70.0 (I‑1); the recreation uses 70.5 since the I‑1 fix.
 - `Belt Drive Arm`: origin at the proximal end + 40, on the Base underside; plates in XY; J3 at (160, 40). The belt_arm parts are modelled in this frame as placed (`src/belt_arm/common.py`); only Pin 2 needs a placement (`PIN_2_PLACEMENT`).
 
 The **full-arm assembly** (`src/full_arm/`, Session 6) uses a robot frame:
@@ -313,13 +313,13 @@ Placements (`src/full_arm/common.py`):
 
 ## 8. Observed issues and open questions
 
-These are logged, **not fixed**: the replica reproduces them. Field reports from
+The replica reproduces these. Fixes come one per commit after recreation; a fixed issue is marked **Fixed** with its commit. Field reports from
 the last offering are marked 🔧.
 
 | ID | Severity | Issue | Evidence |
 |---|---|---|---|
-| I‑1 | **High** 🔧 | **J2 is misaligned and over-constrained.** The gearbox axis is at z = 70.0, but the hinge 6805 seats and the coupling shaft are at z = 70.5 (0.5 mm offset). The output shaft runs in three bearings (front cover, left cheek, right cheek via the coupling), so any offset binds. Students reported J2 stiffness and binding. | `checks/inspect/interference.py`: Carrier p2 output × left 6805 = 86 mm³; axis survey |
-| I‑2 | Medium | The output hex (21.65 AF) and the coupling socket (21.65 AF) overlap by 2803 mm³ in the model: the hex is rotated 43.5°, not a multiple of 60°, and is offset by I‑1. The fit itself is line-to-line (socket 21.651 AF, circumradius 12.5, against a 21.65 hex; Session 1 read 21.66 from rounded values), which leaves no print allowance. | interference |
+| I‑1 | **High** 🔧 **Fixed** (Session 7, commit "Fix I-1") | **J2 is misaligned and over-constrained.** The gearbox axis is at z = 70.0, but the hinge 6805 seats and the coupling shaft are at z = 70.5 (0.5 mm offset). The output shaft runs in three bearings (front cover, left cheek, right cheek via the coupling), so any offset binds. Students reported J2 stiffness and binding. **Fix:** the gearbox placement is raised to z = 70.5 (`params.J2_AXIS_YZ`, one axis for every J2 part). The hinge's front-cover bolt circle was already centred on 70.5, so the cover bolts now line up too. No printed part changed, and the replica gate is unaffected. Remaining risk: the shaft still runs in three bearings, so print accuracy of the cheek seats and front cover matters (see I‑11). | Before: `checks/inspect/interference.py`: Carrier p2 output × left 6805 = 87.5 mm³. After: 0; the front cover, ring bolt circle, all three 6805s and the coupling are coaxial at (75, 70.5). J1/J2 clear travel unchanged (`checks/joint_clearance.py`) |
+| I‑2 | Medium | The output hex (21.65 AF) and the coupling socket (21.65 AF) overlap by 2783 mm³ in the model (2803 before the I‑1 fix): the hex is rotated 43.5°, not a multiple of 60°. The fit itself is line-to-line (socket 21.651 AF, circumradius 12.5, against a 21.65 hex; Session 1 read 21.66 from rounded values), which leaves no print allowance. | interference |
 | I‑3 | Medium 🔧 | **Gear wear and backlash.** m1.5 (transverse) 15° helical PLA gears with 9 mm face width at 16:1 near the output. The helix adds an axial thrust that the carriers and washers must react. There is no clearance or backlash allowance; the planets mesh at nominal center distance. | gear data |
 | I‑4 | Medium 🔧 | **Belt tensioning.** The arm idlers slide in slots with no positive lock, and J1 relies on a friction-locked motor slot. The idler dowels are only clamped between the plates (they stop at the plate faces). | geometry |
 | I‑5 | Medium | The `GT2-20 idler` has a 5 mm bore but sits on a 6 mm dowel pin (86 mm³ overlap). The part actually used is unknown. | interference |

@@ -4,7 +4,7 @@ U-bracket that turns on J1 and carries J2. A 20 mm floor (z 15..35) with
 R5 inner fillets joins two 7 mm cheeks, each a rectangle with an R42.5
 rounded top: the left (gearbox) cheek is rounded about z = 70.5, the right
 about z = 62.5 (I-13). Both cheeks have Ø37 6805 seats on J2 at z = 70.5
-(IF-4; the gearbox sits at 70.0, I-1). Underneath: a Ø35 J1 shaft down to
+(IF-4, shared with the gearbox since the I-1 fix). Underneath: a Ø35 J1 shaft down to
 z = -8 and a Ø61 x 10 upper-thrust pocket (IF-1). 4 x M5 Ø5.3 at r = 10
 with Ø12 counterbores from the floor take the bolts into the 160T pulley.
 The left cheek has 5 of the 6 front-cover M3 holes, the bottom one is

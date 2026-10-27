@@ -3,7 +3,8 @@
 Base frame (every joint12 part is modelled in it): the Fusion "Joint 1 and 2"
 frame as-is. Origin at the box corner, top of the box bottom at z = 0,
 +Z up; J1 is vertical through (75, 75); J2 is parallel to X at y = 75,
-z = 70.5 (hinge and coupling shaft) / 70.0 (gearbox), see issue I-1.
+z = 70.5 (hinge, coupling shaft and gearbox). Fusion had the gearbox 0.5 mm
+lower, at 70.0 (issue I-1, fixed).
 """
 from __future__ import annotations
 
@@ -15,12 +16,11 @@ from gearbox.common import TO_FUSION
 from lib import params
 
 J1_X, J1_Y = params.J1_AXIS_XY                 # (75, 75)
-J2_Y, J2_Z = params.J2_AXIS_YZ_HINGE           # (75, 70.5)
-J2_Z_GEARBOX = params.J2_AXIS_YZ_GEARBOX[1]    # 70.0 (I-1, reproduced)
+J2_Y, J2_Z = params.J2_AXIS_YZ                 # (75, 70.5)
 
-# Gearbox frame -> base frame, measured from the Fusion files: the gearbox is
-# placed rigidly with its ring / back-cover joint at x = -17, motor toward -X.
-GEARBOX_PLACEMENT = bd.Pos(-17.0, J2_Y, J2_Z_GEARBOX) * bd.Rot(0, 0, 90) * TO_FUSION
+# Gearbox frame -> base frame: the gearbox is placed rigidly on J2 with its
+# ring / back-cover joint at x = -17, motor toward -X (Fusion: z = 70.0, I-1).
+GEARBOX_PLACEMENT = bd.Pos(-17.0, J2_Y, J2_Z) * bd.Rot(0, 0, 90) * TO_FUSION
 
 # Along-X parts (axis on J2) are modelled about +Z, then turned onto +X.
 Z_TO_X = bd.Rot(0, 90, 0)

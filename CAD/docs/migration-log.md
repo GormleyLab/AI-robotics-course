@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | Next |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1 done) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -158,8 +158,13 @@ during recreation.
 - Snapshots: `docs/img/robot_arm_zero.png` and `robot_arm_pick.png`.
 - URDF deferred: it needs a mesh per link in link frames, and nothing downstream uses it yet.
 
-### Next session (7): design review, I‑1 first
-1. Fix order: I‑1 (J2 axis 0.5 mm offset, three bearings) first. Then I‑6 (J3 output on axis; this also removes the pulley's rub on the Wall), then I‑17 (J3/J4 travel ≥ ±90°: clear the Wall's distal end against the Output block fork. Travel is currently ±54°, and the Wall is the only obstacle out to about ±100°). I‑2 comes after these. I‑16 (J2 ±63°) is accepted, so leave it. Confirm I‑17 with `checks/joint_clearance.py --joint j3_elbow --angles 90,-90,95,-95` (and `j4_wrist`).
+## Session 7 — 2026-10-27
+- **I‑1 fixed** (commit "Fix I-1"). The hinge seats, the coupling and the hinge's front-cover bolt circle all sit at z = 70.5, so the gearbox moved up 0.5 mm. The hinge did not move down. `params.J2_AXIS_YZ` replaces the separate `_HINGE` / `_GEARBOX` constants, and `GEARBOX_PLACEMENT` uses it.
+- No part STEP changed. Only `joint12/joint_1_and_2.step` and `full_arm/robot_arm.step` were rebuilt, and the joint12 gate still passes. No fusion_map entry changed: the gearbox parts are gated in the gearbox frame, not the base frame.
+- Checks: the carrier output × left 6805 overlap went from 87.5 to 0 mm³. The coupling × output hex overlap went from 2803 to 2783 mm³; what remains is I‑2. J1 is still ±40° and J2 still ±63°.
+
+### Next steps (continue Session 7 or start Session 8)
+1. Fix order: I‑1 done. Next I‑6 (J3 output on axis; this also removes the pulley's rub on the Wall), then I‑17 (J3/J4 travel ≥ ±90°: clear the Wall's distal end against the Output block fork. Travel is currently ±54°, and the Wall is the only obstacle out to about ±100°). I‑2 comes after these. I‑16 (J2 ±63°) is accepted, so leave it. Confirm I‑17 with `checks/joint_clearance.py --joint j3_elbow --angles 90,-90,95,-95` (and `j4_wrist`).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it as an intentional departure in `checks/fusion_map.json` or retire its entry), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
