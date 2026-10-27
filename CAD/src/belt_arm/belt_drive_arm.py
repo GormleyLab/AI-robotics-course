@@ -1,7 +1,9 @@
 """Belt drive arm segment assembly (J3 elbow), arm frame.
 
 Printed parts are modelled in place; purchased parts use the Fusion
-placements, so I-5 (5 mm idler bores on the 6 mm dowels) is reproduced.
+placements. I-5 is fixed: the idler axles are M5 x 40 button head screws
+(head in the Base's Ø10 slot, seat at z 3) with an M5 nut in the Top's 8 mm
+slot (z 39..43), as built; Fusion had 6 x 30 dowels in the 5 mm idler bores.
 I-6 is fixed: the GT2-80 output and both Pin hexes sit on J3, in line with
 the Output block socket. I-15 is fixed: every band on a belt is in line with
 it (the motor 20T slides down its shaft; the dual pulley changed).
@@ -32,9 +34,11 @@ from belt_arm.wall import wall
 from lib import gt2, params
 from purchased.bearing_6805 import bearing_6805
 from purchased.bushing_6x8x10 import bushing_6x8x10
+from purchased.button_head_m5x40 import button_head_m5x40
 from purchased.dowel_pin_6x30 import dowel_pin_6x30
 from purchased.gt2_idler_20t import gt2_idler_20t
 from purchased.gt2_pulley_20t import gt2_pulley_20t
+from purchased.hex_nut_m5 import hex_nut_m5
 from purchased.nema17 import nema17
 
 # Belt planes (I-15 fixed): stage 1 centred at z 17.0 on the idler-1 band, stage 2 at
@@ -44,6 +48,8 @@ IDLER_Z = (12.0, 22.0)                 # idler bottom faces (bands 13.5..20.5 / 
 IDLER_2_SHIFT = bd.Pos(IDLER_XS[1] - IDLER_XS[0], 0, 0)
 BELT_Z = (14.0, 23.7)                  # belt bottoms: centred on the 80T bands 13.5..20.5 / 23.2..30.2
 BUSHING_Z = (10.7, 21.7)               # bushing bottoms in the dual pulley bore 10.7..31.7 (Fusion 10.7, 20.7)
+IDLER_SCREW_Z = 3.0                    # button head seat: top of the Base's Ø10 x 3 slot (I-5)
+IDLER_NUT_Z = 39.0                     # nut seat: floor of the Top's 8 mm slot (I-5)
 
 R_PITCH_20 = gt2.pitch_diameter(params.GT2_TEETH_MOTOR) / 2
 R_PITCH_80 = gt2.pitch_diameter(params.GT2_TEETH_ARM_DRIVEN) / 2
@@ -87,8 +93,10 @@ def segment_parts():
         _named(bd.Pos(MOTOR_X, MOTOR_Y, 0) * nema17(), "nema17:j3"),
         _named(bd.Pos(MOTOR_X, MOTOR_Y, MOTOR_PULLEY_Z) * gt2_pulley_20t(), "gt2_pulley_20t:j3"),
         _named(bd.Pos(DUAL_X, DUAL_Y, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:dual_pulley"),
-        _named(bd.Pos(*idler_1, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:idler_1"),
-        _named(bd.Pos(*idler_2, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:idler_2"),
+        _named(bd.Pos(*idler_1, IDLER_SCREW_Z) * button_head_m5x40(), "button_head_m5x40:idler_1"),
+        _named(bd.Pos(*idler_2, IDLER_SCREW_Z) * button_head_m5x40(), "button_head_m5x40:idler_2"),
+        _named(bd.Pos(*idler_1, IDLER_NUT_Z) * hex_nut_m5(), "hex_nut_m5:idler_1"),
+        _named(bd.Pos(*idler_2, IDLER_NUT_Z) * hex_nut_m5(), "hex_nut_m5:idler_2"),
         _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[0]) * bushing_6x8x10(), "bushing:lower"),
         _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[1]) * bushing_6x8x10(), "bushing:upper"),
         _named(bd.Pos(*idler_1, IDLER_Z[0]) * gt2_idler_20t(), "gt2_idler_20t:1"),

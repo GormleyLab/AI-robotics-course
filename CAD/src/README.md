@@ -33,8 +33,10 @@ Frame: axis +Z, end face (motor: mounting face) at z = 0.
 | `bearing_6807.py` | Stand-in 35×47×7 | Box top (J1) |
 | `thrust_bearing_51108.py` | Stand-in 40×60×13 | J1 (×2) |
 | `gt2_pulley_20t.py` | step.parts `gt2_pulley_20t_bore5_w6`, bore cut through both flanges (the vendor file leaves them solid) | Motor pulleys |
-| `gt2_idler_20t.py` | step.parts `gt2_toothed_idler_bore5_w6`, bore cut through both flanges (Fusion bore; see I-5) | Arm idlers (×2 per segment) |
-| `dowel_pin_6x30.py` | Stand-in | Arm axles (×3 per segment) |
+| `gt2_idler_20t.py` | step.parts `gt2_toothed_idler_bore5_w6`, bore cut through both flanges (Fusion bore, correct for the M5 axle) | Arm idlers (×2 per segment) |
+| `dowel_pin_6x30.py` | Stand-in | Dual-pulley axle (×1 per segment; the idler dowels became M5 screws, I-5) |
+| `button_head_m5x40.py` | step.parts `button_head_screw_m5_l0040_simple`, flipped so the shank runs +Z from the head seat | Idler axles (×2 per segment) |
+| `hex_nut_m5.py` | step.parts `iso4032_hex_nut_m5` | Idler axle nuts (×2 per segment) |
 | `planet_pin_6x22.py` | Stand-in (Fusion "Pin 6x11mm") | Planets (×6) |
 | `bushing_6x8x10.py` | Stand-in | Planets (×6), dual pulley (×2 per segment) |
 | `washer_6.py` | Stand-in 6.2×11.8×1.3 | Planets (×12) |
