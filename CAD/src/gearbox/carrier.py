@@ -18,10 +18,11 @@ from cadgen import build123d as bd
 
 from gearbox.common import disc, hole, polar, revolve_rz
 from lib import gears, params
+from lib.tolerances import ACTIVE as FIT, hole as fit_hole
 
 PLATE_D = 56.0
 PIN_R = params.PLANET_CENTRE_R          # 22.5
-PIN_D = 6.0
+PIN_D = fit_hole(6.0, FIT.press)        # planet pins
 POCKET_D = 29.5
 BORE_D = 32.5
 POCKET_FILLET = 1.0
@@ -75,7 +76,7 @@ def carrier_output_plate(z_top: float, pin_angle: float) -> bd.Part:
     z_bottom = z_top - 5.0
     body = disc(PLATE_D, z_bottom, z_top)
     body += revolve_rz([(0, z_bottom - 2.0), (14.5, z_bottom - 2.0), (16.5, z_bottom), (0, z_bottom)])
-    body -= disc(21.0, z_bottom, z_top)            # 6801 bearing recess
+    body -= disc(fit_hole(21.0, FIT.press), z_bottom, z_top)            # 6801 bearing recess
     body -= disc(18.0, z_bottom - 0.4, z_bottom)
     for a in _three(pin_angle):
         body -= hole(PIN_D, PIN_R, a, z_bottom, z_top)

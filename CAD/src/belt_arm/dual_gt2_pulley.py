@@ -15,11 +15,12 @@ from cadgen import step
 
 from belt_arm.common import DUAL_X, DUAL_Y, zcyl
 from lib import gt2, params
+from lib.tolerances import ACTIVE as FIT, hole
 
 Z_BOTTOM = 10.7                    # Base dowel boss top
 Z_80T, Z_20T, Z_TOP = 12.0, 21.7, 31.7   # I-15 fixed: Fusion 10.7, 20.7, 30.7
 HUB_D = 12.0
-BORE = 8.0
+BORE = hole(8.0, FIT.press)            # two 6 x 8 x 10 bushings
 
 
 def dual_gt2_pulley_body():

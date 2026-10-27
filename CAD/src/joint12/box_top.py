@@ -9,6 +9,7 @@ from cadgen import step
 
 from joint12.common import J1_X, J1_Y, M3_CLEAR, M5_CLEAR, box, zcyl, zslot
 from lib import params
+from lib.tolerances import ACTIVE as FIT, hole
 
 Z_BOTTOM, Z_TOP = 0.0, 12.0
 RECESS_DEPTH = 5.0
@@ -17,8 +18,8 @@ SCREW_SLOT_X = (124.5, 175.5)
 
 def box_top_body():
     body = box(0, params.BOX_X, 0, params.BOX_Y, Z_BOTTOM, Z_TOP)
-    body -= zcyl(params.THRUST_RECESS_BOX_D, J1_X, J1_Y, Z_BOTTOM, Z_BOTTOM + RECESS_DEPTH)
-    body -= zcyl(params.BEARING_6807_SEAT_D, J1_X, J1_Y, Z_BOTTOM + RECESS_DEPTH, Z_TOP)
+    body -= zcyl(hole(params.THRUST_RECESS_BOX_D, FIT.slip), J1_X, J1_Y, Z_BOTTOM, Z_BOTTOM + RECESS_DEPTH)
+    body -= zcyl(hole(params.BEARING_6807_SEAT_D, FIT.press), J1_X, J1_Y, Z_BOTTOM + RECESS_DEPTH, Z_TOP)
     body -= zslot(*params.J1_MOTOR_SLOT_X, params.J1_MOTOR_SLOT_Y, params.J1_MOTOR_SLOT_W, Z_BOTTOM, Z_TOP)
     for y in params.J1_MOTOR_SCREW_SLOT_Y:
         body -= zslot(*SCREW_SLOT_X, y, M3_CLEAR, Z_BOTTOM, Z_TOP)

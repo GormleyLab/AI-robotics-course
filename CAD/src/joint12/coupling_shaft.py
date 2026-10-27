@@ -14,19 +14,20 @@ from cadgen import step
 
 from joint12.common import J2_Y, J2_Z, M3_CBORE, M3_CLEAR, Z_TO_X, box, xcyl, zcyl
 from lib import params
+from lib.tolerances import ACTIVE as FIT, hex_socket_r, shaft
 
 X0, X1 = 52.8, 96.8
 Y0, Y1 = J2_Y - params.ARM_WIDTH / 2, J2_Y + params.ARM_WIDTH / 2
 END_R = 40.0
 ROUND_Z = 90.5
 Z_TOP = 100.5
-HEX_CIRCUMR = 12.5
+HEX_CIRCUMR = hex_socket_r(12.5, FIT.hex_socket)
 HEX_DEPTH = 15.0
 # Stub profile along +X: (x, r) from the block face.
 TRANSITION = ((96.8, 16.5), (98.365, 15.597), (99.8, 14.5))
 SHOULDER_X1 = 101.8
 STUB_X1 = 108.8
-STUB_R = params.OUTPUT_SHAFT_D / 2
+STUB_R = shaft(params.OUTPUT_SHAFT_D, FIT.press) / 2
 LINK_X = (56.3, 93.3)
 LINK_Y = (38.5, 111.5)
 LINK_CBORE_Z1 = 80.5

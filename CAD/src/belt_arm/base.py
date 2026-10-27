@@ -15,12 +15,13 @@ from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE, DUAL_X, DUAL_Y, IDLER_SLO
                              M3_CBORE, M3_CLEAR, M3_INSERT, MOTOR_X, MOTOR_Y, PROXIMAL_INSERT_DEPTH,
                              PROXIMAL_INSERT_Y, WALL_SCREW_XY, X_PROXIMAL, Z_BASE_TOP, plate, xcyl, yslot, zcyl)
 from lib import params
+from lib.tolerances import ACTIVE as FIT, hole
 
 BOSS_TOP = 10.7
 MOTOR_PILOT_D = 30.0
 MOTOR_SCREW_CBORE_Z = 4.0
 IDLER_CBORE_D, IDLER_CBORE_Z = 10.0, 3.0
-IDLER_SLOT_W = 5.3
+IDLER_SLOT_W = hole(5.3, FIT.clearance)
 WALL_CBORE_Z = 3.0
 INSERT_Z = 3.5
 
@@ -29,7 +30,7 @@ def base_body():
     body = plate(0, Z_BASE_TOP)
     body += zcyl(DOWEL_BOSS_D, DUAL_X, DUAL_Y, Z_BASE_TOP, BOSS_TOP)
     body -= zcyl(DOWEL_HOLE, DUAL_X, DUAL_Y, Z_BASE_TOP, BOSS_TOP)
-    body -= zcyl(params.BEARING_6805_SEAT_D, J3_X, J3_Y, 0, Z_BASE_TOP)
+    body -= zcyl(hole(params.BEARING_6805_SEAT_D, FIT.press), J3_X, J3_Y, 0, Z_BASE_TOP)
 
     body -= zcyl(MOTOR_PILOT_D, MOTOR_X, MOTOR_Y, 0, Z_BASE_TOP)
     half = params.NEMA17_BOLT_SPACING / 2

@@ -12,6 +12,7 @@ from cadgen import step
 
 from belt_arm.common import J3_X, J3_Y
 from lib import gt2, params
+from lib.tolerances import ACTIVE as FIT, hex_socket_r
 
 Z0 = 21.7
 H = 2 * gt2.FLANGE_H + 7.0
@@ -19,7 +20,7 @@ H = 2 * gt2.FLANGE_H + 7.0
 
 def gt2_80_output_body():
     body = gt2.flanged_pulley(params.GT2_TEETH_ARM_DRIVEN)
-    body -= bd.extrude(bd.RegularPolygon(params.OUTPUT_HEX_SOCKET_R, 6), H)
+    body -= bd.extrude(bd.RegularPolygon(hex_socket_r(params.OUTPUT_HEX_SOCKET_R, FIT.hex_socket), 6), H)
     return bd.Pos(J3_X, J3_Y, Z0) * bd.Rot(0, 0, 90) * body
 
 

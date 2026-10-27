@@ -1,11 +1,18 @@
 """Print-process fit allowances.
 
-The replica keeps every Fusion dimension at its nominal value (Fusion had no
-allowances; issue I-11), so these presets are all zero-offset in the
-``FUSION`` profile. The fix phase switches parts to ``PLA_FDM`` or ``RESIN``.
+Every fit feature of the printed parts (I-11 fixed) is its Fusion value
+plus (hole) or minus (shaft) the allowance for its class in ``ACTIVE``. The
+committed STEPs use ``FUSION`` (all zero), so they stay the Fusion replica
+and pass the gate. To print, set ``ACTIVE = PLA_FDM`` (or ``RESIN``) and
+rerun the models; tune the profile first with ``src/fit_coupon.py``.
 
-Each fit is a diametral allowance in mm, added to a nominal hole diameter
-(or subtracted from a nominal shaft): ``hole_d = nominal + fit``.
+Each fit is a diametral allowance in mm. Classes (design.md §6, Print fits):
+``press`` bearing ODs in printed seats, printed shafts in bearing bores,
+bushings and planet pins in printed holes; ``slip`` parts that slide in or
+along by hand (dowel, M5 nut slot, thrust washer recess, motor shaft bore);
+``running`` is unused (nothing turns in a printed bore); ``clearance`` screw
+holes and slots; ``hex_socket`` female hexes, across flats. Heat-set insert
+holes follow the insert maker's size and are not adjusted.
 """
 from __future__ import annotations
 
@@ -36,3 +43,13 @@ ACTIVE = FUSION
 def hole(nominal: float, fit: float) -> float:
     """Diameter to model for a hole that must accept ``nominal`` with ``fit``."""
     return nominal + fit
+
+
+def shaft(nominal: float, fit: float) -> float:
+    """Diameter to model for a printed shaft that must enter a ``nominal`` bore with ``fit``."""
+    return nominal - fit
+
+
+def hex_socket_r(circumradius: float, fit: float) -> float:
+    """Circumradius of a female hex opened by ``fit`` across flats."""
+    return circumradius + fit / 3 ** 0.5

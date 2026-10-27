@@ -9,6 +9,7 @@ from cadgen import step
 
 from gearbox.common import (BOLT_ANGLES, BOLT_R, M3_CLEAR, M3_INSERT, NUT_POCKET_DEPTH, OD,
                             disc, hole, nut_slot_pocket)
+from lib.tolerances import ACTIVE as FIT, hole as fit_hole
 
 Z0, Z1 = 0.0, 14.0
 MOUNT_INSERT_R = 29.125
@@ -19,7 +20,7 @@ MOUNT_INSERT_DEPTH = 6.0
 def back_cover_body():
     body = disc(OD, Z0, Z1)
     body -= disc(72.0, Z0, 7.0)
-    body -= disc(26.0, 7.0, 12.0)
+    body -= disc(fit_hole(26.0, FIT.press), 7.0, 12.0)    # 6803 seat
     body -= disc(24.0, 12.0, 12.6)
     body -= disc(18.0, 12.6, Z1)
     for a in BOLT_ANGLES:

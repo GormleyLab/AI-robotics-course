@@ -11,6 +11,7 @@ from cadgen import step
 
 from belt_arm.common import J3_X, J3_Y, zcyl
 from lib import params
+from lib.tolerances import ACTIVE as FIT, shaft
 
 Z_FLANGE, Z_JOURNAL, Z_HEX, Z_END = -4.8, -2.8, 7.2, 22.2
 FLANGE_D = 30.0
@@ -18,7 +19,7 @@ FLANGE_D = 30.0
 
 def pin_body():
     body = zcyl(FLANGE_D, J3_X, J3_Y, Z_FLANGE, Z_JOURNAL)
-    body += zcyl(params.OUTPUT_SHAFT_D, J3_X, J3_Y, Z_JOURNAL, Z_HEX)
+    body += zcyl(shaft(params.OUTPUT_SHAFT_D, FIT.press), J3_X, J3_Y, Z_JOURNAL, Z_HEX)
     body += bd.Pos(J3_X, J3_Y, Z_HEX) * bd.extrude(bd.RegularPolygon(params.PIN_HEX_R, 6, rotation=90), Z_END - Z_HEX)
     return body
 

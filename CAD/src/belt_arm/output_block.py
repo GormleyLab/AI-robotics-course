@@ -17,6 +17,7 @@ from cadgen import step
 
 from belt_arm.common import J3_X, J3_Y, M3_CBORE, M3_CLEAR, box, xcyl
 from lib import params
+from lib.tolerances import ACTIVE as FIT, hex_socket_r
 
 X_FORK, X_SLOT_END, X_PLATE, X_END = 144.175, 199.175, 214.175, 234.175
 Z0, Z1 = 0.2, 44.2
@@ -70,7 +71,7 @@ def output_block_body():
     body -= box(X_FORK - 1, X_SLOT_END, FORK_Y[0] - 1, FORK_Y[1] + 1, *SLOT_Z)
     hex_z0, hex_z1 = FORK_Z[0] - BOSS_H, FORK_Z[1] + BOSS_H
     body -= bd.Pos(J3_X, J3_Y, hex_z0) * bd.extrude(
-        bd.RegularPolygon(params.OUTPUT_HEX_SOCKET_R, 6, rotation=90), hex_z1 - hex_z0)
+        bd.RegularPolygon(hex_socket_r(params.OUTPUT_HEX_SOCKET_R, FIT.hex_socket), 6, rotation=90), hex_z1 - hex_z0)
     for y in LINK_Y:
         for z in LINK_Z:
             body -= xcyl(M3_CBORE, y, z, X_PLATE, X_PLATE + CBORE_DEPTH)

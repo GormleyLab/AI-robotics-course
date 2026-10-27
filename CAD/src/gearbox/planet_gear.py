@@ -7,9 +7,10 @@ from cadgen import step
 
 from gearbox.carrier import BACKLASH, HELIX, MODULE, ROOT_FILLET, TIP_CHAMFER
 from lib import gears, params
+from lib.tolerances import ACTIVE as FIT, hole as fit_hole
 
 WIDTH = params.GEAR_FACE_WIDTH
-BORE = 8.0
+BORE = fit_hole(8.0, FIT.press)        # 6 x 8 x 10 bushing OD
 
 
 @step(out="../../STEP/gearbox/planet_gear.step")

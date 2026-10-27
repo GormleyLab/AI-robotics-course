@@ -17,10 +17,11 @@ from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE, DUAL_X, DUAL_Y, IDLER_SLO
                              M3_CBORE, M3_CLEAR, M3_INSERT, PROXIMAL_INSERT_DEPTH, PROXIMAL_INSERT_Y,
                              WALL_SCREW_XY, X_PROXIMAL, Z_TOP_TOP, Z_WALL_TOP, plate, xcyl, yslot, zcyl)
 from lib import params
+from lib.tolerances import ACTIVE as FIT, hole
 
 BOSS_BOTTOM = 35.3
-IDLER_SLOT_W, IDLER_SLOT_Z = 5.3, 39.0
-IDLER_CBORE_W = 8.0                # M5 nut 8 AF, line-to-line (fit allowance: I-11)
+IDLER_SLOT_W, IDLER_SLOT_Z = hole(5.3, FIT.clearance), 39.0
+IDLER_CBORE_W = hole(8.0, FIT.slip)   # M5 nut 8 AF: line-to-line in Fusion, FIT.slip lets it slide (I-11)
 IDLER_NUT_SLOT_Y = (IDLER_SLOT_Y[0] - 1.0, IDLER_SLOT_Y[1] + 1.0)   # I-4 fixed: Fusion = IDLER_SLOT_Y
 WALL_CBORE_Z = 41.0
 INSERT_Z = 40.5
@@ -30,7 +31,7 @@ def top_body():
     body = plate(Z_WALL_TOP, Z_TOP_TOP)
     body += zcyl(DOWEL_BOSS_D, DUAL_X, DUAL_Y, BOSS_BOTTOM, Z_WALL_TOP)
     body -= zcyl(DOWEL_HOLE, DUAL_X, DUAL_Y, BOSS_BOTTOM, Z_WALL_TOP)
-    body -= zcyl(params.BEARING_6805_SEAT_D, J3_X, J3_Y, Z_WALL_TOP, Z_TOP_TOP)
+    body -= zcyl(hole(params.BEARING_6805_SEAT_D, FIT.press), J3_X, J3_Y, Z_WALL_TOP, Z_TOP_TOP)
     for x in IDLER_XS:
         body -= yslot(x, *IDLER_SLOT_Y, IDLER_SLOT_W, Z_WALL_TOP, IDLER_SLOT_Z)
         body -= yslot(x, *IDLER_NUT_SLOT_Y, IDLER_CBORE_W, IDLER_SLOT_Z, Z_TOP_TOP)

@@ -8,8 +8,9 @@ chamfers. Disc z -13..-3 with a Ø60 x 5 lower-thrust pocket on top and
 from cadgen import build123d as bd
 from cadgen import step
 
-from joint12.common import J1_X, J1_Y, zcyl
+from joint12.common import J1_X, J1_Y, M5_CLEAR, zcyl
 from lib import gt2, params
+from lib.tolerances import ACTIVE as FIT, hole
 
 TEETH = params.GT2_TEETH_J1
 R_OD = gt2.outside_diameter(TEETH) / 2      # 50.676
@@ -17,7 +18,7 @@ R_FLANGE = R_OD + 1.0
 CHAMFER = 0.2
 Z_HUB, Z_BOTTOM, Z_BAND0, Z_BAND1, Z_TOP = -25.0, -13.0, -11.5, -4.5, -3.0
 HUB_R = 4.0
-POCKET_R, POCKET_DEPTH = params.THRUST_RECESS_BOX_D / 2, 5.0
+POCKET_R, POCKET_DEPTH = hole(params.THRUST_RECESS_BOX_D, FIT.slip) / 2, 5.0
 BOLT_R = 10.0
 R_CORE = R_OD - 1.5                          # inside the groove bottoms
 
@@ -39,7 +40,7 @@ def gt2_pulley_160t_body():
     body += bd.Pos(0, 0, Z_BAND0) * gt2.toothed_ring(TEETH, Z_BAND1 - Z_BAND0)
     body -= zcyl(2 * POCKET_R, 0, 0, Z_TOP - POCKET_DEPTH, Z_TOP)
     for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1)):
-        body -= zcyl(5.3, dx * BOLT_R, dy * BOLT_R, Z_BOTTOM, Z_TOP - POCKET_DEPTH)
+        body -= zcyl(M5_CLEAR, dx * BOLT_R, dy * BOLT_R, Z_BOTTOM, Z_TOP - POCKET_DEPTH)
     return bd.Pos(J1_X, J1_Y, 0) * body
 
 

@@ -301,9 +301,28 @@ Segment 2 (J4) is an identical copy of this segment.
 Purchased-part models and their sources (step.parts vendor files or parametric
 stand-ins) are listed in [`CAD/src/README.md`](../src/README.md).
 
-Bearing seats are modelled at the nominal bearing OD, with no print allowance.
-The recreation should keep the nominal values and add the allowance through a
-named tolerance parameter (`lib/tolerances.py`, Session 2).
+### Print fits (I‑11)
+
+Fusion models every fit at its nominal size. In the recreation each fit feature
+is its Fusion value plus (holes) or minus (printed shafts) the diametral
+allowance of its class in `lib/tolerances.py` `ACTIVE`. The committed STEPs use
+`FUSION` (all zero), so they stay the Fusion replica and the gate is unchanged.
+**To print:** set `ACTIVE = PLA_FDM` (or `RESIN`), rerun the models, and print
+from the regenerated STEPs. Tune the profile first with `src/fit_coupon.py`
+(`STEP/fit_coupon.step`, not gated): one of each fit, sized by `ACTIVE`.
+
+| Class | `PLA_FDM` / `RESIN` (mm, on Ø) | Features |
+|---|---|---|
+| `press` | 0.10 / 0.05 | Bearing seats: 6807 Ø47 (`Box top`), 608 Ø22 (`Box bottom`), 6805 Ø37 (`Hinge` ×2, gearbox front cover, arm `Base`/`Top`), 6803 Ø26 (back cover), 6801 Ø21 (both carrier output halves). Printed shafts in bearing bores, made smaller: `Hinge` Ø35, coupling stub, stage‑2 output shaft and arm `Pin` Ø25, input shaft Ø11.94 / Ø16.94 (already 0.06 under in Fusion), stage‑1 carrier journal Ø12. Bushings in `Planet` and dual-pulley Ø8 bores; planet pins in the carriers' Ø6 holes |
+| `slip` | 0.20 / 0.10 | Dowel Ø6.1 (arm `Base`/`Top` bosses), M5 nut slot 8 (`Top`), thrust washer recesses Ø60 (`Box top`, `GT2-160` pocket), motor shaft D‑bore Ø5.3 (input shaft) |
+| `running` | 0.35 / 0.20 | Unused: nothing turns in a printed bore (planets run on bushings, J3 on 6805s) |
+| `clearance` | 0.2 / 0.1 | M3 Ø3.3 and M5 Ø5.3 holes and slots, idler slots |
+| `hex_socket` | 0.25 / 0.15 | Female hexes across flats: coupling socket and arm `GT2-80` / `Output block` sockets (Fusion already has 0.17 over the 21.48 male) |
+
+Not adjusted: heat-set insert holes (Ø4.2 / Ø6.4, the insert maker's size),
+counterbores, clearance bores with mm of play (`Hinge` Ø61 thrust pocket,
+carrier Ø32.5 bore, motor pilot slot), and gear teeth (I‑3, accepted). The
+`PLA_FDM` values are starting points for a 0.4 mm nozzle.
 
 ---
 
@@ -344,7 +363,7 @@ the last offering are marked 🔧.
 | I‑8 | Low | The J1 motor, J1 20T pulley, all belts, all fasteners, segment 2, J4 and the end effector are missing from the CAD. The recreation adds the J1 motor and 20T pulley (Session 4, assumed mid-slot placement), the two arm belt envelopes (Session 5), and segment 2 with J4 (Session 6, full arm). The J1 belt, fasteners and end effector are still missing. | tree |
 | I‑9 | Low | Naming errors: `GT2-120` is 160T; `Pin 6x11mm` is 22 long; `Component1/2/7` wrappers; an empty `Component2`; a `test` product in the arm. | tree |
 | I‑10 | Low **Accepted** (Session 7, commit "Close I-10") | The hinge left cheek has 5 of the 6 front-cover bolt holes. **Intentional:** the missing hole is the bottom one (270°, z 31.25), inside the 20 mm floor (z 15–35). Its Ø6 counterbore and the screw's insertion path from the inner face would be solid floor, so no screw could be fitted. Adding it would mean a pocket about 24 mm long into the floor top at y = 75. That would leave about 3 mm over the Ø61 thrust pocket and break into an M5 counterbore. Five M3 are ample: the ring's reaction torque is at most about 6 Nm (NEMA17 holding torque × 16), about 31 N of shear per bolt at r = 39.25. No model change (instructor's choice, Session 7). | features; access check (`tmp/i10_access.py`, not kept): the counterbore volume is 100 % hinge, and the insertion path 46..70 is 58 % hinge |
-| I‑11 | Info | All bearing seats are at the nominal OD; PLA needs a press-fit allowance. | features |
+| I‑11 | Info **Fixed** (Session 7, commit "Fix I-11") | All bearing seats are at the nominal OD; PLA needs a press-fit allowance. **Fix** (instructor's choice, Session 7: switchable, nominal default): every fit feature takes its allowance from `lib/tolerances.py` `ACTIVE`, by class (§6 Print fits); `ACTIVE = FUSION` keeps the committed STEPs and the gate unchanged. Setting `PLA_FDM` and rerunning gives print-ready parts. A test coupon (`src/fit_coupon.py`) holds one of each fit for tuning the profile. | With `FUSION`: every rebuilt STEP matches its committed version (volume within 5e‑10, same bbox and face count). With `PLA_FDM` (in memory, `tmp/i11_pla.py`): all 19 fitted bodies are valid single solids, 11–559 mm³ lighter; the `Wall` (inserts only) is unchanged |
 | I‑12 | Info | The thrust bearings (40 ID) ride on a Ø35 shaft, leaving 2.5 mm radial slop; they are centered only by the Ø60/61 recesses. | features |
 | I‑13 | Info | The hinge has two R42.5 boss profiles at different heights (z = 62.5 and 70.5). Check whether the offset is intentional. | features |
 | I‑14 | Medium **Fixed** (Session 7, commit "Fix I-14") | **J1 yaw is limited by the J1 motor** (found once the motor was modelled, Session 4). The hinge floor corners sweep r = 55.7 about J1; the motor frame's near face is 53.85 from the axis at mid-slot, so the hinge hits it. Clear range around 0° (10° steps): ±20° at x = 140, ±40° at x = 150 (blocked at ±50°, clear again from ±60° to ±110°), ±120° at x = 160 (also at 155, 158 and 159, Session 7; a 366–372 mm belt puts the motor there, §2 Load path item 2). Beyond about ±120° the gearbox (ring gear, carriers, covers) hits the motor at every slot position. Assumes the motor square to the box; belt not modelled. **Fix** (no printed part changes): the course stocks GT2 6 mm closed loops in several lengths (instructor, Session 7), so the belt is chosen to put the motor far out: 366–372 mm puts it at x = 155.7–159.2. The model uses 370 mm (`J1_BELT_LOOP`, x = 158.04 from the new `gt2.centre_distance`). `J1_LIMITS` ±40° → ±124°. | After (2° steps): clear to ±124° at x = 155.7 (366 mm), ±128° at 158.04 (370 mm) and 159.2 (372 mm); the ring gear hits next. Full arm (`checks/joint_clearance.py --joint j1_waist`, 10° steps to ±110°, then 2°–6°): clear at ±40…±128°, ring gear × J1 motor 18 mm³ at ±130°. `checks/j1_yaw_clearance.py` now reads the motor's modelled x from the STEP |

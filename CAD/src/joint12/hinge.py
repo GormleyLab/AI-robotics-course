@@ -16,6 +16,7 @@ from cadgen import step
 from joint12.common import (J1_X, J1_Y, J2_Y, J2_Z, M3_CBORE, M3_CLEAR, M5_CLEAR, box, on_j2_circle,
                             xcyl, zcyl)
 from lib import params
+from lib.tolerances import ACTIVE as FIT, hole, shaft
 
 X0, X1 = 39.0, 109.0
 Y0, Y1 = J2_Y - 42.5, J2_Y + 42.5
@@ -52,14 +53,15 @@ def hinge_body():
     body += _inner_fillet(X0 + CHEEK, +1) + _inner_fillet(X1 - CHEEK, -1)
 
     body -= zcyl(params.THRUST_RECESS_HINGE_D, J1_X, J1_Y, Z_FLOOR_BOTTOM, Z_FLOOR_BOTTOM + POCKET_DEPTH)
-    body += zcyl(params.J1_SHAFT_D, J1_X, J1_Y, SHAFT_Z0, Z_FLOOR_BOTTOM + POCKET_DEPTH)
+    body += zcyl(shaft(params.J1_SHAFT_D, FIT.press), J1_X, J1_Y, SHAFT_Z0, Z_FLOOR_BOTTOM + POCKET_DEPTH)
     for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1)):
         x, y = J1_X + dx * PULLEY_BOLT_R, J1_Y + dy * PULLEY_BOLT_R
         body -= zcyl(M5_CLEAR, x, y, SHAFT_Z0, CBORE_Z0)
         body -= zcyl(CBORE_D, x, y, CBORE_Z0, Z_FLOOR_TOP)
 
-    body -= xcyl(params.BEARING_6805_SEAT_D, J2_Y, J2_Z, X0, X0 + CHEEK)
-    body -= xcyl(params.BEARING_6805_SEAT_D, J2_Y, J2_Z, X1 - CHEEK, X1)
+    seat = hole(params.BEARING_6805_SEAT_D, FIT.press)
+    body -= xcyl(seat, J2_Y, J2_Z, X0, X0 + CHEEK)
+    body -= xcyl(seat, J2_Y, J2_Z, X1 - CHEEK, X1)
     for a in COVER_BOLT_ANGLES:
         y, z = on_j2_circle(params.GEARBOX_BOLT_CIRCLE_R, a)
         body -= xcyl(M3_CLEAR, y, z, X0, X0 + CHEEK - COVER_CBORE_DEPTH)

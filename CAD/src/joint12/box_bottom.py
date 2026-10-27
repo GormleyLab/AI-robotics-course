@@ -9,6 +9,7 @@ from cadgen import step
 
 from joint12.common import J1_X, J1_Y, M5_INSERT, box, zcyl
 from lib import params
+from lib.tolerances import ACTIVE as FIT, hole
 
 Z_BOTTOM, Z_FLOOR, Z_TOP = -30.0, -25.0, 0.0
 WALL = 15.0
@@ -21,7 +22,7 @@ def box_bottom_body():
     body = box(0, params.BOX_X, 0, params.BOX_Y, Z_BOTTOM, Z_TOP)
     body -= box(WALL, params.BOX_X - WALL, WALL, params.BOX_Y - WALL, Z_FLOOR, Z_TOP)
     body -= box(params.BOX_X - WALL, params.BOX_X, *WINDOW_Y, Z_FLOOR, Z_TOP)
-    body += zcyl(27.0, J1_X, J1_Y, Z_FLOOR, SEAT_Z1) - zcyl(params.BEARING_608_SEAT_D, J1_X, J1_Y, Z_FLOOR, SEAT_Z1)
+    body += zcyl(27.0, J1_X, J1_Y, Z_FLOOR, SEAT_Z1) - zcyl(hole(params.BEARING_608_SEAT_D, FIT.press), J1_X, J1_Y, Z_FLOOR, SEAT_Z1)
     for x, y in params.BOX_M5_XY:
         body -= zcyl(M5_INSERT, x, y, Z_TOP - INSERT_DEPTH, Z_TOP)
     return body

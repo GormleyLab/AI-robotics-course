@@ -7,13 +7,14 @@ nut pockets that run out to the rim; bolts to the ring gear and the hinge.
 from cadgen import step
 
 from gearbox.common import BOLT_ANGLES, BOLT_R, M3_CLEAR, NUT_POCKET_DEPTH, OD, disc, hole, nut_slot_pocket
+from lib.tolerances import ACTIVE as FIT, hole as fit_hole
 
 Z_OUT, Z_FLANGE, Z_IN = -56.0, -47.0, -45.0
 
 
 def front_cover_body():
     body = disc(OD, Z_OUT, Z_FLANGE) + disc(41.0, Z_FLANGE, Z_IN)
-    body -= disc(37.0, -52.0, Z_IN)
+    body -= disc(fit_hole(37.0, FIT.press), -52.0, Z_IN)    # 6805 seat
     body -= disc(34.0, -52.5, -52.0)
     body -= disc(26.0, Z_OUT, -52.5)
     for a in BOLT_ANGLES:
