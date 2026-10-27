@@ -247,21 +247,42 @@
     "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
     "ref": "#o1.1",
     "frame": "world",
-    "slice_axis": "z"
+    "slice_axis": "z",
+    "departure": {
+      "issue": "I-17",
+      "why": "the two distal Wall screws (counterbore + clearance) move from x = 160 to 130 with the shortened Wall rails",
+      "bbox": 0.0,
+      "vol_pct": 0.0,
+      "symdiff_pct": 0.431
+    }
   },
   {
     "generated": "STEP/belt_arm/wall.step",
     "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
     "ref": "#o1.2",
     "frame": "world",
-    "slice_axis": "z"
+    "slice_axis": "z",
+    "departure": {
+      "issue": "I-17",
+      "why": "side rails end at x = 130 (half-round centres), not 160, to clear the Output block fork; the two distal insert holes move with them",
+      "bbox": 30.0,
+      "vol_pct": 13.111,
+      "symdiff_pct": 13.111
+    }
   },
   {
     "generated": "STEP/belt_arm/top.step",
     "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
     "ref": "#o1.3",
     "frame": "world",
-    "slice_axis": "z"
+    "slice_axis": "z",
+    "departure": {
+      "issue": "I-17",
+      "why": "the two distal Wall screws (clearance + counterbore) move from x = 160 to 130 with the shortened Wall rails",
+      "bbox": 0.0,
+      "vol_pct": 0.0,
+      "symdiff_pct": 0.412
+    }
   },
   {
     "generated": "STEP/belt_arm/dual_gt2_pulley.step",

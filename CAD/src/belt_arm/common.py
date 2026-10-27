@@ -29,8 +29,15 @@ Z_TOP_TOP = 44.0
 # 137.23 deg and put the GT2-80 output 9.08 mm off J3 (I-6, fixed).
 PIN_2_PLACEMENT = bd.Pos(J3_X, J3_Y, 47.4) * bd.Rot(-180, 0, 0) * bd.Pos(-J3_X, -J3_Y, 2.8)
 
-# M3 screws from the Base / Top into Ø4.2 inserts through the Wall.
-WALL_SCREW_XY = ((75.0, 76.5), (0.0, 3.5), (75.0, 3.5), (160.0, 76.5), (-36.5, 40.0), (0.0, 76.5), (160.0, 3.5))
+# Wall side rails end in half-rounds centred at x = RAIL_END_X. Fusion runs
+# them to J3 (x = 160), where the Output block fork hits them at +-55 deg
+# (I-17). Ending them at 130 clears the fork to about +-100 deg (9 mm at 90).
+RAIL_END_X = 130.0
+
+# M3 screws from the Base / Top into Ø4.2 inserts through the Wall. The two
+# distal ones sit at the rail ends (Fusion: x = 160, I-17).
+WALL_SCREW_XY = ((75.0, 76.5), (0.0, 3.5), (75.0, 3.5), (RAIL_END_X, 76.5), (-36.5, 40.0), (0.0, 76.5),
+                 (RAIL_END_X, 3.5))
 # Ø4.2 insert holes in the proximal end faces of Base and Top (IF-8).
 PROXIMAL_INSERT_Y = (3.5, 76.5)
 PROXIMAL_INSERT_DEPTH = 10.0

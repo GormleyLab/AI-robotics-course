@@ -57,8 +57,8 @@ declared as the kinematic limits of `STEP/full_arm/robot_arm.step`:
 |---|---|---|---|---|
 | J1 waist | (0, 0, 0) | +Z | ±40° (motor at mid-slot) | Hinge × J1 motor ([I‑14](#8-observed-issues-and-open-questions)) |
 | J2 shoulder | (0, 0, 58.5) | +Y | ±63° | Segment‑1 motor × right hinge cheek ([I‑16](#8-observed-issues-and-open-questions)) |
-| J3 elbow | (0, −21.8, 288.5) | +Y | ±54° | Output block fork × Wall ([I‑17](#8-observed-issues-and-open-questions)) |
-| J4 wrist | (0, −21.6, 562.675) | +Y | ±54° | Same as J3, on segment 2 |
+| J3 elbow | (0, −21.8, 288.5) | +Y | ±103° (Fusion ±54°) | Output block fork × Wall rail end at ±104° ([I‑17](#8-observed-issues-and-open-questions), fixed) |
+| J4 wrist | (0, −21.6, 562.675) | +Y | ±103° (Fusion ±54°) | Same as J3, on segment 2 |
 
 A positive J2–J4 angle tips the arm toward +X. The segments' mid-planes are 0.2 mm
 (segment 1) and 0.4 mm (segment 2) off J1 in +Y, from the coupling block (centred at
@@ -179,7 +179,7 @@ Face width is 9 (planets). Hands: the ring and planets are right-hand (the tooth
 The segment is a 240 × 80 × 44 box with an R40 rounded distal end, built from
 three printed plates fastened with M3 screws into heat-set inserts:
 - `Base`, 7 thick, with bosses to 10.7;
-- `Wall`, a 30-tall U-frame (7-wide side rails, 7-thick proximal end wall, open at the distal end);
+- `Wall`, a 30-tall U-frame (7-wide side rails, 7-thick proximal end wall, open at the distal end). Since the I‑17 fix the rails end at x = 130 (Fusion: 160, at J3), clear of the Output block fork's sweep;
 - `Top`, 7 thick.
 
 The proximal end faces of Base and Top carry Ø4.2 insert holes (x‑axis, at
@@ -233,7 +233,7 @@ y = 3.5 / 76.5 and z = 3.5 / 40.5), which form the 73 × 37 link interface.
 | Part | Qty | Make | Envelope | Key features |
 |---|---|---|---|---|
 | `Base` | 1 | Print | 240 × 80 × 10.7 | NEMA17 pilot Ø30 plus 4 × M3 (Ø3.3, Ø6 × 3 counterbore from the top). Ø37 6805 seat. Ø10 × 3.7 dowel boss with a Ø6.1 socket. Idler slots y 20 ↔ 65 (Ø10 × 3 from below, then Ø5.3). 7 × M3 to the Wall (Ø6 × 3 counterbore from below, Ø3.3). Proximal Ø4.2 × 10 inserts. |
-| `Wall` | 1 | Print | 203.5 × 80 × 30 | U-frame: 7 mm end wall and side rails with half-round R3.5 ends at x = 160; 7 × Ø4.2 vertical insert holes through the full 30 (used from both faces). |
+| `Wall` | 1 | Print | 173.5 × 80 × 30 | U-frame: 7 mm end wall and side rails with half-round R3.5 ends centred at x = 130 (Fusion: 160, 203.5 long; I‑17); 7 × Ø4.2 vertical insert holes through the full 30 (used from both faces), the two distal ones at the rail ends, (130, 3.5) / (130, 76.5). Base and Top move their matching screw holes with them. |
 | `Top` | 1 | Print | 240 × 80 × 8.7 | Ø37 6805 seat. Ø10 × 1.7 dowel boss underneath with a Ø6.1 socket. Idler slots y 20 ↔ 65 (Ø5.3 × 2 from below, then Ø8). 7 × M3 to the Wall (Ø3.3, Ø6 × 3 counterbore from the top). Proximal Ø4.2 × 10 inserts. No motor holes. |
 | `Dual GT2 pulley` | 1 | Print | Ø52.4 × 20 | Flanged GT2 80T (band z 12.2–19.2) + flanged 20T (band 22.2–29.2) on one body, Ø8 bore |
 | `GT2-80 output` | 1 | Print | Ø52.4 × 10 | Flanged GT2 80T, 21.65 AF hex socket with corners on ±Y, on J3. Fusion: turned 90° and 9.08 mm off J3 (I‑6) |
@@ -335,7 +335,7 @@ the last offering are marked 🔧.
 | I‑14 | Medium | **J1 yaw is limited by the J1 motor** (found once the motor was modelled, Session 4). The hinge floor corners sweep r = 55.7 about J1; the motor frame's near face is 53.85 from the axis at mid-slot, so the hinge hits it. Clear range around 0° (10° steps): ±20° at x = 140, ±40° at x = 150 (blocked at ±50°, clear again from ±60° to ±110°), ±120° at x = 160. Beyond about ±120° the gearbox (ring gear, carriers, covers) hits the motor at every slot position. Assumes the motor square to the box; belt not modelled. | `checks/j1_yaw_clearance.py` |
 | I‑15 | Low | **Arm pulley bands are out of line axially.** Stage 1: the motor 20T band (z 15.2–22.2) is 3 mm above the dual 80T band (12.2–19.2), so a 6 mm belt centred on the 80T band runs 3.5 mm on the motor pulley. Stage 2: the dual 20T band (22.2–29.2) is 1 mm below the output 80T band (23.2–30.2). The motor pulley can slide on its shaft; the dual pulley's split cannot. | Session 5 assembly, belt envelopes |
 | I‑16 | Low 🔧 | **J2 travel is ±63°.** With the arm on the coupling shaft, the segment‑1 motor body (a standard 40 mm NEMA17, as on the built arm; the stand-in matches it) touches the right hinge cheek at ±64°. Centred 30 mm from the link face, it hangs 40 mm below the Base plate. The coupling's rounded block hits the hinge next, at about ±80°. **Accepted:** the instructor rates ±63° as acceptable and not a priority (Session 6). | `checks/joint_clearance.py --joint j2_shoulder` (Session 6) |
-| I‑17 | **High** 🔧 | **J3 and J4 travel is ±54°; target ±90° or more** (instructor, Session 6: limited on the built arm, a design flaw to fix). The Output block fork (35 wide, from 16 behind J3 to the end plate) sweeps into the Wall's distal rail ends (x 160–163.5, the inserts at (160, 3.5) / (160, 76.5)) at ±55°. The overlap reaches 2400 mm³ at ±90°. Travel is currently ±54°, and the Wall is the only obstacle out to about ±100° (the I‑6 pulley rub is gone since the I‑6 fix: 179 mm³ at ±60°, 2403 at ±90°, 2996 at ±95°, all Output block × Wall). Angles between 100° and 120° were not tested; by ±120° the end plate also reaches the Base and Top plates. So clearing the Wall's distal end against the fork should reach ±90° without changing the plates. | `checks/joint_clearance.py --joint j3_elbow` (Session 6) |
+| I‑17 | **High** 🔧 **Fixed** (Session 7, commit "Fix I-17") | **J3 and J4 travel is ±54°; target ±90° or more** (instructor, Session 6: limited on the built arm, a design flaw to fix). The Output block fork (35 wide, from 16 behind J3 to the end plate) sweeps into the Wall's distal rail ends (x 160–163.5, the inserts at (160, 3.5) / (160, 76.5)) at ±55°. The overlap reaches 2400 mm³ at ±90°. Travel is currently ±54°, and the Wall is the only obstacle out to about ±100° (the I‑6 pulley rub is gone since the I‑6 fix: 179 mm³ at ±60°, 2403 at ±90°, 2996 at ±95°, all Output block × Wall). Angles between 100° and 120° were not tested; by ±120° the end plate also reaches the Base and Top plates. So clearing the Wall's distal end against the fork should reach ±90° without changing the plates. **Fix** (instructor's choice of three options, Session 7): the Wall rails end 30 mm earlier, with their half-round centres at x = 130, and the two distal Wall screws move from (160, 3.5) / (160, 76.5) to (130, 3.5) / (130, 76.5), keeping a clamp near J3. Base and Top change only those screw holes. A 2D sweep gave 9 mm clearance at 90° (an end at x = 137 would give 2 mm, and contact at 95°). J3/J4 limits are now ±103°. The gate records Wall, Base and Top as intentional departures (`departure` key in `checks/fusion_map.json`). | Before: `checks/joint_clearance.py --joint j3_elbow` (Session 6). After: J3 and J4 clear at ±54…±103°; the first contact is Output block × Wall rail end at ±104° (59 mm³), the same for J4 |
 
 ### Open questions (deferred)
 - Q1: The belt lengths actually bought, for J1 and the arm stages.

@@ -24,6 +24,12 @@ entries for helical gears set ``"method": "sliced"`` to skip the 3D boolean
 Pass criteria (defaults): bounding box within 0.1 mm per side, volume within
 0.5 %, symmetric-difference volume within 0.5 % of the Fusion volume.
 Exit status is 1 if any comparison fails.
+
+Intentional departures (a design fix that changes a part's shape) keep their
+map entry with a ``departure`` object: ``{"issue", "why", "bbox", "vol_pct",
+"symdiff_pct"}``, the deviation the fix is expected to produce. Such an entry
+reports DEPART and passes while all three measured values stay within
+DEPARTURE_TOL of the recorded ones, so an unintended later change still fails.
 """
 from __future__ import annotations
 
@@ -242,13 +248,25 @@ def compare(generated: str, fusion: str, ref: str, transform=None, align=None,
     }
 
 
+DEPARTURE_TOL = {"bbox": 0.05, "vol_pct": 0.05, "symdiff_pct": 0.05}
+
+
+def _check_departure(row, departure):
+    measured = {"bbox": row["bbox_err"], "vol_pct": row["vol_err_pct"], "symdiff_pct": row["symdiff_pct"]}
+    row["departure"] = departure["issue"]
+    row["pass"] = all(abs(measured[k] - departure[k]) <= tol for k, tol in DEPARTURE_TOL.items())
+    return row
+
+
 def _report(rows):
     print(f"{'result':6s} {'bbox mm':>8s} {'vol %':>7s} {'symdiff %':>9s}  generated  <-  fusion ref")
     for r in rows:
         print(
-            f"{'PASS' if r['pass'] else 'FAIL':6s} {r['bbox_err']:8.3f} {r['vol_err_pct']:7.3f} "
+            f"{('DEPART' if r.get('departure') else 'PASS') if r['pass'] else 'FAIL':6s} "
+            f"{r['bbox_err']:8.3f} {r['vol_err_pct']:7.3f} "
             f"{r['symdiff_pct']:9.3f}  {r['generated']}  <-  {r['ref']}"
             + ("" if r["method"] == "boolean" else f"  ({r['method']})")
+            + (f"  ({r['departure']})" if r.get("departure") else "")
             + f"  [{r['seconds']:.0f}s]"
         )
 
@@ -286,7 +304,7 @@ def main(argv=None):
     rows = []
     for job in jobs:
         tol = job.get("tolerances", {})
-        rows.append(compare(
+        row = compare(
             job["generated"], job["fusion"], job["ref"],
             transform=job.get("transform"), align=job.get("align"),
             frame=job.get("frame", "local"), explain=args.explain,
@@ -295,7 +313,8 @@ def main(argv=None):
             bbox_tol=tol.get("bbox", args.bbox_tol),
             vol_tol=tol.get("vol_pct", args.vol_tol),
             symdiff_tol=tol.get("symdiff_pct", args.symdiff_tol),
-        ))
+        )
+        rows.append(_check_departure(row, job["departure"]) if "departure" in job else row)
     _report(rows)
     return 0 if all(r["pass"] for r in rows) else 1
 

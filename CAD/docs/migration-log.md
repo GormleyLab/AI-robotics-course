@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑6 done) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑6, I‑17 done) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -168,9 +168,14 @@ during recreation.
 - Checks: all four J3-output overlaps in `belt_drive_arm.step` are gone (98 / 1812 / 374 / 83 mm³). The stage‑2 idler now wraps its belt (1.83 mm, 274.4 mm loop, the same as stage 1). J3/J4 are clear at +5° and ±54°, and the Wall is the only contact out to ±95°.
 - Re-rendered `docs/img/belt_arm_internals.png` (top hidden, `--display parts`) and `belt_arm_iso.png` (`--display parts`). The robot_arm images were left as they are: the pulley is hidden inside the fork at that scale.
 
+- **I‑17 fixed** (commit "Fix I-17"), option 1 of three put to the instructor: the Wall rails are trimmed and the two distal screws moved inboard. The other options were dropping those two screws, or a spacer post. `belt_arm/common.py` gains `RAIL_END_X = 130`, and `WALL_SCREW_XY` uses it, so Base and Top follow. The end was chosen with a 2D sweep of the fork outline (`tmp/i17_sweep.py`, not kept): x = 130 leaves 9 mm at 90° and 2.2 mm at 100°.
+- J3/J4 clear to ±103° (first contact Output block × Wall at ±104°, 59 mm³), and `J3_LIMITS` / `J4_LIMITS` are now ±103°. The `pick` and `folded` poses still use 54°; they were not changed.
+- The gate gained intentional departures: a map entry with `departure: {issue, why, bbox, vol_pct, symdiff_pct}` reports DEPART and passes only while the measured deviation stays within 0.05 of the recorded one. Wall (30 mm bbox, 13.1 %), Base (0.43 % symdiff) and Top (0.41 %) use it; Base and Top would still pass the plain tolerance, but they are recorded as departures so later drift is caught.
+- Re-rendered `belt_arm_internals.png`, `belt_arm_iso.png`, `robot_arm_zero.png` and `robot_arm_pick.png` (`--kinematics zero|pick --camera iso` reproduces the Session 6 framing).
+
 ### Next steps (continue Session 7 or start Session 8)
-1. Fix order: I‑1 and I‑6 done. Next I‑17 (J3/J4 travel ≥ ±90°: clear the Wall's distal end against the Output block fork. Travel is currently ±54°, and the Wall is the only obstacle out to about ±100°). I‑2 comes after these. I‑16 (J2 ±63°) is accepted, so leave it. Confirm I‑17 with `checks/joint_clearance.py --joint j3_elbow --angles 90,-90,95,-95` (and `j4_wrist`).
-2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it as an intentional departure in `checks/fusion_map.json` or retire its entry), update design.md (part rows, §5, §8 with the commit).
+1. Fix order: I‑1, I‑6 and I‑17 done. Next I‑2 (output hex rotated 43.5° in the coupling socket, line-to-line fit). I‑16 (J2 ±63°) is accepted, so leave it.
+2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
 5. Optional URDF (`$urdf`) from `full_arm/common.py`: one STL per link, in the link's joint frame.

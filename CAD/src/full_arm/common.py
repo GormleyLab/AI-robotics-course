@@ -60,11 +60,11 @@ END_FACE = _r(base_to_robot(segment_to_base(segment_2_to_segment_1((OUTPUT_FACE_
 UP = (0.0, 0.0, 1.0)
 PITCH = (0.0, 1.0, 0.0)
 
-# Joint limits (deg), from checks/joint_clearance.py (I-14, I-16).
+# Joint limits (deg), from checks/joint_clearance.py (I-14, I-16; J3/J4 after the I-17 fix).
 J1_LIMITS = (-40, 40)
 J2_LIMITS = (-63, 63)
-J3_LIMITS = (-54, 54)
-J4_LIMITS = (-54, 54)
+J3_LIMITS = (-103, 103)
+J4_LIMITS = (-103, 103)
 
 
 def placement(pair):

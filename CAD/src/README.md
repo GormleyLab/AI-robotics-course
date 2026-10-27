@@ -92,7 +92,7 @@ transform back to the Fusion placement.
 | Script | Fusion part | Notes |
 | --- | --- | --- |
 | `base.py` | Base | Motor pilot, J3 6805 seat, dowel boss, idler slots |
-| `wall.py` | Wall | U-frame, 7 insert holes |
+| `wall.py` | Wall | U-frame, 7 insert holes; rails end at `RAIL_END_X` = 130 (Fusion 160, I-17) |
 | `top.py` | Top | |
 | `dual_gt2_pulley.py` | Dual GT2 pulley | 80T + 20T flanged, `lib/gt2.flanged_pulley` |
 | `gt2_80_output.py` | GT2-80 output | 21.65 AF socket; gated with `"method": "sliced"` (the 3D boolean returns a wrong result) |
