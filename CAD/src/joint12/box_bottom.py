@@ -7,9 +7,11 @@ heat-set insert holes Ø6.4 x 10.5 in the top face (IF-2).
 """
 from cadgen import step
 
-from joint12.common import J1_X, J1_Y, M5_INSERT, box, zcyl
+from joint12.common import J1_X, J1_Y, box, zcyl
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hole
+from lib.tolerances import hole, profile
+
+FIT = profile("box_bottom")
 
 Z_BOTTOM, Z_FLOOR, Z_TOP = -30.0, -25.0, 0.0
 WALL = 15.0
@@ -24,7 +26,7 @@ def box_bottom_body():
     body -= box(params.BOX_X - WALL, params.BOX_X, *WINDOW_Y, Z_FLOOR, Z_TOP)
     body += zcyl(27.0, J1_X, J1_Y, Z_FLOOR, SEAT_Z1) - zcyl(hole(params.BEARING_608_SEAT_D, FIT.press), J1_X, J1_Y, Z_FLOOR, SEAT_Z1)
     for x, y in params.BOX_M5_XY:
-        body -= zcyl(M5_INSERT, x, y, Z_TOP - INSERT_DEPTH, Z_TOP)
+        body -= zcyl(FIT.insert_m5, x, y, Z_TOP - INSERT_DEPTH, Z_TOP)
     return body
 
 

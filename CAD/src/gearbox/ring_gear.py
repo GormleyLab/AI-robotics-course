@@ -9,8 +9,11 @@ each end.
 from cadgen import build123d as bd
 from cadgen import step
 
-from gearbox.common import BOLT_ANGLES, BOLT_R, M3_INSERT, OD, disc, hole, revolve_rz
+from gearbox.common import BOLT_ANGLES, BOLT_R, OD, disc, hole, revolve_rz
 from lib import gears, params
+from lib.tolerances import profile
+
+FIT = profile("ring_gear")
 
 Z_FRONT, Z_BACK = -47.0, 0.0
 RING_ADDENDUM = 1.1667         # ring tooth height inside the pitch circle (x m): tip Ø64.0
@@ -51,8 +54,8 @@ def ring_gear_body():
         r = RELIEF_D / 2
         body -= revolve_rz([(0, z0), (r, z0), (r, z_chamfer), (r_tip, z_chamfer + (r - r_tip)), (0, z_chamfer + (r - r_tip))])
     for a in BOLT_ANGLES:
-        body -= hole(M3_INSERT, BOLT_R, a, Z_BACK - INSERT_DEPTH, Z_BACK)
-        body -= hole(M3_INSERT, BOLT_R, a, Z_FRONT, Z_FRONT + INSERT_DEPTH)
+        body -= hole(FIT.insert_m3, BOLT_R, a, Z_BACK - INSERT_DEPTH, Z_BACK)
+        body -= hole(FIT.insert_m3, BOLT_R, a, Z_FRONT, Z_FRONT + INSERT_DEPTH)
     return body
 
 

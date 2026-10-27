@@ -10,11 +10,14 @@ from cadgen import step
 
 from gearbox.common import disc, hole, polar
 from lib import params
+from lib.tolerances import hole as fit_hole, profile
+
+FIT = profile("nema17_mount")
 
 Z0, Z1 = 14.0, 24.0
 PLATE_X, PLATE_Y, CORNER_R = 41.0, 56.0, 5.0
 MOTOR_SCREW_R = params.NEMA17_BOLT_SPACING / 2 * 2**0.5   # 21.92
-MOTOR_SCREW_D = 3.0
+MOTOR_SCREW_D = fit_hole(3.0, FIT.clearance)   # M3, Fusion line-to-line
 CSK_D, CSK_DEPTH = 7.0, 2.0
 COVER_SCREW_R, COVER_SCREW_ANGLES = 29.125, (55.49, 124.51, -55.49, -124.51)
 ACCESS_D, ACCESS_Z = 3.5, 19.5

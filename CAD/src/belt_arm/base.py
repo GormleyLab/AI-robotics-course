@@ -11,11 +11,13 @@ inserts at z = 3.5.
 from cadgen import build123d as bd
 from cadgen import step
 
-from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE, DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y,
-                             M3_CBORE, M3_CLEAR, M3_INSERT, MOTOR_X, MOTOR_Y, PROXIMAL_INSERT_DEPTH,
+from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE_D, DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y,
+                             M3_CBORE, MOTOR_X, MOTOR_Y, PROXIMAL_INSERT_DEPTH,
                              PROXIMAL_INSERT_Y, WALL_SCREW_XY, X_PROXIMAL, Z_BASE_TOP, plate, xcyl, yslot, zcyl)
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hole
+from lib.tolerances import hole, profile
+
+FIT = profile("base")
 
 BOSS_TOP = 10.7
 MOTOR_PILOT_D = 30.0
@@ -29,7 +31,7 @@ INSERT_Z = 3.5
 def base_body():
     body = plate(0, Z_BASE_TOP)
     body += zcyl(DOWEL_BOSS_D, DUAL_X, DUAL_Y, Z_BASE_TOP, BOSS_TOP)
-    body -= zcyl(DOWEL_HOLE, DUAL_X, DUAL_Y, Z_BASE_TOP, BOSS_TOP)
+    body -= zcyl(hole(DOWEL_HOLE_D, FIT.slip), DUAL_X, DUAL_Y, Z_BASE_TOP, BOSS_TOP)
     body -= zcyl(hole(params.BEARING_6805_SEAT_D, FIT.press), J3_X, J3_Y, 0, Z_BASE_TOP)
 
     body -= zcyl(MOTOR_PILOT_D, MOTOR_X, MOTOR_Y, 0, Z_BASE_TOP)
@@ -37,7 +39,7 @@ def base_body():
     for sx in (-1, 1):
         for sy in (-1, 1):
             x, y = MOTOR_X + sx * half, MOTOR_Y + sy * half
-            body -= zcyl(M3_CLEAR, x, y, 0, MOTOR_SCREW_CBORE_Z)
+            body -= zcyl(FIT.m3_clear, x, y, 0, MOTOR_SCREW_CBORE_Z)
             body -= zcyl(M3_CBORE, x, y, MOTOR_SCREW_CBORE_Z, Z_BASE_TOP)
 
     for x in IDLER_XS:
@@ -46,9 +48,9 @@ def base_body():
 
     for x, y in WALL_SCREW_XY:
         body -= zcyl(M3_CBORE, x, y, 0, WALL_CBORE_Z)
-        body -= zcyl(M3_CLEAR, x, y, WALL_CBORE_Z, Z_BASE_TOP)
+        body -= zcyl(FIT.m3_clear, x, y, WALL_CBORE_Z, Z_BASE_TOP)
     for y in PROXIMAL_INSERT_Y:
-        body -= xcyl(M3_INSERT, y, INSERT_Z, X_PROXIMAL, X_PROXIMAL + PROXIMAL_INSERT_DEPTH)
+        body -= xcyl(FIT.insert_m3, y, INSERT_Z, X_PROXIMAL, X_PROXIMAL + PROXIMAL_INSERT_DEPTH)
     return body
 
 

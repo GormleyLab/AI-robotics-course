@@ -10,9 +10,12 @@ each idler, for the M3 jack screws that set belt tension.
 """
 from cadgen import step
 
-from belt_arm.common import (JACK_SCREW_XZ, M3_INSERT, RAIL_END_X, WALL_SCREW_XY, X_PROXIMAL, Z_BASE_TOP,
+from belt_arm.common import (JACK_SCREW_XZ, RAIL_END_X, WALL_SCREW_XY, X_PROXIMAL, Z_BASE_TOP,
                              Z_WALL_TOP, box, ycyl, zcyl)
 from lib import params
+from lib.tolerances import profile
+
+FIT = profile("wall")
 
 T = 7.0
 
@@ -24,9 +27,9 @@ def wall_body():
         body += box(X_PROXIMAL, RAIL_END_X, y0, y0 + T, Z_BASE_TOP, Z_WALL_TOP)
         body += zcyl(T, RAIL_END_X, y0 + T / 2, Z_BASE_TOP, Z_WALL_TOP)
     for x, y in WALL_SCREW_XY:
-        body -= zcyl(M3_INSERT, x, y, Z_BASE_TOP, Z_WALL_TOP)
+        body -= zcyl(FIT.insert_m3, x, y, Z_BASE_TOP, Z_WALL_TOP)
     for x, z in JACK_SCREW_XZ:
-        body -= ycyl(M3_INSERT, x, z, 0.0, T)
+        body -= ycyl(FIT.insert_m3, x, z, 0.0, T)
     return body
 
 

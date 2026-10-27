@@ -12,9 +12,11 @@ cheek 6805.
 from cadgen import build123d as bd
 from cadgen import step
 
-from joint12.common import J2_Y, J2_Z, M3_CBORE, M3_CLEAR, Z_TO_X, box, xcyl, zcyl
+from joint12.common import J2_Y, J2_Z, M3_CBORE, Z_TO_X, box, xcyl, zcyl
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hex_socket_r, shaft
+from lib.tolerances import hex_socket_r, profile, shaft
+
+FIT = profile("coupling_shaft")
 
 X0, X1 = 52.8, 96.8
 Y0, Y1 = J2_Y - params.ARM_WIDTH / 2, J2_Y + params.ARM_WIDTH / 2
@@ -54,7 +56,7 @@ def coupling_shaft_body():
     body += _stub()
     for x in LINK_X:
         for y in LINK_Y:
-            body -= zcyl(M3_CLEAR, x, y, LINK_CBORE_Z1, Z_TOP)
+            body -= zcyl(FIT.m3_clear, x, y, LINK_CBORE_Z1, Z_TOP)
             body -= zcyl(M3_CBORE, x, y, ROUND_Z - END_R, LINK_CBORE_Z1)
     return body
 

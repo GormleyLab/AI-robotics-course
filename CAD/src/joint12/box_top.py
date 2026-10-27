@@ -7,9 +7,11 @@ wide with centres x 140..160, and two 3.3 wide M3 slots for the NEMA17's
 """
 from cadgen import step
 
-from joint12.common import J1_X, J1_Y, M3_CLEAR, M5_CLEAR, box, zcyl, zslot
+from joint12.common import J1_X, J1_Y, box, zcyl, zslot
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hole
+from lib.tolerances import hole, profile
+
+FIT = profile("box_top")
 
 Z_BOTTOM, Z_TOP = 0.0, 12.0
 RECESS_DEPTH = 5.0
@@ -22,9 +24,9 @@ def box_top_body():
     body -= zcyl(hole(params.BEARING_6807_SEAT_D, FIT.press), J1_X, J1_Y, Z_BOTTOM + RECESS_DEPTH, Z_TOP)
     body -= zslot(*params.J1_MOTOR_SLOT_X, params.J1_MOTOR_SLOT_Y, params.J1_MOTOR_SLOT_W, Z_BOTTOM, Z_TOP)
     for y in params.J1_MOTOR_SCREW_SLOT_Y:
-        body -= zslot(*SCREW_SLOT_X, y, M3_CLEAR, Z_BOTTOM, Z_TOP)
+        body -= zslot(*SCREW_SLOT_X, y, FIT.m3_clear, Z_BOTTOM, Z_TOP)
     for x, y in params.BOX_M5_XY:
-        body -= zcyl(M5_CLEAR, x, y, Z_BOTTOM, Z_TOP)
+        body -= zcyl(FIT.m5_clear, x, y, Z_BOTTOM, Z_TOP)
     return body
 
 

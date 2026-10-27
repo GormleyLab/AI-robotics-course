@@ -13,10 +13,12 @@ inside the floor with no screw access, so it is left out (I-10, accepted).
 from cadgen import build123d as bd
 from cadgen import step
 
-from joint12.common import (J1_X, J1_Y, J2_Y, J2_Z, M3_CBORE, M3_CLEAR, M5_CLEAR, box, on_j2_circle,
+from joint12.common import (J1_X, J1_Y, J2_Y, J2_Z, M3_CBORE, box, on_j2_circle,
                             xcyl, zcyl)
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hole, shaft
+from lib.tolerances import hole, profile, shaft
+
+FIT = profile("hinge")
 
 X0, X1 = 39.0, 109.0
 Y0, Y1 = J2_Y - 42.5, J2_Y + 42.5
@@ -56,7 +58,7 @@ def hinge_body():
     body += zcyl(shaft(params.J1_SHAFT_D, FIT.press), J1_X, J1_Y, SHAFT_Z0, Z_FLOOR_BOTTOM + POCKET_DEPTH)
     for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1)):
         x, y = J1_X + dx * PULLEY_BOLT_R, J1_Y + dy * PULLEY_BOLT_R
-        body -= zcyl(M5_CLEAR, x, y, SHAFT_Z0, CBORE_Z0)
+        body -= zcyl(FIT.m5_clear, x, y, SHAFT_Z0, CBORE_Z0)
         body -= zcyl(CBORE_D, x, y, CBORE_Z0, Z_FLOOR_TOP)
 
     seat = hole(params.BEARING_6805_SEAT_D, FIT.press)
@@ -64,7 +66,7 @@ def hinge_body():
     body -= xcyl(seat, J2_Y, J2_Z, X1 - CHEEK, X1)
     for a in COVER_BOLT_ANGLES:
         y, z = on_j2_circle(params.GEARBOX_BOLT_CIRCLE_R, a)
-        body -= xcyl(M3_CLEAR, y, z, X0, X0 + CHEEK - COVER_CBORE_DEPTH)
+        body -= xcyl(FIT.m3_clear, y, z, X0, X0 + CHEEK - COVER_CBORE_DEPTH)
         body -= xcyl(M3_CBORE, y, z, X0 + CHEEK - COVER_CBORE_DEPTH, X0 + CHEEK)
     return body
 

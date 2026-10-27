@@ -7,9 +7,11 @@ inserts for the NEMA17 mount.
 """
 from cadgen import step
 
-from gearbox.common import (BOLT_ANGLES, BOLT_R, M3_CLEAR, M3_INSERT, NUT_POCKET_DEPTH, OD,
+from gearbox.common import (BOLT_ANGLES, BOLT_R, NUT_POCKET_DEPTH, OD,
                             disc, hole, nut_slot_pocket)
-from lib.tolerances import ACTIVE as FIT, hole as fit_hole
+from lib.tolerances import hole as fit_hole, profile
+
+FIT = profile("back_cover")
 
 Z0, Z1 = 0.0, 14.0
 MOUNT_INSERT_R = 29.125
@@ -24,10 +26,10 @@ def back_cover_body():
     body -= disc(24.0, 12.0, 12.6)
     body -= disc(18.0, 12.6, Z1)
     for a in BOLT_ANGLES:
-        body -= hole(M3_CLEAR, BOLT_R, a, Z0, Z1)
+        body -= hole(FIT.m3_clear, BOLT_R, a, Z0, Z1)
         body -= nut_slot_pocket(BOLT_R, a, Z1 - NUT_POCKET_DEPTH, Z1)
     for a in MOUNT_INSERT_ANGLES:
-        body -= hole(M3_INSERT, MOUNT_INSERT_R, a, Z1 - MOUNT_INSERT_DEPTH, Z1)
+        body -= hole(FIT.insert_m3, MOUNT_INSERT_R, a, Z1 - MOUNT_INSERT_DEPTH, Z1)
     return body
 
 

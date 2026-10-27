@@ -11,7 +11,6 @@ from cadgen import build123d as bd
 
 from joint12.common import box, xcyl, zcyl  # noqa: F401  (re-exported for the arm parts)
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hole
 
 J3_X, J3_Y = params.J3_AXIS_XY                 # (160, 40)
 MOTOR_X, MOTOR_Y = params.ARM_MOTOR_XY         # (-10, 40)
@@ -51,10 +50,8 @@ SPACER_R = 5.0
 PROXIMAL_INSERT_Y = (3.5, 76.5)
 PROXIMAL_INSERT_DEPTH = 10.0
 
-M3_CLEAR = hole(3.3, FIT.clearance)
 M3_CBORE = 6.0
-M3_INSERT = 4.2
-DOWEL_HOLE = hole(6.1, FIT.slip)
+DOWEL_HOLE_D = 6.1                  # Fusion: 0.1 over the 6 mm dowel; + FIT.slip in each plate
 DOWEL_BOSS_D = 10.0
 
 

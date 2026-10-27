@@ -11,7 +11,9 @@ from cadgen import step
 
 from belt_arm.common import J3_X, J3_Y, zcyl
 from lib import params
-from lib.tolerances import ACTIVE as FIT, shaft
+from lib.tolerances import profile, shaft
+
+FIT = profile("pin")
 
 Z_FLANGE, Z_JOURNAL, Z_HEX, Z_END = -4.8, -2.8, 7.2, 22.2
 FLANGE_D = 30.0

@@ -14,7 +14,6 @@ from cadgen import build123d as bd
 
 from gearbox.common import TO_FUSION
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hole
 
 J1_X, J1_Y = params.J1_AXIS_XY                 # (75, 75)
 J2_Y, J2_Z = params.J2_AXIS_YZ                 # (75, 70.5)
@@ -26,10 +25,7 @@ GEARBOX_PLACEMENT = bd.Pos(-17.0, J2_Y, J2_Z) * bd.Rot(0, 0, 90) * TO_FUSION
 # Along-X parts (axis on J2) are modelled about +Z, then turned onto +X.
 Z_TO_X = bd.Rot(0, 90, 0)
 
-M3_CLEAR = hole(3.3, FIT.clearance)
 M3_CBORE = 6.0
-M5_CLEAR = hole(5.3, FIT.clearance)
-M5_INSERT = 6.4
 
 _MIN = (bd.Align.MIN, bd.Align.MIN, bd.Align.MIN)
 _CMIN = (bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)

@@ -11,7 +11,9 @@ from cadgen import step
 
 from gearbox.carrier import sun_gear
 from gearbox.common import revolve_rz
-from lib.tolerances import ACTIVE as FIT, hole as fit_hole
+from lib.tolerances import hole as fit_hole, profile
+
+FIT = profile("input_shaft")
 
 # Outer envelope (r, z): journal, shoulder, gear tips with 0.4 chamfers,
 # conical gear top, neck, collar with 45 deg chamfer, upper journal.

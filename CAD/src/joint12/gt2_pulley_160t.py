@@ -8,9 +8,11 @@ chamfers. Disc z -13..-3 with a Ø60 x 5 lower-thrust pocket on top and
 from cadgen import build123d as bd
 from cadgen import step
 
-from joint12.common import J1_X, J1_Y, M5_CLEAR, zcyl
+from joint12.common import J1_X, J1_Y, zcyl
 from lib import gt2, params
-from lib.tolerances import ACTIVE as FIT, hole
+from lib.tolerances import hole, profile
+
+FIT = profile("gt2_pulley_160t")
 
 TEETH = params.GT2_TEETH_J1
 R_OD = gt2.outside_diameter(TEETH) / 2      # 50.676
@@ -40,7 +42,7 @@ def gt2_pulley_160t_body():
     body += bd.Pos(0, 0, Z_BAND0) * gt2.toothed_ring(TEETH, Z_BAND1 - Z_BAND0)
     body -= zcyl(2 * POCKET_R, 0, 0, Z_TOP - POCKET_DEPTH, Z_TOP)
     for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1)):
-        body -= zcyl(M5_CLEAR, dx * BOLT_R, dy * BOLT_R, Z_BOTTOM, Z_TOP - POCKET_DEPTH)
+        body -= zcyl(FIT.m5_clear, dx * BOLT_R, dy * BOLT_R, Z_BOTTOM, Z_TOP - POCKET_DEPTH)
     return bd.Pos(J1_X, J1_Y, 0) * body
 
 

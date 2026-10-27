@@ -15,9 +15,11 @@ the Pins are 30 and 17.2 deg off).
 from cadgen import build123d as bd
 from cadgen import step
 
-from belt_arm.common import J3_X, J3_Y, M3_CBORE, M3_CLEAR, box, xcyl
+from belt_arm.common import J3_X, J3_Y, M3_CBORE, box, xcyl
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hex_socket_r
+from lib.tolerances import hex_socket_r, profile
+
+FIT = profile("output_block")
 
 X_FORK, X_SLOT_END, X_PLATE, X_END = 144.175, 199.175, 214.175, 234.175
 Z0, Z1 = 0.2, 44.2
@@ -75,7 +77,7 @@ def output_block_body():
     for y in LINK_Y:
         for z in LINK_Z:
             body -= xcyl(M3_CBORE, y, z, X_PLATE, X_PLATE + CBORE_DEPTH)
-            body -= xcyl(M3_CLEAR, y, z, X_PLATE + CBORE_DEPTH, X_END)
+            body -= xcyl(FIT.m3_clear, y, z, X_PLATE + CBORE_DEPTH, X_END)
     return body
 
 

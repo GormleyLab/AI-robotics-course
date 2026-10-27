@@ -12,7 +12,9 @@ from cadgen import step
 
 from belt_arm.common import J3_X, J3_Y
 from lib import gt2, params
-from lib.tolerances import ACTIVE as FIT, hex_socket_r
+from lib.tolerances import hex_socket_r, profile
+
+FIT = profile("gt2_80_output")
 
 Z0 = 21.7
 H = 2 * gt2.FLANGE_H + 7.0

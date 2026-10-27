@@ -18,11 +18,11 @@ from cadgen import build123d as bd
 
 from gearbox.common import disc, hole, polar, revolve_rz
 from lib import gears, params
-from lib.tolerances import ACTIVE as FIT, hole as fit_hole
+from lib.tolerances import FitProfile, hole as fit_hole
 
 PLATE_D = 56.0
 PIN_R = params.PLANET_CENTRE_R          # 22.5
-PIN_D = fit_hole(6.0, FIT.press)        # planet pins
+PIN_D = 6.0                             # planet pins (+ fit.press)
 POCKET_D = 29.5
 BORE_D = 32.5
 POCKET_FILLET = 1.0
@@ -30,7 +30,7 @@ SCREW_R, SCREW_OFFSET = 22.0, -60.0     # M3 insert / screw, relative to pin_ang
 PEG_R, PEG_OFFSET = 25.0, 165.0         # locating peg / socket, relative to pin_angle
 PEG_BASE_R, PEG_TIP_R, PEG_H = 1.0, 0.464, 2.0
 SOCKET_TIP_R, SOCKET_DEPTH = 0.532, 2.2
-INSERT_D, INSERT_DEPTH = 4.2, 8.0
+INSERT_DEPTH = 8.0
 PILOT_D, PILOT_DEPTH = 2.8, 2.65
 CSK_D = 7.5
 
@@ -46,14 +46,14 @@ def _three(angle0: float) -> list[float]:
     return [angle0 + 120.0 * k for k in range(3)]
 
 
-def carrier_plate(z_bottom: float, pin_angle: float) -> bd.Part:
+def carrier_plate(z_bottom: float, pin_angle: float, fit: FitProfile) -> bd.Part:
     """Carrier plate from z_bottom to z_bottom + 17, pegs below z_bottom."""
     z_top = z_bottom + 17.0
     z_pocket_top = z_bottom + 13.0
     body = disc(PLATE_D, z_bottom, z_top) - disc(BORE_D, z_bottom, z_top)
     for a in _three(pin_angle):
         body -= hole(POCKET_D, PIN_R, a, z_bottom, z_pocket_top)
-        body -= hole(PIN_D, PIN_R, a, z_pocket_top, z_top)
+        body -= hole(fit_hole(PIN_D, fit.press), PIN_R, a, z_pocket_top, z_top)
     # R1 rounds on the vertical edges where the pockets break into the bore and the OD
     edges = [
         e for e in body.edges()
@@ -64,22 +64,22 @@ def carrier_plate(z_bottom: float, pin_angle: float) -> bd.Part:
     ]
     body = body.fillet(POCKET_FILLET, edges)
     for a in _three(pin_angle + SCREW_OFFSET):
-        body -= hole(INSERT_D, SCREW_R, a, z_bottom, z_bottom + INSERT_DEPTH)
+        body -= hole(fit.insert_m3, SCREW_R, a, z_bottom, z_bottom + INSERT_DEPTH)
     for a in _three(pin_angle + PEG_OFFSET):
         peg = bd.Cone(PEG_BASE_R, PEG_TIP_R, PEG_H, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
         body += polar(PEG_R, a, z_bottom) * bd.Rot(180, 0, 0) * peg
     return body
 
 
-def carrier_output_plate(z_top: float, pin_angle: float) -> bd.Part:
+def carrier_output_plate(z_top: float, pin_angle: float, fit: FitProfile) -> bd.Part:
     """Output-half plate from z_top - 5 to z_top, with the stem cone below it."""
     z_bottom = z_top - 5.0
     body = disc(PLATE_D, z_bottom, z_top)
     body += revolve_rz([(0, z_bottom - 2.0), (14.5, z_bottom - 2.0), (16.5, z_bottom), (0, z_bottom)])
-    body -= disc(fit_hole(21.0, FIT.press), z_bottom, z_top)            # 6801 bearing recess
+    body -= disc(fit_hole(21.0, fit.press), z_bottom, z_top)            # 6801 bearing recess
     body -= disc(18.0, z_bottom - 0.4, z_bottom)
     for a in _three(pin_angle):
-        body -= hole(PIN_D, PIN_R, a, z_bottom, z_top)
+        body -= hole(fit_hole(PIN_D, fit.press), PIN_R, a, z_bottom, z_top)
     for a in _three(pin_angle + SCREW_OFFSET):
         body -= hole(PILOT_D, SCREW_R, a, z_top - PILOT_DEPTH, z_top)
         csk = bd.Cone(CSK_D / 2, PILOT_D / 2, z_top - PILOT_DEPTH - z_bottom,

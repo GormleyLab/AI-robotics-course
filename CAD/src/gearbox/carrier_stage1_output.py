@@ -8,14 +8,16 @@ from cadgen import step
 
 from gearbox.carrier import carrier_output_plate, sun_gear
 from gearbox.common import disc
-from lib.tolerances import ACTIVE as FIT, shaft
+from lib.tolerances import profile, shaft
+
+FIT = profile("carrier_stage1_output")
 
 Z_TOP, PIN_ANGLE = -12.0, 26.41
 SUN_Z, SUN_W, SUN_PHASE = -34.8, 10.4, 10.590
 
 
 def carrier_stage1_output_body():
-    body = carrier_output_plate(Z_TOP, PIN_ANGLE)
+    body = carrier_output_plate(Z_TOP, PIN_ANGLE, FIT)
     body += disc(29.0, -21.0, -19.0)
     body += disc(24.7, -24.4, -21.0)
     body += sun_gear(SUN_Z, SUN_W, SUN_PHASE)

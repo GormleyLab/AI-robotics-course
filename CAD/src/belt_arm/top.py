@@ -13,11 +13,13 @@ No motor holes.
 """
 from cadgen import step
 
-from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE, DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y,
-                             M3_CBORE, M3_CLEAR, M3_INSERT, PROXIMAL_INSERT_DEPTH, PROXIMAL_INSERT_Y,
+from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE_D, DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y,
+                             M3_CBORE, PROXIMAL_INSERT_DEPTH, PROXIMAL_INSERT_Y,
                              WALL_SCREW_XY, X_PROXIMAL, Z_TOP_TOP, Z_WALL_TOP, plate, xcyl, yslot, zcyl)
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hole
+from lib.tolerances import hole, profile
+
+FIT = profile("top")
 
 BOSS_BOTTOM = 35.3
 IDLER_SLOT_W, IDLER_SLOT_Z = hole(5.3, FIT.clearance), 39.0
@@ -30,16 +32,16 @@ INSERT_Z = 40.5
 def top_body():
     body = plate(Z_WALL_TOP, Z_TOP_TOP)
     body += zcyl(DOWEL_BOSS_D, DUAL_X, DUAL_Y, BOSS_BOTTOM, Z_WALL_TOP)
-    body -= zcyl(DOWEL_HOLE, DUAL_X, DUAL_Y, BOSS_BOTTOM, Z_WALL_TOP)
+    body -= zcyl(hole(DOWEL_HOLE_D, FIT.slip), DUAL_X, DUAL_Y, BOSS_BOTTOM, Z_WALL_TOP)
     body -= zcyl(hole(params.BEARING_6805_SEAT_D, FIT.press), J3_X, J3_Y, Z_WALL_TOP, Z_TOP_TOP)
     for x in IDLER_XS:
         body -= yslot(x, *IDLER_SLOT_Y, IDLER_SLOT_W, Z_WALL_TOP, IDLER_SLOT_Z)
         body -= yslot(x, *IDLER_NUT_SLOT_Y, IDLER_CBORE_W, IDLER_SLOT_Z, Z_TOP_TOP)
     for x, y in WALL_SCREW_XY:
-        body -= zcyl(M3_CLEAR, x, y, Z_WALL_TOP, WALL_CBORE_Z)
+        body -= zcyl(FIT.m3_clear, x, y, Z_WALL_TOP, WALL_CBORE_Z)
         body -= zcyl(M3_CBORE, x, y, WALL_CBORE_Z, Z_TOP_TOP)
     for y in PROXIMAL_INSERT_Y:
-        body -= xcyl(M3_INSERT, y, INSERT_Z, X_PROXIMAL, X_PROXIMAL + PROXIMAL_INSERT_DEPTH)
+        body -= xcyl(FIT.insert_m3, y, INSERT_Z, X_PROXIMAL, X_PROXIMAL + PROXIMAL_INSERT_DEPTH)
     return body
 
 

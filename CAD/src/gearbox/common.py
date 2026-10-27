@@ -13,7 +13,6 @@ import math
 from cadgen import build123d as bd
 
 from lib import params
-from lib.tolerances import ACTIVE as FIT, hole as fit_hole
 
 TO_FUSION = bd.Rot(-90, 0, 0)
 
@@ -21,8 +20,6 @@ OD = params.GEARBOX_OD                      # 85
 BOLT_R = params.GEARBOX_BOLT_CIRCLE_R       # 39.25
 BOLT_ANGLES = tuple(30.0 + 60.0 * k for k in range(params.GEARBOX_BOLT_COUNT))
 
-M3_CLEAR = fit_hole(3.3, FIT.clearance)
-M3_INSERT = 4.2
 NUT_POCKET_D = 7.5     # cover pockets: counterbore + open radial slot to the rim
 NUT_POCKET_DEPTH = 3.2
 
