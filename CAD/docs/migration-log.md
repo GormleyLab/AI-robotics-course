@@ -11,8 +11,8 @@ during recreation.
 | 0 | Install the text-to-cad plugin | Done |
 | 1 | Measure the Fusion STEP files; write `docs/design.md` | Done |
 | 2 | Project scaffold (`src/`, `STEP/`, `lib/`), tolerance and gear/GT2 helpers, COTS via step.parts, `checks/compare_to_fusion.py` | Done |
-| 3 | Planetary gearbox parts + assembly | Next |
-| 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | |
+| 3 | Planetary gearbox parts + assembly | Done |
+| 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Next |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | |
 | 6 | Full arm (two segments), kinematics, optional URDF | |
 | 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks | |
@@ -49,22 +49,32 @@ during recreation.
   - OCCT booleans return empty results for exactly coincident cylinders, so the check also evaluates the overlap with a 1e-4 mm nudge and keeps the larger value.
 - Generated STEP files are committed, so students can use them without cadgen.
 
-### Next session (3): planetary gearbox
-1. Build in this order:
-   1. `src/gearbox/ring_gear.py`
-   2. `back_cover.py`, `front_cover.py`, `nema17_mount.py`
-   3. `carrier_stage1.py` and `carrier_stage2.py` (identical geometry; one factory)
-   4. `carrier_stage1_output.py` (stage-2 sun)
-   5. `carrier_stage2_output.py` (output shaft + hex)
-   6. `input_shaft.py`, `planet_gear.py`
-   7. the `gearbox.py` assembly
-2. Model each part in its Fusion local frame. Get the frame and features from
-   `tmp/inspect/Planetary Gearbox - Two-stage 16to1 ratio.txt`; regenerate it
-   with `checks/inspect/dump_features.py` (design.md §9).
-3. Gear phase: before each `compare_to_fusion` run, find each gear's tooth
-   rotation from the Fusion part, e.g. the angle of a tip-land face centre.
-4. Ring gear: Fusion root Ø70.9 implies a dedendum of about 1.133 m. Fit
-   addendum and dedendum to the Fusion faces before gating.
-5. Add every part to `checks/fusion_map.json`, then run the gate, snapshot
-   review, and `checks/inspect/interference.py` on the assembly. Reproduce
-   I-1/I-2/I-7; don't fix them.
+## Session 3 — 2026-10-26
+- Recreated all 9 printed gearbox models plus the `planetary_gearbox.py` assembly in one gearbox frame (`gearbox/common.py`). All 10 map entries pass the gate (worst: ring gear at 0.364 % symmetric difference).
+- **Finding: the gears are 15° helical, not spur.** Measurements:
+  - transverse m1.5; ring and planets right-hand, suns left-hand;
+  - 0.053 mm backlash;
+  - root fillets 0.635 mm; ring tips rounded 0.385 mm;
+  - ring tip Ø64.0 / root Ø70.9;
+  - each ring band is a separate cutter; tooth centre at 0° at each band's lower end.
+  - `design.md` §3 and IF‑6 are corrected.
+- Other corrections in `design.md`:
+  - the bolt circle is r = 39.25;
+  - the output hex is 21.65 AF;
+  - the cover pockets are open radial U-slots (Q4 partly resolved).
+- `lib/gears.py` gained `helix_angle` (uniformly twisted extrusion), `root_fillet` and `tip_round`.
+- Tools:
+  - `checks/inspect/gear_phase.py` finds tooth phase and tip/root radii (point sampling; slow);
+  - `tmp/phase_slice.py` is the fast section-based version, and should be promoted to `checks/` when Session 5 needs it for pulleys.
+- Gate (`compare_to_fusion.py`) now has:
+  - `frame: world`, step-list transforms, `--only`, `--explain` and per-entry timing;
+  - nudged retries for coincident faces;
+  - a sliced method (planar sections, polygonised when the exact 2D boolean fails), calibrated against the 6805 stand-in. Helical gears skip the 3D boolean (`"method": "sliced"`) and take 20–90 s each.
+- The assembly interference matches Fusion except ring × planet (54/52 vs 36/26 mm³; I‑7 updated).
+- Stage-1 and stage-2 planets in Fusion each share one absolute tooth phase (4.830° / 3.530° at their bottom faces); `planetary_gearbox.py` uses them.
+
+### Next session (4): joint 1/2 base
+1. Recreate in `src/joint12/`: `box_bottom.py`, `box_top.py`, `hinge.py`, `coupling_shaft.py`, `gt2_pulley_160t.py` (the Fusion "GT2-120"; use `lib/gt2.py`, and check its groove against Fusion with a section like the gear checks).
+2. Pick one clean frame for the base, e.g. the Fusion "Joint 1 and 2" frame as-is (axes already clean: J1 at (75, 75), J2 ‖ X). Place the gearbox with `TO_FUSION` composed with the gearbox's placement in that file. The gearbox axis is at z = 70.0 and the hinge at 70.5 (I‑1): reproduce it.
+3. Add the J1 NEMA17 + 20T pulley under the box top slot at mid-travel (x = 150, y = 75). They aren't in Fusion, so they're not gated; record the placement assumption.
+4. Assembly `src/joint12/joint_1_and_2.py`; gate all parts with `frame: world` against `Joint 1 and 2.step`; run the interference check; reproduce I‑1/I‑2/I‑10/I‑12.

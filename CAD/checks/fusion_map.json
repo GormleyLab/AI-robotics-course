@@ -1,7 +1,210 @@
 [
-  {"generated": "STEP/purchased/bushing_6x8x10.step", "fusion": "STEP/imported/fusion/Joint 1 and 2.step", "ref": "#o1.12.5", "align": "center"},
-  {"generated": "STEP/purchased/washer_6.step", "fusion": "STEP/imported/fusion/Joint 1 and 2.step", "ref": "#o1.12.4", "align": "center"},
-  {"generated": "STEP/purchased/planet_pin_6x22.step", "fusion": "STEP/imported/fusion/Joint 1 and 2.step", "ref": "#o1.12.2", "align": "center"},
-  {"generated": "STEP/purchased/thrust_bearing_51108.step", "fusion": "STEP/imported/fusion/Joint 1 and 2.step", "ref": "#o1.2", "align": "center"},
-  {"generated": "STEP/purchased/dowel_pin_6x30.step", "fusion": "STEP/imported/fusion/Belt Drive Arm.step", "ref": "#o1.6", "align": "center"}
+  {
+    "generated": "STEP/purchased/bushing_6x8x10.step",
+    "fusion": "STEP/imported/fusion/Joint 1 and 2.step",
+    "ref": "#o1.12.5",
+    "align": "center"
+  },
+  {
+    "generated": "STEP/purchased/washer_6.step",
+    "fusion": "STEP/imported/fusion/Joint 1 and 2.step",
+    "ref": "#o1.12.4",
+    "align": "center"
+  },
+  {
+    "generated": "STEP/purchased/planet_pin_6x22.step",
+    "fusion": "STEP/imported/fusion/Joint 1 and 2.step",
+    "ref": "#o1.12.2",
+    "align": "center"
+  },
+  {
+    "generated": "STEP/purchased/thrust_bearing_51108.step",
+    "fusion": "STEP/imported/fusion/Joint 1 and 2.step",
+    "ref": "#o1.2",
+    "align": "center"
+  },
+  {
+    "generated": "STEP/purchased/dowel_pin_6x30.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.6",
+    "align": "center"
+  },
+  {
+    "generated": "STEP/gearbox/ring_gear.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.19",
+    "frame": "world",
+    "transform": [
+      0,
+      0,
+      0,
+      -90,
+      0,
+      0
+    ],
+    "slice_axis": "y",
+    "method": "sliced"
+  },
+  {
+    "generated": "STEP/gearbox/back_cover.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.42",
+    "frame": "world",
+    "transform": [
+      0,
+      0,
+      0,
+      -90,
+      0,
+      0
+    ],
+    "slice_axis": "y"
+  },
+  {
+    "generated": "STEP/gearbox/front_cover.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.41",
+    "frame": "world",
+    "transform": [
+      0,
+      0,
+      0,
+      -90,
+      0,
+      0
+    ],
+    "slice_axis": "y"
+  },
+  {
+    "generated": "STEP/gearbox/nema17_mount.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.12",
+    "frame": "world",
+    "transform": [
+      0,
+      0,
+      0,
+      -90,
+      0,
+      0
+    ],
+    "slice_axis": "y"
+  },
+  {
+    "generated": "STEP/gearbox/carrier_plate.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.32",
+    "frame": "world",
+    "transform": [
+      0,
+      0,
+      0,
+      -90,
+      0,
+      0
+    ],
+    "slice_axis": "y"
+  },
+  {
+    "generated": "STEP/gearbox/carrier_plate.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.18",
+    "frame": "world",
+    "transform": [
+      [
+        "rot",
+        0,
+        0,
+        17.05
+      ],
+      [
+        "pos",
+        0,
+        0,
+        -24.0
+      ],
+      [
+        "rot",
+        -90,
+        0,
+        0
+      ]
+    ],
+    "slice_axis": "y"
+  },
+  {
+    "generated": "STEP/gearbox/carrier_stage1_output.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.35",
+    "frame": "world",
+    "transform": [
+      0,
+      0,
+      0,
+      -90,
+      0,
+      0
+    ],
+    "slice_axis": "y",
+    "method": "sliced"
+  },
+  {
+    "generated": "STEP/gearbox/carrier_stage2_output.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.44",
+    "frame": "world",
+    "transform": [
+      0,
+      0,
+      0,
+      -90,
+      0,
+      0
+    ],
+    "slice_axis": "y"
+  },
+  {
+    "generated": "STEP/gearbox/input_shaft.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.43",
+    "frame": "world",
+    "transform": [
+      0,
+      0,
+      0,
+      -90,
+      0,
+      0
+    ],
+    "slice_axis": "y",
+    "method": "sliced"
+  },
+  {
+    "generated": "STEP/gearbox/planet_gear.step",
+    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
+    "ref": "#o1.1",
+    "frame": "world",
+    "transform": [
+      [
+        "rot",
+        0,
+        0,
+        4.83
+      ],
+      [
+        "pos",
+        -1.4097,
+        -22.4558,
+        -10.2
+      ],
+      [
+        "rot",
+        -90,
+        0,
+        0
+      ]
+    ],
+    "slice_axis": "y",
+    "method": "sliced"
+  }
 ]

@@ -1,12 +1,17 @@
-"""Involute spur and internal (ring) gear factories.
+"""Involute spur/helical and internal (ring) gear factories.
 
 No gear library ships in the cadgen environment, so the profile is built here.
-Profile: standard involute, ``addendum``/``dedendum`` in multiples of the
-module, straight radial flank below the base circle, no root fillet. Tooth
-thickness at the pitch circle is ``pi*m/2 - backlash``.
+Profile (transverse plane): standard involute, ``addendum``/``dedendum`` in
+multiples of the module, straight radial flank below the base circle, no root
+fillet. Tooth thickness at the pitch circle is ``pi*m/2 - backlash``.
 
-The planetary gearbox (design.md §3) uses m1.5, 20 deg: sun and planets 15T
-(dedendum 1.25 m), ring 45T.
+Helical gears are the transverse profile extruded with a uniform twist (the
+way Fusion's gear add-in builds them), so ``module`` is the *transverse*
+module. ``helix_angle`` is at the pitch circle; positive = the tooth pattern
+turns counter-clockwise (about +Z) as z increases.
+
+The planetary gearbox (design.md §3) uses transverse m1.5, 20 deg, 15 deg
+helix: sun and planets 15T, ring 45T.
 """
 from __future__ import annotations
 
@@ -61,8 +66,12 @@ def spur_profile(
     dedendum: float = 1.25,
     backlash: float = 0.0,
     samples: int = 12,
+    root_fillet: float = 0.0,
 ) -> bd.Sketch:
-    """2D external gear outline centred on the origin, tooth 0 on +X."""
+    """2D external gear outline centred on the origin, tooth 0 on +X.
+
+    ``root_fillet`` rounds the concave corners where the flanks meet the
+    root circle (Fusion's gears have them)."""
     rp = module * teeth / 2
     rb = rp * math.cos(math.radians(pressure_angle))
     r_tip = rp + addendum * module
@@ -73,6 +82,10 @@ def spur_profile(
     profile = bd.Sketch() + bd.Circle(r_root)
     for i in range(teeth):
         profile += tooth.rotate(bd.Axis.Z, 360.0 * i / teeth)
+    if root_fillet > 0:
+        corners = [v for v in profile.vertices()
+                   if abs(bd.Vector(v.X, v.Y).length - r_root) < 1e-3]
+        profile = bd.Sketch() + bd.fillet(corners, root_fillet)
     return profile
 
 
@@ -86,10 +99,13 @@ def spur_gear(
     backlash: float = 0.0,
     bore: float = 0.0,
     tip_chamfer: float = 0.0,
+    helix_angle: float = 0.0,
+    root_fillet: float = 0.0,
 ) -> bd.Part:
-    """External spur gear, axis +Z, from z=0 to z=width."""
-    profile = spur_profile(teeth, module, pressure_angle, addendum, dedendum, backlash)
-    gear = bd.extrude(profile, width)
+    """External spur/helical gear, axis +Z, from z=0 to z=width, tooth 0 on +X at z=0."""
+    profile = spur_profile(teeth, module, pressure_angle, addendum, dedendum, backlash,
+                           root_fillet=root_fillet)
+    gear = _extrude(profile, width, twist_deg(helix_angle, module * teeth / 2, width))
     if tip_chamfer > 0:
         r_tip = module * teeth / 2 + addendum * module
         # Cones trimming the tooth tips at both faces (as the Fusion gears do).
@@ -107,8 +123,13 @@ def ring_gear_cutter(
     addendum: float = 1.0,
     dedendum: float = 1.25,
     backlash: float = 0.0,
+    helix_angle: float = 0.0,
+    tip_round: float = 0.0,
 ) -> bd.Part:
     """Solid to subtract from a body to cut an internal gear.
+
+    ``tip_round`` rounds the ring's tooth-tip corners (it is the cutter's
+    root fillet).
 
     ``addendum`` is the ring tooth height inside the pitch circle (ring tip
     radius = rp - addendum*m); ``dedendum`` is the space depth outside it
@@ -119,8 +140,22 @@ def ring_gear_cutter(
         teeth, module, pressure_angle,
         addendum=dedendum, dedendum=addendum,
         backlash=-backlash,  # wider spaces = thinner ring teeth
+        root_fillet=tip_round,
     )
-    return bd.extrude(profile, width)
+    return _extrude(profile, width, twist_deg(helix_angle, module * teeth / 2, width))
+
+
+def twist_deg(helix_angle: float, pitch_radius: float, width: float) -> float:
+    """Rotation of the tooth pattern over ``width`` for a helix at the pitch circle."""
+    return math.degrees(width * math.tan(math.radians(helix_angle)) / pitch_radius)
+
+
+def _extrude(profile: bd.Sketch, width: float, twist: float) -> bd.Part:
+    if abs(twist) < 1e-9:
+        return bd.extrude(profile, width)
+    (face,) = profile.faces()
+    return bd.Solid.extrude_linear_with_rotation(
+        face, bd.Vector(0, 0, 0), bd.Vector(0, 0, width), twist)
 
 
 def _tip_chamfer_envelope(r_tip: float, width: float, c: float) -> bd.Part:

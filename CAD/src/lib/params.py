@@ -32,12 +32,13 @@ J1_MOTOR_SCREW_SLOT_Y = (59.5, 90.5)
 J2_AXIS_YZ_HINGE = (75.0, 70.5)    # hinge 6805 seats and coupling shaft
 J2_AXIS_YZ_GEARBOX = (75.0, 70.0)  # gearbox (0.5 mm low: issue I-1, reproduced)
 BEARING_6805_SEAT_D = 37.0
-GEARBOX_BOLT_CIRCLE_R = 39.2
+GEARBOX_BOLT_CIRCLE_R = 39.25
 GEARBOX_BOLT_COUNT = 6
 
 # --- IF-6: gearbox internals
 GEAR_MODULE = 1.5
 GEAR_PRESSURE_ANGLE = 20.0
+GEAR_HELIX_ANGLE = 15.0           # transverse module 1.5; measured Session 3
 SUN_TEETH = 15
 PLANET_TEETH = 15
 RING_TEETH = 45

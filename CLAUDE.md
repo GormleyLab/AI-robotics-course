@@ -21,8 +21,8 @@ Students build a multi-axis robotic arm (Arduino + Python, machine vision via Op
 The arm is being recreated as Python models with the text-to-cad `cad` skill (cadgen + build123d). Load that skill before any CAD work.
 
 - Run Python through cadgen's pinned environment, not the project `.venv`: `PYTHONPATH=src uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python ...`, from `CAD/`.
-- Every printed part gets an entry in `CAD/checks/fusion_map.json` and must pass `checks/compare_to_fusion.py --map checks/fusion_map.json` (bbox ±0.1 mm, volume ±0.5 %, symmetric difference ≤0.5 %).
-- Replica first: recreated parts must match the Fusion STEP files (keep each part's Fusion local frame). Don't fix the issues in `design.md` §8 during recreation; fix them later, one per commit.
+- Every printed part gets an entry in `CAD/checks/fusion_map.json` and must pass `checks/compare_to_fusion.py --map checks/fusion_map.json` (bbox ±0.1 mm, volume ±0.5 %, symmetric difference ≤0.5 %). Helical gears need `"method": "sliced"` in their map entry: the 3D boolean always fails on their flanks. Gate slow parts in parallel, one process per `--only` filter.
+- Replica first: recreated parts must match the Fusion STEP files. Model each subassembly in one clean frame that maps onto the Fusion assembly by a single transform (the gearbox does this; see `CAD/src/gearbox/common.py`), and compare with `"frame": "world"`. Don't fix the issues in `design.md` §8 during recreation; fix them later, one per commit.
 - Locked interfaces are listed in `design.md` §5. Changing one is a breaking change and must be called out.
 - Every design change must update `CAD/docs/design.md` in the same commit: the affected part rows, interface table (§5), ratios and link lengths (§1), and issue log (§8, marking issues fixed with the commit that fixed them). If a change makes a snapshot in `CAD/docs/img/` out of date, re-render it.
 - Exploratory scripts and snapshots go in `CAD/tmp/` (git-ignored); reusable checks go in `CAD/checks/`.

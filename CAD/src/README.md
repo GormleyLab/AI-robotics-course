@@ -41,6 +41,25 @@ Frame: axis +Z, end face (motor: mounting face) at z = 0.
 
 Imported sources: `STEP/imported/fusion/` (the three Fusion exports, the replica reference) and `STEP/imported/vendor/` (step.parts downloads, sha256-verified).
 
-## Printed parts
+## Planetary gearbox (`gearbox/` → `STEP/gearbox/`), Session 3
 
-Added in Sessions 3–5 under `gearbox/`, `joint12/` and `belt_arm/`. Every printed part needs an entry in `checks/fusion_map.json`, and must pass `python checks/compare_to_fusion.py --map checks/fusion_map.json`.
+Gearbox frame: axis +Z, z = 0 at the ring / back-cover joint, motor at +Z
+(`gearbox/common.py`; `TO_FUSION = Rot(-90, 0, 0)` maps onto the Fusion gearbox).
+
+| Script | Fusion part | Notes |
+| --- | --- | --- |
+| `ring_gear.py` | Ring gear | 45T helical internal, two bands with separate cutters |
+| `back_cover.py`, `front_cover.py` | Back / Front cover | Slot-pocket helper in `common.py` |
+| `nema17_mount.py` | NEMA17 mount | |
+| `input_shaft.py` | Input shaft v5 | Stage-1 sun (left-hand) |
+| `carrier_plate.py` | Carrier p1 - stage 1 / stage 2 | One model, two placements |
+| `carrier_stage1_output.py` | Carrier p1 - stage 1 - Output | Stage-2 sun |
+| `carrier_stage2_output.py` | Carrier p2 - stage 2 - Output v5 | Output shaft + hex |
+| `planet_gear.py` | Planet gear (×6) | Right-hand helix |
+| `planetary_gearbox.py` | Assembly | Not named `gearbox.py`: running it would shadow the package |
+
+Helpers (not entrypoints): `common.py`, `carrier.py`.
+
+## Printed parts still to come
+
+Sessions 4–5, under `joint12/` and `belt_arm/`. Every printed part needs an entry in `checks/fusion_map.json`, and must pass `python checks/compare_to_fusion.py --map checks/fusion_map.json`.
