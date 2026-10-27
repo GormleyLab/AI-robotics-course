@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑6, I‑15, I‑17 done) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑6, I‑15, I‑17 done; I‑10, I‑16 accepted) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -197,8 +197,10 @@ during recreation.
   - the radial vendor-band overlaps remain: motor 20T × belt 1 is 97 mm³ (was 84, since the whole belt height is now on the band), and each idler × its belt is 33 mm³.
 - Snapshots not re-rendered: the 1–1.7 mm axial shifts don't show at the scale of the `belt_arm_*` images.
 
+- **I‑10 accepted** (commit "Close I-10"), with no model change. The missing hole is the bottom one (270°, z 31.25). It lies inside the 20 mm hinge floor: its counterbore is all hinge, and the screw path from the inner face is 58 % hinge. Adding it would mean a pocket about 24 mm long into the floor top, leaving about 3 mm over the thrust pocket and breaking into an M5 counterbore. Five M3 carry about 31 N each at the most the ring sees (about 6 Nm). Options put to the instructor: accept, add a pocket, or skip. The instructor chose accept.
+
 ### Next steps (continue Session 7 or start Session 8)
-1. Fix order: I‑1, I‑2, I‑6, I‑15 and I‑17 done. I‑16 (J2 ±63°) is accepted, so leave it. Next candidates: I‑10 (sixth front-cover hole in the left cheek), I‑4 (belt tensioning), I‑5 (idler 5 mm bore on a 6 mm dowel; needs Q3 answered).
+1. Fix order: I‑1, I‑2, I‑6, I‑15 and I‑17 done; I‑10 and I‑16 accepted. Next candidates: I‑4 (belt tensioning), I‑5 (idler 5 mm bore on a 6 mm dowel; needs Q3 answered).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.

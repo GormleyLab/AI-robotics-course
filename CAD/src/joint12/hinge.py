@@ -7,8 +7,8 @@ about z = 62.5 (I-13). Both cheeks have Ø37 6805 seats on J2 at z = 70.5
 (IF-4, shared with the gearbox since the I-1 fix). Underneath: a Ø35 J1 shaft down to
 z = -8 and a Ø61 x 10 upper-thrust pocket (IF-1). 4 x M5 Ø5.3 at r = 10
 with Ø12 counterbores from the floor take the bolts into the 160T pulley.
-The left cheek has 5 of the 6 front-cover M3 holes, the bottom one is
-missing (I-10).
+The left cheek has 5 of the 6 front-cover M3 holes: the bottom one would sit
+inside the floor with no screw access, so it is left out (I-10, accepted).
 """
 from cadgen import build123d as bd
 from cadgen import step
@@ -28,7 +28,7 @@ SHAFT_Z0 = -8.0
 POCKET_DEPTH = 10.0
 PULLEY_BOLT_R = 10.0
 CBORE_D, CBORE_Z0 = 12.0, 23.0
-COVER_BOLT_ANGLES = (-30.0, 30.0, 90.0, 150.0, 210.0)   # 270 missing (I-10)
+COVER_BOLT_ANGLES = (-30.0, 30.0, 90.0, 150.0, 210.0)   # 270 is inside the floor (I-10, accepted)
 COVER_CBORE_DEPTH = 2.0
 
 
