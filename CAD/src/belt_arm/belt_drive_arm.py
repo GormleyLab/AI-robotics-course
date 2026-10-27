@@ -3,7 +3,8 @@
 Printed parts are modelled in place; purchased parts use the Fusion
 placements, so I-5 (5 mm idler bores on the 6 mm dowels) is reproduced.
 I-6 is fixed: the GT2-80 output and both Pin hexes sit on J3, in line with
-the Output block socket.
+the Output block socket. I-15 is fixed: every band on a belt is in line with
+it (the motor 20T slides down its shaft; the dual pulley changed).
 
 Belts are not in Fusion (I-8) and are added here as envelopes (not gated):
 the GT2 pitch line over the pitch circles from lib/gt2.py, offset to the
@@ -36,10 +37,13 @@ from purchased.gt2_idler_20t import gt2_idler_20t
 from purchased.gt2_pulley_20t import gt2_pulley_20t
 from purchased.nema17 import nema17
 
-MOTOR_PULLEY_Z = 13.7                  # vendor 20T bottom face, as Fusion's GT2-20 (band z 15.2..22.2)
+# Belt planes (I-15 fixed): stage 1 centred at z 17.0 on the idler-1 band, stage 2 at
+# 26.7 on the GT2-80 output band (idler 2 is 0.3 high, inside the output's 0.5 slot play).
+MOTOR_PULLEY_Z = 12.0                  # vendor 20T bottom face, band 13.5..20.5 (Fusion 13.7: band 15.2..22.2)
 IDLER_Z = (12.0, 22.0)                 # idler bottom faces (bands 13.5..20.5 / 23.5..30.5)
 IDLER_2_SHIFT = bd.Pos(IDLER_XS[1] - IDLER_XS[0], 0, 0)
-BELT_Z = (12.7, 23.7)                  # belt bottoms: centred on the 80T bands 12.2..19.2 / 23.2..30.2
+BELT_Z = (14.0, 23.7)                  # belt bottoms: centred on the 80T bands 13.5..20.5 / 23.2..30.2
+BUSHING_Z = (10.7, 21.7)               # bushing bottoms in the dual pulley bore 10.7..31.7 (Fusion 10.7, 20.7)
 
 R_PITCH_20 = gt2.pitch_diameter(params.GT2_TEETH_MOTOR) / 2
 R_PITCH_80 = gt2.pitch_diameter(params.GT2_TEETH_ARM_DRIVEN) / 2
@@ -85,8 +89,8 @@ def segment_parts():
         _named(bd.Pos(DUAL_X, DUAL_Y, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:dual_pulley"),
         _named(bd.Pos(*idler_1, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:idler_1"),
         _named(bd.Pos(*idler_2, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:idler_2"),
-        _named(bd.Pos(DUAL_X, DUAL_Y, 10.7) * bushing_6x8x10(), "bushing:lower"),
-        _named(bd.Pos(DUAL_X, DUAL_Y, 20.7) * bushing_6x8x10(), "bushing:upper"),
+        _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[0]) * bushing_6x8x10(), "bushing:lower"),
+        _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[1]) * bushing_6x8x10(), "bushing:upper"),
         _named(bd.Pos(*idler_1, IDLER_Z[0]) * gt2_idler_20t(), "gt2_idler_20t:1"),
         _named(bd.Pos(*idler_2, IDLER_Z[1]) * gt2_idler_20t(), "gt2_idler_20t:2"),
         _named(bd.Pos(J3_X, J3_Y, 0.2) * bearing_6805(), "bearing_6805:base"),

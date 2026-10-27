@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑6, I‑17 done) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑6, I‑15, I‑17 done) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -185,8 +185,20 @@ during recreation.
 - Build hygiene: changing `params.py` rebuilds every model that imports it, and the rebuilt STEPs differ only in float noise (`2.2e-16` → `0`). Those files were restored with `git checkout`, so the commit carries only the carrier, gearbox, joint12 and full-arm STEPs.
 - Not re-rendered: `docs/img/gearbox_exploded.png` still shows the Fusion carrier, 6 mm longer at the output. It was an exploded view made in the viewer GUI, and the CLI `exploded` setting only spreads the parts along the axis, which hides the shaft. Re-capture it from the viewer if the difference matters.
 
+- **I‑15 fixed** (commit "Fix I-15"). Idler 1 was also out of line: its band (13.5–20.5) was 1.3 mm above the dual 80T, and belt 1 rode its lower flange. That was the Session 5 "vendor" 34 mm³.
+  - The design intent is the spacers: 5 + 15 and 15 + 5 put the idler bands 10 apart, at z 17.0 and 27.0.
+  - Belts aligned to the parts that can't move: idler 1 (z 17.0) and the output 80T in its fork slot (z 26.7, with 0.5 mm play).
+  - Dual pulley: the 80T is up 1.3 on a new Ø12 × 1.3 hub (it still sits on the Base boss), and the 20T is up 1.0. Its lower flange merges 0.3 mm into the 80T's top flange.
+  - Assembly: the motor 20T slides 1.7 mm down its shaft (`MOTOR_PULLEY_Z = 12.0`), belt 1 moves to z 14.0, and the upper bushing to 21.7 (`BUSHING_Z`).
+- Gate: the dual pulley is a departure (bbox 1.0, 0.28 % vol, 29.06 % symdiff; the symdiff is the Ø52 flanges swept 1.3 mm).
+- Checks (`interference.py` on `belt_drive_arm.step`):
+  - dual × belt 2 went from 2.5 mm³ to 0;
+  - every belt now lies inside the band of each pulley and idler it runs on;
+  - the radial vendor-band overlaps remain: motor 20T × belt 1 is 97 mm³ (was 84, since the whole belt height is now on the band), and each idler × its belt is 33 mm³.
+- Snapshots not re-rendered: the 1–1.7 mm axial shifts don't show at the scale of the `belt_arm_*` images.
+
 ### Next steps (continue Session 7 or start Session 8)
-1. Fix order: I‑1, I‑2, I‑6 and I‑17 done. I‑16 (J2 ±63°) is accepted, so leave it. Next candidates: I‑5 (idler 5 mm bore on a 6 mm dowel; needs Q3 answered), I‑15 (pulley bands out of line axially), I‑10 (sixth front-cover hole in the left cheek), I‑4 (belt tensioning).
+1. Fix order: I‑1, I‑2, I‑6, I‑15 and I‑17 done. I‑16 (J2 ±63°) is accepted, so leave it. Next candidates: I‑10 (sixth front-cover hole in the left cheek), I‑4 (belt tensioning), I‑5 (idler 5 mm bore on a 6 mm dowel; needs Q3 answered).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.

@@ -94,7 +94,7 @@ transform back to the Fusion placement.
 | `base.py` | Base | Motor pilot, J3 6805 seat, dowel boss, idler slots |
 | `wall.py` | Wall | U-frame, 7 insert holes; rails end at `RAIL_END_X` = 130 (Fusion 160, I-17) |
 | `top.py` | Top | |
-| `dual_gt2_pulley.py` | Dual GT2 pulley | 80T + 20T flanged, `lib/gt2.flanged_pulley` |
+| `dual_gt2_pulley.py` | Dual GT2 pulley | 80T + 20T flanged, `lib/gt2.flanged_pulley`. I-15 departure: bands moved up 1.3 / 1.0 on a Ø12 hub |
 | `gt2_80_output.py` | GT2-80 output | 21.65 AF socket; gated with `"method": "sliced"` (the 3D boolean returns a wrong result) |
 | `pin.py` | Pin (×2) | Modelled as Pin:1; Pin:2 at `PIN_2_PLACEMENT` |
 | `output_block.py` | Output block | Fork, mitred R5 root fillets, hex socket, link interface |
