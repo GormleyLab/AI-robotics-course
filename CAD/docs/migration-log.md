@@ -159,7 +159,7 @@ during recreation.
 - URDF deferred: it needs a mesh per link in link frames, and nothing downstream uses it yet.
 
 ### Next session (7): design review, I‑1 first
-1. Fix order: I‑1 (J2 axis 0.5 mm offset, three bearings) first. Then I‑6 (J3 output on axis; this also removes the pulley's rub on the Wall), then I‑17 (J3/J4 travel ≥ ±90°: clear the Wall's distal end against the Output block fork; up to ±100° nothing else is in the way). I‑2 comes after these. I‑16 (J2 ±63°) is accepted, so leave it. Confirm I‑17 with `checks/joint_clearance.py --joint j3_elbow --angles 90,-90,95,-95` (and `j4_wrist`).
+1. Fix order: I‑1 (J2 axis 0.5 mm offset, three bearings) first. Then I‑6 (J3 output on axis; this also removes the pulley's rub on the Wall), then I‑17 (J3/J4 travel ≥ ±90°: clear the Wall's distal end against the Output block fork. Travel is currently ±54°, and the Wall is the only obstacle out to about ±100°). I‑2 comes after these. I‑16 (J2 ±63°) is accepted, so leave it. Confirm I‑17 with `checks/joint_clearance.py --joint j3_elbow --angles 90,-90,95,-95` (and `j4_wrist`).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it as an intentional departure in `checks/fusion_map.json` or retire its entry), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
