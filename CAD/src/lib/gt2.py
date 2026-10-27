@@ -75,6 +75,13 @@ def belt_pitch_length(centre_distance: float, teeth_a: int, teeth_b: int) -> flo
     return 2 * c + math.pi * (da + db) / 2 + (da - db) ** 2 / (4 * c)
 
 
+def centre_distance(length: float, teeth_a: int, teeth_b: int) -> float:
+    """Centre distance at which an open belt of pitch ``length`` fits (inverse of belt_pitch_length)."""
+    da, db = pitch_diameter(teeth_a), pitch_diameter(teeth_b)
+    k = length - math.pi * (da + db) / 2
+    return (k + math.sqrt(k * k - 2 * (da - db) ** 2)) / 4
+
+
 def belt_teeth(length: float) -> float:
     return length / PITCH
 

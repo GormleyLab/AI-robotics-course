@@ -60,10 +60,12 @@ END_FACE = _r(base_to_robot(segment_to_base(segment_2_to_segment_1((OUTPUT_FACE_
 UP = (0.0, 0.0, 1.0)
 PITCH = (0.0, 1.0, 0.0)
 
-# Joint limits (deg), from checks/joint_clearance.py (I-14, I-16; J3/J4 after the I-17 fix).
+# Joint limits (deg), from checks/joint_clearance.py (I-16; J3/J4 after the I-17 fix).
+# J1 (I-14 fixed): the ring gear meets the J1 motor at +/-130 deg with the 370 mm belt
+# (clear to +/-128) and at +/-126 with a 366 mm one; +/-124 holds for any 366-372 mm belt.
 # J3/J4 negative side: the Output block meets the idler-2 jack screw head at -95 deg
 # with the screw backed out to slack (-97 at a 280 mm loop), I-4; +103 is the Wall.
-J1_LIMITS = (-40, 40)
+J1_LIMITS = (-124, 124)
 J2_LIMITS = (-63, 63)
 J3_LIMITS = (-94, 103)
 J4_LIMITS = (-94, 103)

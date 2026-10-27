@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑15, I‑17 done; I‑3, I‑4 J1, I‑10, I‑16 accepted) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑14, I‑15, I‑17 done; I‑3, I‑4 J1, I‑10, I‑16 accepted) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -218,9 +218,10 @@ during recreation.
 - Finding: `checks/j1_yaw_clearance.py --slot-x 155,158,159,160` clears ±120° at every one of them. So a 366–372 mm J1 belt (motor at x ≈ 155.7–159.2) gives ±120° instead of the mid-slot ±40°. Recorded in §1, §2, the belt row and I‑14 (still open). `J1_LIMITS` stays (−40, 40) because the model's motor is at mid-slot.
 - **I‑7 fixed** (commit "Fix I-7"; assembly only, no printed part or gate change). Done before I‑3 so that backlash can be checked from a meshing pose. Mesh condition (15/15/45, phases at one z): planet 3·ring − 2a − 12, sun 4a − 3·ring + 204 (mod 24°), checked on 2D sections (`tmp/i7_phase.py`). The output hex fixes stage 2's carrier (60° steps are 0 mod 24°), so the stage‑1 carrier turns +6.2947° and the input shaft +9.1834°; planet phases are 21.0469° / 22.8541°. Interference: the 12 gear pairs (3.4–65.0 mm³) went to none above 0.001 mm³; input shaft × stand-in NEMA17 9.8 mm³ is unchanged. Rebuilt planetary_gearbox, joint_1_and_2 and robot_arm; the part STEPs' float-noise rewrites were restored. No snapshot shows the planet phases (`gearbox_exploded.png` is a viewer view), so none was re-rendered.
 - **I‑3 accepted** (commit "Close I-3"; instructor's choice, docs only). Measured: 0.106 mm circular backlash per mesh (each gear thinned 0.053); tip clearance 0.375 sun–planet, 0.125 ring tip → planet root, 0.20 planet tip → ring root. Offered 0.30 or 0.20 mm backlash with a Ø64.5 ring tip, or the ring tip alone; the built gears run acceptably. design.md I‑3 names the first change if a reprint binds.
+- **I‑14 fixed** (commit "Fix I-14"; no printed part changes). The instructor has a stock of GT2 6 mm loops in several lengths, so the J1 belt is chosen to put the motor far out. The model uses 370 mm (`J1_BELT_LOOP` in `joint12/joint_1_and_2.py`; motor x = 158.04 from the new `gt2.centre_distance`). `checks/j1_yaw_clearance.py` (2° steps; now reads the motor's x from the STEP): clear to ±124° at 366 mm, ±128° at 370 and 372 mm; the ring gear hits next. Full arm, `--joint j1_waist`: clear at ±40…±80 (10° steps), ±90…±110, ±116…±128; ring gear × J1 motor 18 mm³ at ±130°. `J1_LIMITS` is now ±124°, which holds for any 366–372 mm belt. Q1 is resolved for J1. Re-rendered `joint12_iso.png`, `robot_arm_zero.png` and `robot_arm_pick.png`.
 
 ### Next steps (continue Session 7 or start Session 8)
-1. Fix order: I‑1, I‑2, I‑5, I‑6, I‑7, I‑15 and I‑17 done, I‑4 done for the arm (J1 accepted); I‑3, I‑10 and I‑16 accepted. Next: I‑14 (J1 travel; may be settled by the J1 belt choice, ±120° at x ≥ 155), then the Low/Info items I‑9, I‑11, I‑12, I‑13.
+1. Fix order: I‑1, I‑2, I‑5, I‑6, I‑7, I‑14, I‑15 and I‑17 done, I‑4 done for the arm (J1 accepted); I‑3, I‑10 and I‑16 accepted; I‑14 done. Next: the Low/Info items I‑9, I‑11, I‑12, I‑13 (I‑11, the print fit allowances, is the one that matters before printing).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.

@@ -5,7 +5,7 @@ Usage (from CAD/):
 
 The rotating stack is the hinge, the coupling shaft, the hinge 6805s and the
 whole gearbox. The motor (``nema17:j1``) is moved along the slot from its
-modelled position (x = 150) to each ``--slot-x``. Prints one row per slot
+modelled position (read from its bounding box) to each ``--slot-x``. Prints one row per slot
 position, one character per yaw angle from -180 deg (``.`` clear, ``X``
 contact), then the clear range around 0 deg and the parts that hit first.
 """
@@ -17,7 +17,6 @@ from cadgen import build123d as bd
 from cadgen import read_scene
 
 J1 = (75.0, 75.0)
-MODELLED_SLOT_X = 150.0
 ROTATING = ("hinge", "coupling_shaft", "bearing_6805:left_cheek", "bearing_6805:right_cheek")
 
 
@@ -40,10 +39,12 @@ def main():
     if motor is None:
         raise SystemExit("no nema17:j1 occurrence")
 
+    mb0 = motor.bounding_box()
+    modelled_x = (mb0.min.X + mb0.max.X) / 2
     angles = [-180.0 + i * a.step_deg for i in range(int(round(360 / a.step_deg)))]
     pivot = bd.Pos(J1[0], J1[1], 0)
     for x in (float(v) for v in a.slot_x.split(",")):
-        m = bd.Pos(x - MODELLED_SLOT_X, 0, 0) * motor
+        m = bd.Pos(x - modelled_x, 0, 0) * motor
         mb = m.bounding_box()
         row, hits = [], {}
         for ang in angles:

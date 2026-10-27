@@ -6,9 +6,10 @@ fixed), so I-12 (thrust bearings on the Ø35 shaft) is reproduced. The output
 hex fits its coupling socket since the I-2 fix (a carrier change).
 
 The J1 motor and its 20T pulley are not in Fusion (I-8) and are added here
-(not gated). Assumed placement: NEMA17 mounting face on the box top (z = 12),
-shaft down, at mid-slot (x = 150, y = 75; 75 mm centre distance), square to
-the box so its screws sit in the M3 slots; the 20T pulley's toothed band
+(not gated). Placement: NEMA17 mounting face on the box top (z = 12), shaft
+down, square to the box so its screws sit in the M3 slots, where a 370 mm
+(185 T) belt sets it: x = 158.04, y = 75 (I-14 fixed; Session 4-7 had it at
+mid-slot, x = 150, where the hinge stops J1 at +/-40 deg); the 20T pulley's toothed band
 (z 1..9 of the vendor part) centred on the 160T band (z = -8).
 """
 from cadgen import build123d as bd
@@ -21,7 +22,7 @@ from joint12.common import GEARBOX_PLACEMENT, J1_X, J1_Y, J2_Y, J2_Z, Z_TO_X
 from joint12.coupling_shaft import coupling_shaft
 from joint12.gt2_pulley_160t import gt2_pulley_160t
 from joint12.hinge import hinge
-from lib import params
+from lib import gt2, params
 from purchased.bearing_608 import bearing_608
 from purchased.bearing_6805 import bearing_6805
 from purchased.bearing_6807 import bearing_6807
@@ -29,7 +30,8 @@ from purchased.gt2_pulley_20t import gt2_pulley_20t
 from purchased.nema17 import nema17
 from purchased.thrust_bearing_51108 import thrust_bearing_51108
 
-J1_MOTOR_X = sum(params.J1_MOTOR_SLOT_X) / 2   # 150, mid-slot
+J1_BELT_LOOP = 370.0                           # GT2 6 mm closed loop, pitch length (I-14)
+J1_MOTOR_X = J1_X + gt2.centre_distance(J1_BELT_LOOP, params.GT2_TEETH_J1, params.GT2_TEETH_MOTOR)  # 158.04
 J1_MOTOR_FACE_Z = params.BOX_TOP_H             # 12
 J1_PULLEY_Z = -13.0                            # 20T band z -12..-4, centred on the 160T band
 

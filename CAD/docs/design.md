@@ -55,7 +55,7 @@ declared as the kinematic limits of `STEP/full_arm/robot_arm.step`:
 
 | Joint | Axis origin | Direction | Clear travel | First contact |
 |---|---|---|---|---|
-| J1 waist | (0, 0, 0) | +Z | ±40° (motor at mid-slot); ±120° with the motor at x ≥ 155 (366–372 mm belt) | Hinge × J1 motor ([I‑14](#8-observed-issues-and-open-questions)) |
+| J1 waist | (0, 0, 0) | +Z | ±124° (Fusion-era mid-slot motor: ±40°) | Ring gear × J1 motor at ±130° with the modelled 370 mm belt (clear to ±128°), ±126° with a 366 mm one; ±124° holds for any 366–372 mm belt ([I‑14](#8-observed-issues-and-open-questions), fixed) |
 | J2 shoulder | (0, 0, 58.5) | +Y | ±63° | Segment‑1 motor × right hinge cheek ([I‑16](#8-observed-issues-and-open-questions)) |
 | J3 elbow | (0, −21.8, 288.5) | +Y | −94° … +103° (Fusion ±54°) | +: Output block fork × Wall rail end at +104° ([I‑17](#8-observed-issues-and-open-questions), fixed). −: Output block end plate × idler‑2 jack screw head at −95° with the screw backed off to slack, −97° at a 280 mm loop ([I‑4](#8-observed-issues-and-open-questions)) |
 | J4 wrist | (0, −21.6, 562.675) | +Y | −94° … +103° (Fusion ±54°) | Same as J3, on segment 2 |
@@ -87,7 +87,7 @@ candidate for gears and pulleys in the redesign.
 ## 2. Base and joint 1 (`Joint 1 and 2.step`)
 
 ### Load path and drive
-1. **Motor.** The J1 NEMA17 (not in Fusion; added in the recreation at mid-slot, I‑8) sits on top of `Box top` with its
+1. **Motor.** The J1 NEMA17 (not in Fusion; added in the recreation, I‑8; modelled at x = 158.04 for a 370 mm belt, I‑14) sits on top of `Box top` with its
    shaft pointing down through a slot. A stock GT2 20T pulley on the shaft sits
    in the 30 mm cavity under the top plate.
 2. **Belt and tension.** The belt runs to the `GT2-120` pulley, which actually
@@ -97,9 +97,10 @@ candidate for gears and pulleys in the redesign.
    inside the box, reached through the `Box bottom` +x window (the −x pair with a long ball-end key).
    With the screws snug but not tight, pull the motor toward +x by hand until the belt is taut,
    then tighten the +x pair first and the −x pair after. The belt loop decides where the motor
-   lands, and that decides J1's travel (I‑14): ±20° at x = 140, ±40° at x = 150, ±120° from
-   x = 155 to 160 (`checks/j1_yaw_clearance.py`, 10° steps). So use a 366–372 mm loop (183–186 T),
-   which puts the motor at x ≈ 155.7–159.2. The loop is 364.8 at x = 155 and 373.4 at x = 160.
+   lands, and that decides J1's travel (I‑14): ±20° at x = 140, ±40° at x = 150, ±124° to
+   ±128° from x = 155.7 to 159.2 (`checks/j1_yaw_clearance.py`). So use a 366–372 mm loop
+   (183–186 T), which puts the motor at x ≈ 155.7–159.2; the model uses 370 mm (x = 158.04,
+   `J1_BELT_LOOP` in `joint12/joint_1_and_2.py`). The loop is 364.8 at x = 155 and 373.4 at x = 160.
 3. **Axial clamp.** The pulley bolts to the bottom of `Hinge` with 4 × M5 at
    r = 10. This clamps a stack on the hinge's Ø35 shaft: hinge → upper thrust
    bearing 40×60×13 → `Box top` → lower thrust bearing → pulley. That stack
@@ -120,8 +121,8 @@ candidate for gears and pulleys in the redesign.
 | 6807 bearing 35×47×7 | 1 | Buy | | |
 | 608 bearing 8×22×7 | 1 | Buy | | |
 | 6805 bearing 25×37×7 | 2 | Buy | | In the hinge cheeks (J2) |
-| NEMA17 + GT2 20T 5 mm bore (J1) | 1 | Buy | | Not in Fusion. Added in the recreation (Session 4): mounting face on `Box top`, mid-slot (x = 150), 20T band centred on the 160T band (z −12…−4) |
-| GT2 closed belt, 6 mm (J1) | 1 | Buy | | Pitch length 340–373 over the slot range (356 at mid-slot); exact belt unknown. Use 366–372 mm (183–186 T) so the motor sits at x ≥ 155 and J1 clears ±120° (I‑4, I‑14; §2 Load path item 2) |
+| NEMA17 + GT2 20T 5 mm bore (J1) | 1 | Buy | | Not in Fusion. Added in the recreation (Session 4): mounting face on `Box top`, at x = 158.04 for the 370 mm belt (Session 4–7: mid-slot, x = 150; I‑14), 20T band centred on the 160T band (z −12…−4) |
+| GT2 closed belt, 6 mm (J1) | 1 | Buy | | Pitch length 340–373 over the slot range (356 at mid-slot). Use 366–372 mm (183–186 T), from the course's stock of GT2 6 mm loops, so the motor sits at x ≥ 155.7 and J1 clears ±124° (I‑4, I‑14; §2 Load path item 2). Modelled: 370 mm |
 | M5 bolts + inserts, M3 screws | — | Buy | | Lengths not recorded |
 
 ---
@@ -346,13 +347,13 @@ the last offering are marked 🔧.
 | I‑11 | Info | All bearing seats are at the nominal OD; PLA needs a press-fit allowance. | features |
 | I‑12 | Info | The thrust bearings (40 ID) ride on a Ø35 shaft, leaving 2.5 mm radial slop; they are centered only by the Ø60/61 recesses. | features |
 | I‑13 | Info | The hinge has two R42.5 boss profiles at different heights (z = 62.5 and 70.5). Check whether the offset is intentional. | features |
-| I‑14 | Medium | **J1 yaw is limited by the J1 motor** (found once the motor was modelled, Session 4). The hinge floor corners sweep r = 55.7 about J1; the motor frame's near face is 53.85 from the axis at mid-slot, so the hinge hits it. Clear range around 0° (10° steps): ±20° at x = 140, ±40° at x = 150 (blocked at ±50°, clear again from ±60° to ±110°), ±120° at x = 160 (also at 155, 158 and 159, Session 7; a 366–372 mm belt puts the motor there, §2 Load path item 2). Beyond about ±120° the gearbox (ring gear, carriers, covers) hits the motor at every slot position. Assumes the motor square to the box; belt not modelled. | `checks/j1_yaw_clearance.py` |
+| I‑14 | Medium **Fixed** (Session 7, commit "Fix I-14") | **J1 yaw is limited by the J1 motor** (found once the motor was modelled, Session 4). The hinge floor corners sweep r = 55.7 about J1; the motor frame's near face is 53.85 from the axis at mid-slot, so the hinge hits it. Clear range around 0° (10° steps): ±20° at x = 140, ±40° at x = 150 (blocked at ±50°, clear again from ±60° to ±110°), ±120° at x = 160 (also at 155, 158 and 159, Session 7; a 366–372 mm belt puts the motor there, §2 Load path item 2). Beyond about ±120° the gearbox (ring gear, carriers, covers) hits the motor at every slot position. Assumes the motor square to the box; belt not modelled. **Fix** (no printed part changes): the course stocks GT2 6 mm closed loops in several lengths (instructor, Session 7), so the belt is chosen to put the motor far out: 366–372 mm puts it at x = 155.7–159.2. The model uses 370 mm (`J1_BELT_LOOP`, x = 158.04 from the new `gt2.centre_distance`). `J1_LIMITS` ±40° → ±124°. | After (2° steps): clear to ±124° at x = 155.7 (366 mm), ±128° at 158.04 (370 mm) and 159.2 (372 mm); the ring gear hits next. Full arm (`checks/joint_clearance.py --joint j1_waist`, 10° steps to ±110°, then 2°–6°): clear at ±40…±128°, ring gear × J1 motor 18 mm³ at ±130°. `checks/j1_yaw_clearance.py` now reads the motor's modelled x from the STEP |
 | I‑15 | Low **Fixed** (Session 7, commit "Fix I-15") | **Arm pulley bands are out of line axially.** Stage 1: the motor 20T band (z 15.2–22.2) is 3 mm above the dual 80T band (12.2–19.2), so a 6 mm belt centred on the 80T band runs 3.5 mm on the motor pulley. Idler 1 (band 13.5–20.5) is also 1.3 mm high, so the belt rides its lower flange. Stage 2: the dual 20T band (22.2–29.2) is 1 mm below the output 80T band (23.2–30.2). The motor pulley can slide on its shaft; the dual pulley's split cannot. **Fix:** align the belts to the fixed parts, idler 1 (z 17.0) and the output 80T in its fork slot (z 26.7). The dual pulley's 80T moves up 1.3 mm, on a new Ø12 × 1.3 hub that keeps it on the Base boss, and its 20T moves up 1.0 mm. The motor 20T slides 1.7 mm down its shaft (it still covers the pulley; tip 1.7 above). The spacers, idlers, output pulley and plates are unchanged. Idler 2 stays 0.3 mm high, inside the output's 0.5 mm slot play. The gate records the dual pulley as a departure. | Before: interference, dual × belt 2 = 2.5 mm³; belt 1 on the idler-1 flange. After: 0; every belt lies inside the band of each pulley and idler it runs on. The remaining belt overlaps are radial, from the vendor 20T and idler plain Ø15.23 bands (motor 97, idlers 33 mm³ each) |
 | I‑16 | Low 🔧 | **J2 travel is ±63°.** With the arm on the coupling shaft, the segment‑1 motor body (a standard 40 mm NEMA17, as on the built arm; the stand-in matches it) touches the right hinge cheek at ±64°. Centred 30 mm from the link face, it hangs 40 mm below the Base plate. The coupling's rounded block hits the hinge next, at about ±80°. **Accepted:** the instructor rates ±63° as acceptable and not a priority (Session 6). | `checks/joint_clearance.py --joint j2_shoulder` (Session 6) |
 | I‑17 | **High** 🔧 **Fixed** (Session 7, commit "Fix I-17") | **J3 and J4 travel is ±54°; target ±90° or more** (instructor, Session 6: limited on the built arm, a design flaw to fix). The Output block fork (35 wide, from 16 behind J3 to the end plate) sweeps into the Wall's distal rail ends (x 160–163.5, the inserts at (160, 3.5) / (160, 76.5)) at ±55°. The overlap reaches 2400 mm³ at ±90°. Travel is currently ±54°, and the Wall is the only obstacle out to about ±100° (the I‑6 pulley rub is gone since the I‑6 fix: 179 mm³ at ±60°, 2403 at ±90°, 2996 at ±95°, all Output block × Wall). Angles between 100° and 120° were not tested; by ±120° the end plate also reaches the Base and Top plates. So clearing the Wall's distal end against the fork should reach ±90° without changing the plates. **Fix** (instructor's choice of three options, Session 7): the Wall rails end 30 mm earlier, with their half-round centres at x = 130, and the two distal Wall screws move from (160, 3.5) / (160, 76.5) to (130, 3.5) / (130, 76.5), keeping a clamp near J3. Base and Top change only those screw holes. A 2D sweep gave 9 mm clearance at 90° (an end at x = 137 would give 2 mm, and contact at 95°). J3/J4 limits are now ±103° (the negative side became −94° with the I‑4 jack screws). The gate records Wall, Base and Top as intentional departures (`departure` key in `checks/fusion_map.json`). | Before: `checks/joint_clearance.py --joint j3_elbow` (Session 6). After: J3 and J4 clear at ±54…±103°; the first contact is Output block × Wall rail end at ±104° (59 mm³), the same for J4 |
 
 ### Open questions (deferred)
-- Q1: The belt lengths actually bought, for J1 and the arm stages.
+- Q1: The belt lengths actually bought, for J1 and the arm stages. J1 resolved (Session 7): the course stocks several GT2 6 mm loop lengths; use 366–372 mm (I‑14). The arm stages need about 280 mm (I‑4).
 - Q2: Where the nuts are for the hinge → GT2‑160 M5 bolts (both parts have only clearance holes).
 - Q3: The idler part actually used (I‑5). Resolved (Session 7): a 5 mm bore idler on an M5 bolt, clamped by its head and a nut.
 - Q4: The Ø7.5 cover pockets are round counterbores that run out radially as open U-slots, not hex traps (resolved, Session 3). What sits in them, an M3 nut or a screw head, is still unknown.
