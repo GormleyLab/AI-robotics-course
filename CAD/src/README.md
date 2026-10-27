@@ -32,7 +32,7 @@ Frame: axis +Z, end face (motor: mounting face) at z = 0.
 | `bearing_6805.py` | Stand-in 25×37×7 | Hinge (×2), gearbox front cover, arm J3 (×2 per segment) |
 | `bearing_6807.py` | Stand-in 35×47×7 | Box top (J1) |
 | `thrust_bearing_51108.py` | Stand-in 40×60×13 | J1 (×2) |
-| `gt2_pulley_20t.py` | step.parts `gt2_pulley_20t_bore5_w6` | Motor pulleys |
+| `gt2_pulley_20t.py` | step.parts `gt2_pulley_20t_bore5_w6`, bore cut through both flanges (the vendor file leaves them solid) | Motor pulleys |
 | `gt2_idler_20t.py` | step.parts `gt2_toothed_idler_bore5_w6` (Fusion bore; see I-5) | Arm idlers (×2 per segment) |
 | `dowel_pin_6x30.py` | Stand-in | Arm axles (×3 per segment) |
 | `planet_pin_6x22.py` | Stand-in (Fusion "Pin 6x11mm") | Planets (×6) |
@@ -60,6 +60,24 @@ Gearbox frame: axis +Z, z = 0 at the ring / back-cover joint, motor at +Z
 
 Helpers (not entrypoints): `common.py`, `carrier.py`.
 
+## Joint 1 and 2 base (`joint12/` → `STEP/joint12/`), Session 4
+
+Base frame: the Fusion "Joint 1 and 2" frame as-is (box corner origin, top of
+the box bottom at z = 0, J1 at (75, 75), J2 ‖ X at z = 70.5). Parts are
+modelled in place; `common.py` holds `GEARBOX_PLACEMENT` (gearbox frame →
+base frame) and shared helpers.
+
+| Script | Fusion part | Notes |
+| --- | --- | --- |
+| `box_bottom.py` | Box bottom v5 | |
+| `box_top.py` | Box top v6 | J1 motor slot and M3 slots |
+| `hinge.py` | Hinge v8 | Cheeks rounded at z 70.5 / 62.5 (I-13); 5 of 6 cover holes (I-10) |
+| `coupling_shaft.py` | Coupling shaft v1 | 21.65 AF socket, line-to-line with the gearbox hex (I-2) |
+| `gt2_pulley_160t.py` | GT2-120 v4 (160T, I-9) | `lib/gt2.py` profile |
+| `joint_1_and_2.py` | Assembly | Adds the J1 NEMA17 and 20T pulley at mid-slot (not in Fusion, not gated) |
+
+Helper (not an entrypoint): `common.py`. Check: `checks/j1_yaw_clearance.py` (I-14).
+
 ## Printed parts still to come
 
-Sessions 4–5, under `joint12/` and `belt_arm/`. Every printed part needs an entry in `checks/fusion_map.json`, and must pass `python checks/compare_to_fusion.py --map checks/fusion_map.json`.
+Session 5, under `belt_arm/`. Every printed part needs an entry in `checks/fusion_map.json`, and must pass `python checks/compare_to_fusion.py --map checks/fusion_map.json`.

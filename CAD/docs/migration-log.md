@@ -12,8 +12,8 @@ during recreation.
 | 1 | Measure the Fusion STEP files; write `docs/design.md` | Done |
 | 2 | Project scaffold (`src/`, `STEP/`, `lib/`), tolerance and gear/GT2 helpers, COTS via step.parts, `checks/compare_to_fusion.py` | Done |
 | 3 | Planetary gearbox parts + assembly | Done |
-| 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Next |
-| 5 | Belt drive arm segment parts + assembly (belt envelopes) | |
+| 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
+| 5 | Belt drive arm segment parts + assembly (belt envelopes) | Next |
 | 6 | Full arm (two segments), kinematics, optional URDF | |
 | 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks | |
 
@@ -74,9 +74,47 @@ during recreation.
 - The assembly interference matches Fusion except ring × planet (54/52 vs 36/26 mm³; I‑7 updated).
 - Stage-1 and stage-2 planets in Fusion each share one absolute tooth phase (4.830° / 3.530° at their bottom faces); `planetary_gearbox.py` uses them.
 
-### Next session (4): joint 1/2 base
-1. Recreate in `src/joint12/`: `box_bottom.py`, `box_top.py`, `hinge.py`, `coupling_shaft.py`, `gt2_pulley_160t.py` (the Fusion "GT2-120"; use `lib/gt2.py`, and check its groove against Fusion with a section like the gear checks).
-2. Get features with `checks/inspect/part_features.py "STEP/imported/fusion/Joint 1 and 2.step" REF --to-part 0,0,0`, and tooth phases with `tooth_phase.py`.
-3. Pick one clean frame for the base, e.g. the Fusion "Joint 1 and 2" frame as-is (axes already clean: J1 at (75, 75), J2 ‖ X). Place the gearbox with `TO_FUSION` composed with the gearbox's placement in that file. The gearbox axis is at z = 70.0 and the hinge at 70.5 (I‑1): reproduce it.
-4. Add the J1 NEMA17 on top of the box top, shaft down through the slot at mid-travel (x = 150, y = 75), with the 20T pulley on the shaft level with the 160T teeth (z ≈ −11.5…−4.5) (design.md §2). They aren't in Fusion, so they're not gated; record the placement assumption.
-5. Assembly `src/joint12/joint_1_and_2.py`; gate all parts with `frame: world` against `Joint 1 and 2.step`; run the interference check; reproduce I‑1/I‑2/I‑10/I‑12.
+## Session 4 — 2026-10-27
+- Recreated the 5 printed joint 1/2 parts in `src/joint12/` plus the `joint_1_and_2.py` assembly. They are modelled in place in the Fusion "Joint 1 and 2" frame (`joint12/common.py`).
+- Gate (`frame: world`, no transform): box bottom, box top and hinge at 0.000 %; coupling shaft 0.001 % volume; 160T pulley 0.020 % symmetric difference.
+- 160T groove check: the r 49.5–51 tooth-band section is 0.69 % heavier than Fusion (`lib/gt2.py` omits the blend arcs). That is about 0.011 mm² per groove. The tooth phase matches Fusion: groove 0 on +X.
+- The gearbox goes in rigidly: `GEARBOX_PLACEMENT = Pos(-17, 75, 70) * Rot(0, 0, 90) * TO_FUSION`. Ring, back cover, output carrier and planet give the same transform.
+- Interference matches Fusion pair for pair:
+  - I‑2: coupling × output carrier 2802.6 mm³ (Fusion 2802.8).
+  - I‑1: left 6805 × output carrier 87.5 mm³ (Fusion 86.1; the gap is the 6805 stand-in's internals).
+  - The gearbox pairs are as in Session 3.
+  - Not reproduced: the gearbox NEMA17 mount × motor pair (8.7 mm³ in Fusion), because the motor is a stand-in.
+- I‑10 (5 of 6 cheek holes), I‑12 and I‑13 are reproduced in the geometry.
+- J1 NEMA17 and 20T pulley added (not gated). Assumptions:
+  - mounting face on the box top (z = 12), shaft down, at mid-slot (x = 150);
+  - motor square to the box, so the screws sit in the M3 slots;
+  - the 20T band (z 1–9 of the vendor part) centred on the 160T band (z −12…−4);
+  - the shaft reaches z −11.7, so it engages 8.7 of the 10 mm bore;
+  - belt pitch length at mid-slot: 356.5 (`lib/gt2.belt_pitch_length`).
+- Vendor 20T pulley (`step.parts gt2_pulley_20t_bore5_w6`):
+  - its bore runs only through the band; both flanges are solid. `purchased/gt2_pulley_20t.py` now cuts the Ø5 bore through.
+  - it is also not toothed: a plain Ø15.23 band, where a real GT2 20T has OD 12.22. For belt envelopes, use the `lib/gt2.py` pitch diameters, not the vendor geometry.
+- **New issue I‑14: J1 yaw is limited by the J1 motor.**
+  - The hinge corners (r 55.7) hit the motor at ±30° at x = 140 and at ±50° at mid-slot.
+  - The gearbox hits it beyond ±120° at every slot position.
+  - New check: `checks/j1_yaw_clearance.py`.
+- Corrections to `design.md`:
+  - the hinge "Ø10 cross holes" are R5 floor-to-cheek fillets;
+  - the cheek bolt circle is r = 39.25;
+  - the coupling hex socket is 21.65 AF (circumradius 12.5) and 15 deep, not 21.66 / 29. The fit is line-to-line (I‑2, IF‑7);
+  - the coupling has a curved Ø33 → Ø29 transition;
+  - the 160T flange shape.
+  - `params.OUTPUT_HEX_SOCKET_AF` (21.66) is kept only for the GT2‑80 output until Session 5 re-measures it.
+- New inspection tool: `checks/inspect/world_faces.py` (every face in world frame; `--min-area` hides teeth).
+
+### Next session (5): belt drive arm segment
+1. Check that the "Belt Drive Arm" frame is clean. Use the placements in `tmp/inspect/Belt Drive Arm.txt` (regenerate with `dump_features.py`). If it is, model in place as in `joint12/`; otherwise pick one clean frame and a single transform.
+2. Recreate in `src/belt_arm/`: `base.py`, `wall.py`, `top.py`, `dual_gt2_pulley.py` (80T + 20T), `gt2_80_output.py`, `pin.py`, `output_block.py`, `spacer_5mm.py`, `spacer_15mm.py`. Get features with `checks/inspect/world_faces.py` and tooth phases with `tooth_phase.py` (`--to-part 0,0,0 --centre X,Y`).
+3. Re-measure exactly (not from the 2-decimal dumps):
+   - the GT2‑80 output hex socket. If it is 21.65, retire `params.OUTPUT_HEX_SOCKET_AF = 21.66` and update IF‑7/IF‑10;
+   - the Pin hex (21.48);
+   - check the Output block hex pockets (I‑6).
+4. Assembly `belt_arm.py`:
+   - purchased parts: NEMA17 under the Base, 20T, idlers, dowels, bushings, 6805s;
+   - two belt envelopes from `lib/gt2.py` pitch circles (centre distance 85, idler positions from IF‑10).
+5. Gate every printed part (`frame: world`); run the interference check; reproduce I‑4, I‑5 and I‑6.

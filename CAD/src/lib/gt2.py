@@ -10,8 +10,9 @@ arc construction (measured in Session 1 from the 20T, 80T and 160T pulleys):
 - tip fillets: R0.15 where the flanks meet the OD
 
 The Fusion profile also has small blend arcs (R0.38-R0.54) between bottom and
-flanks; they are omitted here. Measure the volume error against Fusion before
-relying on this for the replica (Session 5).
+flanks; they are omitted here. Effect on the 160T J1 pulley (Session 4): the
+r 49.5-51 tooth-band section is 0.69 % heavier than Fusion (about 0.011 mm^2
+per groove), and the whole part passes the gate at 0.02 %.
 """
 from __future__ import annotations
 

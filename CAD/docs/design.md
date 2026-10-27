@@ -68,7 +68,7 @@ candidate for gears and pulleys in the redesign.
 ## 2. Base and joint 1 (`Joint 1 and 2.step`)
 
 ### Load path and drive
-1. **Motor.** The J1 NEMA17 (not modelled) sits on top of `Box top` with its
+1. **Motor.** The J1 NEMA17 (not in Fusion; added in the recreation at mid-slot, I‑8) sits on top of `Box top` with its
    shaft pointing down through a slot. A stock GT2 20T pulley on the shaft sits
    in the 30 mm cavity under the top plate.
 2. **Belt and tension.** The belt runs to the `GT2-120` pulley, which actually
@@ -87,14 +87,14 @@ candidate for gears and pulleys in the redesign.
 |---|---|---|---|---|
 | `Box bottom v5` | 1 | Print | 180 × 150 × 30 | 15 mm walls, 5 mm floor, open pocket 150 × 120. 608 seat Ø22 on a Ø27 boss (z 5–12). 7 × M5 heat-set insert holes Ø6.4 × 10.5 deep (z 19.5–30) at x ∈ {7.5, 90, 172.5}, y ∈ {7.5, 142.5}, plus (7.5, 75). Side window in the +X wall at y 50–100 (wire/belt access). |
 | `Box top v6` | 1 | Print | 180 × 150 × 12 | 7 × M5 clearance Ø5.3 matching the inserts. Ø60 × 5 recess on the underside (lower thrust bearing). Ø47 × 7 seat on top (6807). J1 motor slot: 25 wide, centers x = 140…160, y = 75. Two M3 slots (3.3 wide) at y = 59.5 / 90.5, x = 124.5…175.5 (31 mm NEMA17 pattern, sliding). |
-| `Hinge v8` | 1 | Print | 70 × 85 × 121 | Vertical Ø35 shaft (33 long, through the 6807 and both thrust bearings). Ø61 × 10 pocket on the underside for the upper thrust bearing. 4 × M5 Ø5.3 at r = 10 with Ø12 counterbores. Two 7‑mm cheeks (x 0–7 and 63–70) with rounded R42.5 tops and Ø37 × 7 6805 seats on the J2 axis. Two Ø10 cross holes along Y (x = 12 and 58, z = 25; cable routing *(inferred)*). The left cheek has 5 × M3 (Ø3.3 + Ø6 counterbore) on r = 39.2 about J2 for the gearbox front cover; the 6th hole of the hexagonal pattern is missing. |
-| `GT2-120 v4` (actually 160T) | 1 | Print | Ø103.35 × 22 | GT2 160T: OD 101.35, flange Ø103.35, tooth width 7 (z 0–7). Ø60 × 5 pocket (lower thrust bearing). Ø8 hub, 12 long, into the 608. 4 × Ø5.3 at r = 10. |
-| `Coupling shaft v1` | 1 | Print | 50 × 80 × 56 | J2 output and segment‑1 mount. Block with an R40 rounded end. Hex socket **21.66 AF**, 29 deep, takes the gearbox output hex. Ø25 × 7 stub with Ø29 × 2 shoulder runs in the right-cheek 6805. Top face carries the **73 × 37 M3 link interface** (Ø3.3 + Ø6 counterbore). |
+| `Hinge v8` | 1 | Print | 70 × 85 × 121 | Vertical Ø35 shaft (33 long, through the 6807 and both thrust bearings). Ø61 × 10 pocket on the underside for the upper thrust bearing. 4 × M5 Ø5.3 at r = 10 with Ø12 counterbores. Two 7‑mm cheeks (x 0–7 and 63–70) with rounded R42.5 tops and Ø37 × 7 6805 seats on the J2 axis. R5 fillets along Y where the floor (z 15–35) meets each cheek (Session 1 listed these as Ø10 cable holes; corrected in Session 4). The left cheek has 5 × M3 (Ø3.3 + Ø6 × 2 counterbore from the inside) on r = 39.25 about J2 for the gearbox front cover; the 6th hole of the hexagonal pattern is missing. |
+| `GT2-120 v4` (actually 160T) | 1 | Print | Ø103.35 × 22 | GT2 160T: OD 101.35, tooth width 7 (z 0–7), between 1.5 mm flanges that rise at 45° to Ø103.35 with 0.2 mm chamfers. Ø60 × 5 pocket (lower thrust bearing). Ø8 hub, 12 long, into the 608. 4 × Ø5.3 at r = 10. |
+| `Coupling shaft v1` | 1 | Print | 50 × 80 × 56 | J2 output and segment‑1 mount. Block with an R40 rounded end. Hex socket **21.65 AF** (circumradius 12.5, corners vertical), 15 deep, takes the gearbox output hex. A curved Ø33 → Ø29 transition, a Ø29 × 2 shoulder and a Ø25 × 7 stub that runs in the right-cheek 6805. Top face carries the **73 × 37 M3 link interface** (Ø3.3 + Ø6 counterbore). |
 | Thrust bearing 40×60×13 | 2 | Buy | | |
 | 6807 bearing 35×47×7 | 1 | Buy | | |
 | 608 bearing 8×22×7 | 1 | Buy | | |
 | 6805 bearing 25×37×7 | 2 | Buy | | In the hinge cheeks (J2) |
-| NEMA17 + GT2 20T 5 mm bore (J1) | 1 | Buy | | **Not in the CAD**; to be added |
+| NEMA17 + GT2 20T 5 mm bore (J1) | 1 | Buy | | Not in Fusion. Added in the recreation (Session 4): mounting face on `Box top`, mid-slot (x = 150), 20T band centred on the 160T band (z −12…−4) |
 | GT2 closed belt, 6 mm (J1) | 1 | Buy | | Pitch length 340–373 over the slot range (356 at mid-slot); exact belt unknown |
 | M5 bolts + inserts, M3 screws | — | Buy | | Lengths not recorded |
 
@@ -224,7 +224,7 @@ Segment 2 (J4) is an identical copy of this segment.
 | IF‑4 | J2 axis | Hinge, gearbox, coupling | Hinge 6805 seats Ø37; **axis height: see I‑1** |
 | IF‑5 | Gearbox ↔ hinge | Front cover ↔ hinge left cheek | 6 × M3 on r = 39.25 (5 present in the hinge) |
 | IF‑6 | Gearbox internal | Ring, covers, carriers | Transverse m1.5, 20°, 15° helix, 15/15/45T, planet radius 22.5, face width 9; ring Ø85 |
-| IF‑7 | Gearbox output hex | Carrier p2 output ↔ Coupling shaft | 21.65 AF hex in a 21.66 AF socket; Ø25 shaft |
+| IF‑7 | Gearbox output hex | Carrier p2 output ↔ Coupling shaft | 21.65 AF hex in a 21.65 AF socket (circumradius 12.5, line-to-line); Ø25 shaft |
 | IF‑8 | **Link interface** | Coupling shaft, arm proximal end, Output block | 4 × M3 on 73 × 37, arm thickness 44, width 80 |
 | IF‑9 | NEMA17 | All three motors | 31 × 31 M3, Ø22 pilot, 5 mm shaft |
 | IF‑10 | J3 hex | Pin ↔ GT2‑80 output ↔ Output block | 21.48 / 21.66 AF; Ø25 journal; 6805 seats at (160, 40) |
@@ -259,7 +259,7 @@ named tolerance parameter (`lib/tolerances.py`, Session 2).
 During the **replica phase**, every part keeps its Fusion local frame, so that
 `checks/compare_to_fusion.py` can compare like with like. Each subassembly
 keeps its Fusion frame:
-- `Joint 1 and 2`: origin at the box corner; top of `Box bottom` at z = 0; J1 at (75, 75).
+- `Joint 1 and 2`: origin at the box corner; top of `Box bottom` at z = 0; J1 at (75, 75). The joint12 parts are modelled in this frame as placed (`src/joint12/common.py`). The gearbox frame maps into it by `Pos(-17, 75, 70) * Rot(0, 0, 90) * Rot(-90, 0, 0)` (`GEARBOX_PLACEMENT`), which is the same for every gearbox part.
 - `Belt Drive Arm`: origin at the proximal end + 40, on the Base underside; plates in XY; J3 at (160, 40).
 
 The **full-arm assembly** (Session 6) uses a robot frame:
@@ -277,18 +277,19 @@ the last offering are marked 🔧.
 | ID | Severity | Issue | Evidence |
 |---|---|---|---|
 | I‑1 | **High** 🔧 | **J2 is misaligned and over-constrained.** The gearbox axis is at z = 70.0, but the hinge 6805 seats and the coupling shaft are at z = 70.5 (0.5 mm offset). The output shaft runs in three bearings (front cover, left cheek, right cheek via the coupling), so any offset binds. Students reported J2 stiffness and binding. | `checks/inspect/interference.py`: Carrier p2 output × left 6805 = 86 mm³; axis survey |
-| I‑2 | Medium | The output hex (21.65 AF) and the coupling socket (21.66 AF) overlap by 2803 mm³ in the model: the hex is rotated 43.5°, not a multiple of 60°, and is offset by I‑1. The fit itself is only 0.01 mm across flats, which leaves no print allowance. | interference |
+| I‑2 | Medium | The output hex (21.65 AF) and the coupling socket (21.66 AF) overlap by 2803 mm³ in the model: the hex is rotated 43.5°, not a multiple of 60°, and is offset by I‑1. The fit itself is line-to-line (socket 21.651 AF, circumradius 12.5, against a 21.65 hex; Session 1 read 21.66 from rounded values), which leaves no print allowance. | interference |
 | I‑3 | Medium 🔧 | **Gear wear and backlash.** m1.5 (transverse) 15° helical PLA gears with 9 mm face width at 16:1 near the output. The helix adds an axial thrust that the carriers and washers must react. There is no clearance or backlash allowance; the planets mesh at nominal center distance. | gear data |
 | I‑4 | Medium 🔧 | **Belt tensioning.** The arm idlers slide in slots with no positive lock, and J1 relies on a friction-locked motor slot. | geometry |
 | I‑5 | Medium | The `GT2-20 idler` has a 5 mm bore but sits on a 6 mm dowel pin (86 mm³ overlap). The part actually used is unknown. | interference |
 | I‑6 | Low | The `Pin` hex in `GT2-80 output` overlaps by 98 and 1812 mm³. Pin 2 is rotated 137.2°, so its hex is misaligned. The Pins also overlap `Output block` by 374 and 83 mm³, so check the hex pocket depth. | interference |
 | I‑7 | Low | Planets overlap the ring and sun by 25–65 mm³: they sit at the Fusion tooth phases, which don't mesh. This is cosmetic. The recreated gearbox reproduces it: sun × planet 65.0 mm³ (Fusion 65.0); ring × planet 54 / 52 mm³ (Fusion 36 / 26, from the remaining ring tip-shape difference). | interference |
-| I‑8 | Low | The J1 motor, J1 20T pulley, all belts, all fasteners, segment 2, J4 and the end effector are missing from the CAD. | tree |
+| I‑8 | Low | The J1 motor, J1 20T pulley, all belts, all fasteners, segment 2, J4 and the end effector are missing from the CAD. The recreation adds the J1 motor and 20T pulley (Session 4, assumed mid-slot placement). | tree |
 | I‑9 | Low | Naming errors: `GT2-120` is 160T; `Pin 6x11mm` is 22 long; `Component1/2/7` wrappers; an empty `Component2`; a `test` product in the arm. | tree |
 | I‑10 | Low | The hinge left cheek has 5 of the 6 front-cover bolt holes. | features |
 | I‑11 | Info | All bearing seats are at the nominal OD; PLA needs a press-fit allowance. | features |
 | I‑12 | Info | The thrust bearings (40 ID) ride on a Ø35 shaft, leaving 2.5 mm radial slop; they are centered only by the Ø60/61 recesses. | features |
 | I‑13 | Info | The hinge has two R42.5 boss profiles at different heights (z = 62.5 and 70.5). Check whether the offset is intentional. | features |
+| I‑14 | Medium | **J1 yaw is limited by the J1 motor** (found once the motor was modelled, Session 4). The hinge floor corners sweep r = 55.7 about J1; the motor frame's near face is 53.85 from the axis at mid-slot, so the hinge hits it. Clear range around 0° (10° steps): ±20° at x = 140, ±40° at x = 150 (blocked at ±50°, clear again from ±60° to ±110°), ±120° at x = 160. Beyond about ±120° the gearbox (ring gear, carriers, covers) hits the motor at every slot position. Assumes the motor square to the box; belt not modelled. | `checks/j1_yaw_clearance.py` |
 
 ### Open questions (deferred)
 - Q1: The belt lengths actually bought, for J1 and the arm stages.

@@ -49,7 +49,10 @@ GEARBOX_OD = 85.0
 
 # --- IF-7: gearbox output hex
 OUTPUT_HEX_AF = 21.48              # male hex on Carrier p2 output and arm Pins
-OUTPUT_HEX_SOCKET_AF = 21.66       # female hex in Coupling shaft and GT2-80 output
+# Female hex in the GT2-80 output (Session 1 dump, 2-decimal rounding; re-measure
+# in Session 5). The coupling-shaft socket measures 21.651 (circumradius 12.5),
+# line-to-line with the 21.65 gearbox hex (I-2); see joint12/coupling_shaft.py.
+OUTPUT_HEX_SOCKET_AF = 21.66
 OUTPUT_SHAFT_D = 25.0
 
 # --- IF-8: universal link interface (4 x M3)
