@@ -54,7 +54,7 @@ Gearbox frame: axis +Z, z = 0 at the ring / back-cover joint, motor at +Z
 | `input_shaft.py` | Input shaft v5 | Stage-1 sun (left-hand) |
 | `carrier_plate.py` | Carrier p1 - stage 1 / stage 2 | One model, two placements |
 | `carrier_stage1_output.py` | Carrier p1 - stage 1 - Output | Stage-2 sun |
-| `carrier_stage2_output.py` | Carrier p2 - stage 2 - Output v5 | Output shaft + hex |
+| `carrier_stage2_output.py` | Carrier p2 - stage 2 - Output v5 | Output shaft + hex. I-2 departure: 6.2 mm shorter, 21.48 AF hex (Pin size) aligned to the coupling socket |
 | `planet_gear.py` | Planet gear (×6) | Right-hand helix |
 | `planetary_gearbox.py` | Assembly | Not named `gearbox.py`: running it would shadow the package |
 
@@ -72,7 +72,7 @@ base frame) and shared helpers.
 | `box_bottom.py` | Box bottom v5 | |
 | `box_top.py` | Box top v6 | J1 motor slot and M3 slots |
 | `hinge.py` | Hinge v8 | Cheeks rounded at z 70.5 / 62.5 (I-13); 5 of 6 cover holes (I-10) |
-| `coupling_shaft.py` | Coupling shaft v1 | 21.65 AF socket, line-to-line with the gearbox hex (I-2) |
+| `coupling_shaft.py` | Coupling shaft v1 | 21.65 AF socket; takes the 21.48 AF gearbox hex since the I-2 fix |
 | `gt2_pulley_160t.py` | GT2-120 v4 (160T, I-9) | `lib/gt2.py` profile |
 | `joint_1_and_2.py` | Assembly | Adds the J1 NEMA17 and 20T pulley at mid-slot (not in Fusion, not gated) |
 

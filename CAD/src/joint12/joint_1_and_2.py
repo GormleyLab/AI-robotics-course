@@ -1,9 +1,9 @@
 """Joint 1 and 2 assembly: base, J1 waist, hinge, J2 gearbox and coupling, base frame.
 
 Printed parts are modelled in place; purchased parts and the gearbox use the
-Fusion placements, so I-1 (gearbox 0.5 mm below the hinge J2 axis), I-2
-(output hex rotated 43.5 deg in its socket) and I-12 (thrust bearings on the
-Ø35 shaft) are reproduced.
+Fusion placements, except that the gearbox sits on the hinge J2 axis (I-1
+fixed), so I-12 (thrust bearings on the Ø35 shaft) is reproduced. The output
+hex fits its coupling socket since the I-2 fix (a carrier change).
 
 The J1 motor and its 20T pulley are not in Fusion (I-8) and are added here
 (not gated). Assumed placement: NEMA17 mounting face on the box top (z = 12),

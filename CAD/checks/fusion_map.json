@@ -161,7 +161,14 @@
       0,
       0
     ],
-    "slice_axis": "y"
+    "slice_axis": "y",
+    "departure": {
+      "issue": "I-2",
+      "why": "output end shortened 6.2 mm (Ø25 shaft ends 0.5 short of the coupling face, hex 14.5 long, 1 short of the socket floor); hex 21.48 AF (Pin size), not 21.65, turned to corners on +-Y to match the coupling socket",
+      "bbox": 6.2,
+      "vol_pct": 9.242,
+      "symdiff_pct": 10.304
+    }
   },
   {
     "generated": "STEP/gearbox/input_shaft.step",

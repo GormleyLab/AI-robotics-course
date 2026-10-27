@@ -8,7 +8,7 @@ Reads the mates from the STEP's sidecar (``<name>.step.json``). The links
 downstream of the joint's child (following the mate chain) are rotated about
 the joint axis, every other joint held at zero, and tested part against part
 (bounding-box prefilter, then the boolean common) against the upstream links.
-Contacts already present at zero (I-2, bearings on journals, ...) are the
+Contacts already present at zero (gear meshes, bearings on journals, ...) are the
 baseline: only pairs whose overlap grows by more than ``--min`` mm³ over it
 are reported. Run the angles of a slow joint as parallel processes.
 """

@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑6, I‑17 done) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑6, I‑17 done) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -173,8 +173,20 @@ during recreation.
 - The gate gained intentional departures: a map entry with `departure: {issue, why, bbox, vol_pct, symdiff_pct}` reports DEPART and passes only while the measured deviation stays within 0.05 of the recorded one. Wall (30 mm bbox, 13.1 %), Base (0.43 % symdiff) and Top (0.41 %) use it; Base and Top would still pass the plain tolerance, but they are recorded as departures so later drift is caught.
 - Re-rendered `belt_arm_internals.png`, `belt_arm_iso.png`, `robot_arm_zero.png` and `robot_arm_pick.png` (`--kinematics zero|pick --camera iso` reproduces the Session 6 framing).
 
+- **I‑2 fixed** (commit "Fix I-2"), a change to the carrier only.
+  - Most of the 2783 mm³ was axial, not rotational. The gearbox output was 5.2 mm too long: the Ø25 shaft ran 5.2 mm into the coupling face (6 × 74 mm³) and the hex 5.2 mm past the socket floor (2077 mm³). The 43.5° turn was only about 260 mm³. Neither part can slide: the gearbox is bolted to the left cheek, and the coupling's stub shoulder is 0.2 mm from the right-cheek 6805.
+  - Fusion aligned the hex to the carrier pins (flat normal −16.54° = PIN_ANGLE − 60°), not to the socket.
+  - Fix: the shaft ends 0.5 mm short of the coupling face (`SHAFT_END_Z = -69.3`). The hex is 14.5 long, leaving 1 mm at the floor. It is the Pin size (`params.OUTPUT_HEX_AF = PIN_HEX_AF`, 21.48 AF), with its flat normal at 0° (corners on gearbox ±Y = base ±Z). The coupling and the socket constant are unchanged. IF‑7 is changed (breaking).
+  - The other option, a deeper socket plus a Ø25 counterbore in the coupling, was rejected because it changes a second part.
+- Gate: `carrier_stage2_output` is a departure (bbox 6.2, 9.242 % vol, 10.304 % symdiff).
+- Checks:
+  - Coupling × carrier output went from 2783 to 0 mm³, and the joint12 assembly has no new pair.
+  - `joint_clearance.py --joint j2_shoulder`: J2 is still ±63°, with the first real contact segment‑1 motor × hinge at ±64° (5 mm³, I‑16). Coupling × carrier output now reports 361 mm³ at ±30° and 41 at ±63°. That is the Session 6 artefact (the carrier rides the waist instead of turning with J2), now visible because the zero-pose baseline is 0. It follows the hex's 60° period, so it is not a contact.
+- Build hygiene: changing `params.py` rebuilds every model that imports it, and the rebuilt STEPs differ only in float noise (`2.2e-16` → `0`). Those files were restored with `git checkout`, so the commit carries only the carrier, gearbox, joint12 and full-arm STEPs.
+- Not re-rendered: `docs/img/gearbox_exploded.png` still shows the Fusion carrier, 6 mm longer at the output. It was an exploded view made in the viewer GUI, and the CLI `exploded` setting only spreads the parts along the axis, which hides the shaft. Re-capture it from the viewer if the difference matters.
+
 ### Next steps (continue Session 7 or start Session 8)
-1. Fix order: I‑1, I‑6 and I‑17 done. Next I‑2 (output hex rotated 43.5° in the coupling socket, line-to-line fit). I‑16 (J2 ±63°) is accepted, so leave it.
+1. Fix order: I‑1, I‑2, I‑6 and I‑17 done. I‑16 (J2 ±63°) is accepted, so leave it. Next candidates: I‑5 (idler 5 mm bore on a 6 mm dowel; needs Q3 answered), I‑15 (pulley bands out of line axially), I‑10 (sixth front-cover hole in the left cheek), I‑4 (belt tensioning).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.

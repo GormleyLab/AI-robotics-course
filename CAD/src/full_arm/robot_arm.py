@@ -13,7 +13,7 @@ Zero is the Fusion pose (arm vertical). Links:
 
 Simplifications: the gearbox rides the waist rigidly (its output carrier
 does not turn with J2), and no pulley or idler spins with its joint. The
-replica's issues (I-1, I-2, I-6) come along with the parts.
+replica's open issues (design.md §8) come along with the parts.
 """
 import cadgen
 from cadgen import step

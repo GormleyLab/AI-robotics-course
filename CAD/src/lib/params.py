@@ -48,13 +48,16 @@ GEARBOX_OD = 85.0
 
 # --- IF-7 / IF-10: output hexes
 # Female hex in the coupling shaft, GT2-80 output and Output block: 21.65 AF
-# (circumradius 12.5), line-to-line with the 21.65 gearbox output hex (I-2).
+# (circumradius 12.5).
 # Re-measured in Session 5; the Session 1 value 21.66 came from 2-decimal dumps.
 OUTPUT_HEX_SOCKET_R = 12.5
 OUTPUT_HEX_SOCKET_AF = OUTPUT_HEX_SOCKET_R * 3 ** 0.5     # 21.65
 # Male hex on the arm Pins: 21.48 AF (circumradius 12.4), 0.17 under the sockets.
 PIN_HEX_R = 12.4
 PIN_HEX_AF = PIN_HEX_R * 3 ** 0.5                       # 21.48
+# Male hex on the gearbox output: the Pin size, 0.17 under the coupling socket
+# (I-2 fixed: Fusion had 21.65, line-to-line).
+OUTPUT_HEX_AF = PIN_HEX_AF
 OUTPUT_SHAFT_D = 25.0
 
 # --- IF-8: universal link interface (4 x M3)
