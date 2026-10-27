@@ -1,0 +1,46 @@
+# Models
+
+Run from `CAD/` with cadgen's pinned Python:
+
+```bash
+PY="uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python"
+PYTHONPATH=src $PY src/purchased/nema17.py
+```
+
+Unchanged models report `current`. Assemblies (Sessions 3–6) build their children.
+
+## Shared library (`lib/`, not entrypoints)
+
+| Module | Purpose |
+| --- | --- |
+| `params.py` | Locked interface dimensions (design.md §5) |
+| `tolerances.py` | Fit profiles: `FUSION` (nominal, replica phase), `PLA_FDM`, `RESIN` |
+| `gears.py` | Involute spur gear and internal ring-gear cutter (validated: 15T m1.5 planet within 0.09 % of Fusion volume) |
+| `gt2.py` | GT2 pulley profile, pitch/outside diameter, belt length (validated: 20T/80T sections within 0.1 % of Fusion) |
+| `cots.py` | Parametric stand-ins for purchased parts with no usable step.parts model |
+
+## Purchased parts (`purchased/` → `STEP/purchased/`)
+
+Frame: axis +Z, end face (motor: mounting face) at z = 0.
+
+| Script | Source | Used in |
+| --- | --- | --- |
+| `nema17.py` | Stand-in, 42.3 frame, 40 body, Ø5 × 23.7 shaft | J1, J2, J3, J4 |
+| `bearing_608.py` | step.parts `bearing_608_2rs_sealed_simple` | J1 pulley hub |
+| `bearing_6801.py` | Stand-in 12×21×5 | Gearbox (×2) |
+| `bearing_6803.py` | step.parts `bearing_6803_2rs` | Gearbox back cover |
+| `bearing_6805.py` | Stand-in 25×37×7 | Hinge (×2), gearbox front cover, arm J3 (×2 per segment) |
+| `bearing_6807.py` | Stand-in 35×47×7 | Box top (J1) |
+| `thrust_bearing_51108.py` | Stand-in 40×60×13 | J1 (×2) |
+| `gt2_pulley_20t.py` | step.parts `gt2_pulley_20t_bore5_w6` | Motor pulleys |
+| `gt2_idler_20t.py` | step.parts `gt2_toothed_idler_bore5_w6` (Fusion bore; see I-5) | Arm idlers (×2 per segment) |
+| `dowel_pin_6x30.py` | Stand-in | Arm axles (×3 per segment) |
+| `planet_pin_6x22.py` | Stand-in (Fusion "Pin 6x11mm") | Planets (×6) |
+| `bushing_6x8x10.py` | Stand-in | Planets (×6), dual pulley (×2 per segment) |
+| `washer_6.py` | Stand-in 6.2×11.8×1.3 | Planets (×12) |
+
+Imported sources: `STEP/imported/fusion/` (the three Fusion exports, the replica reference) and `STEP/imported/vendor/` (step.parts downloads, sha256-verified).
+
+## Printed parts
+
+Added in Sessions 3–5 under `gearbox/`, `joint12/` and `belt_arm/`. Every printed part needs an entry in `checks/fusion_map.json`, and must pass `python checks/compare_to_fusion.py --map checks/fusion_map.json`.

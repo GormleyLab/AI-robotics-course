@@ -1,7 +1,7 @@
 """Report solid-solid overlaps between occurrences of a STEP assembly.
 
 Usage (from CAD/):
-    python checks/inspect/interference.py "Joint 1 and 2.step" [--min 1.0]
+    python checks/inspect/interference.py "STEP/imported/fusion/Joint 1 and 2.step" [--min 1.0]
 
 Lists every pair of leaf occurrences whose common volume exceeds --min mm^3
 (default 1.0). Expected overlaps (press fits, gear meshes at an unlucky

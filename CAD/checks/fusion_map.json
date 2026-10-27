@@ -1,0 +1,7 @@
+[
+  {"generated": "STEP/purchased/bushing_6x8x10.step", "fusion": "STEP/imported/fusion/Joint 1 and 2.step", "ref": "#o1.12.5", "align": "center"},
+  {"generated": "STEP/purchased/washer_6.step", "fusion": "STEP/imported/fusion/Joint 1 and 2.step", "ref": "#o1.12.4", "align": "center"},
+  {"generated": "STEP/purchased/planet_pin_6x22.step", "fusion": "STEP/imported/fusion/Joint 1 and 2.step", "ref": "#o1.12.2", "align": "center"},
+  {"generated": "STEP/purchased/thrust_bearing_51108.step", "fusion": "STEP/imported/fusion/Joint 1 and 2.step", "ref": "#o1.2", "align": "center"},
+  {"generated": "STEP/purchased/dowel_pin_6x30.step", "fusion": "STEP/imported/fusion/Belt Drive Arm.step", "ref": "#o1.6", "align": "center"}
+]

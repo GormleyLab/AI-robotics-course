@@ -1,7 +1,7 @@
 """Dump the assembly tree and per-part features of a Fusion STEP export.
 
 Usage (from CAD/):
-    python checks/inspect/dump_features.py "Belt Drive Arm.step" [more.step ...]
+    python checks/inspect/dump_features.py "STEP/imported/fusion/Belt Drive Arm.step" [more.step ...]
 
 Writes tmp/inspect/<stem>.txt. Features are reported in each part's local
 frame (the world placement is undone), which is the frame the Python

@@ -11,9 +11,9 @@ time, after the scripted replica matches the original.
 
 | Source file | Contents |
 |---|---|
-| `CAD/Joint 1 and 2.step` | Base, joint 1 (waist), hinge, joint 2 (shoulder), embedded planetary gearbox |
-| `CAD/Planetary Gearbox - Two-stage 16to1 ratio.step` | The gearbox alone. It is geometrically identical to the copy embedded in `Joint 1 and 2.step` (every unique part matches by volume) |
-| `CAD/Belt Drive Arm.step` | One arm segment: belt drive and joint 3 output |
+| `CAD/STEP/imported/fusion/Joint 1 and 2.step` | Base, joint 1 (waist), hinge, joint 2 (shoulder), embedded planetary gearbox |
+| `CAD/STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step` | The gearbox alone. It is geometrically identical to the copy embedded in `Joint 1 and 2.step` (every unique part matches by volume) |
+| `CAD/STEP/imported/fusion/Belt Drive Arm.step` | One arm segment: belt drive and joint 3 output |
 
 All dimensions are in mm and were measured from the STEP geometry with
 `CAD/checks/inspect/dump_features.py`. The raw dumps are regenerated into
@@ -245,6 +245,9 @@ Segment 2 (J4) is an identical copy of this segment.
 | Ø6.1 | 6 mm dowel slip fit |
 | Ø7.5 × 3.2 hex pocket | captive nut |
 
+Purchased-part models and their sources (step.parts vendor files or parametric
+stand-ins) are listed in [`CAD/src/README.md`](../src/README.md).
+
 Bearing seats are modelled at the nominal bearing OD, with no print allowance.
 The recreation should keep the nominal values and add the allowance through a
 named tolerance parameter (`lib/tolerances.py`, Session 2).
@@ -300,7 +303,8 @@ the last offering are marked 🔧.
 ```bash
 cd CAD
 CADPY="uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python"
-$CADPY checks/inspect/dump_features.py "Joint 1 and 2.step" "Belt Drive Arm.step" \
-    "Planetary Gearbox - Two-stage 16to1 ratio.step"     # -> tmp/inspect/*.txt
-$CADPY checks/inspect/interference.py "Joint 1 and 2.step" "Belt Drive Arm.step"
+F=STEP/imported/fusion
+$CADPY checks/inspect/dump_features.py "$F/Joint 1 and 2.step" "$F/Belt Drive Arm.step" \
+    "$F/Planetary Gearbox - Two-stage 16to1 ratio.step"   # -> tmp/inspect/*.txt
+$CADPY checks/inspect/interference.py "$F/Joint 1 and 2.step" "$F/Belt Drive Arm.step"
 ```

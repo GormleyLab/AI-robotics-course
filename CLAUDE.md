@@ -13,14 +13,15 @@ Students build a multi-axis robotic arm (Arduino + Python, machine vision via Op
 - `README.md` — syllabus: course description, format, 5-phase schedule, grading breakdown.
 - `Assignments.md` — weekly assignment table (week, due date, topic, resources). Due dates are from the previous offering and need to be re-dated for each new semester.
 - `arduino_motor_control_handout.md` — long-form handout for the Phase 1 motors module, with embedded Arduino C++ sketches and ASCII wiring diagrams.
-- `CAD/` — robotic arm part models as STEP files (belt drive arm, joints 1–2, two-stage 16:1 planetary gearbox). Earlier Fusion 360 `.f3z` versions remain in git history.
+- `CAD/` — text-to-cad project for the robotic arm. `src/` holds the Python models (catalog in `CAD/src/README.md`), `STEP/` the generated outputs (committed so students can use them without cadgen), `STEP/imported/fusion/` the original Fusion 360 exports (belt drive arm, joints 1–2, two-stage 16:1 planetary gearbox) that serve as the replica reference, and `STEP/imported/vendor/` the step.parts downloads. Earlier Fusion 360 `.f3z` versions remain in git history.
 - `CAD/docs/design.md` — design documentation for the Fusion baseline: parts, interfaces, gear and belt data, issue log. `CAD/docs/migration-log.md` tracks the multi-session Fusion → text-to-cad migration; read its "Next session" section before continuing.
 
 ## CAD work (text-to-cad plugin)
 
 The arm is being recreated as Python models with the text-to-cad `cad` skill (cadgen + build123d). Load that skill before any CAD work.
 
-- Run Python through cadgen's pinned environment, not the project `.venv`: `uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python ...`, from `CAD/`.
+- Run Python through cadgen's pinned environment, not the project `.venv`: `PYTHONPATH=src uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python ...`, from `CAD/`.
+- Every printed part gets an entry in `CAD/checks/fusion_map.json` and must pass `checks/compare_to_fusion.py --map checks/fusion_map.json` (bbox ±0.1 mm, volume ±0.5 %, symmetric difference ≤0.5 %).
 - Replica first: recreated parts must match the Fusion STEP files (keep each part's Fusion local frame). Don't fix the issues in `design.md` §8 during recreation; fix them later, one per commit.
 - Locked interfaces are listed in `design.md` §5. Changing one is a breaking change and must be called out.
 - Every design change must update `CAD/docs/design.md` in the same commit: the affected part rows, interface table (§5), ratios and link lengths (§1), and issue log (§8, marking issues fixed with the commit that fixed them). If a change makes a snapshot in `CAD/docs/img/` out of date, re-render it.
