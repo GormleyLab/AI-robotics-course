@@ -149,7 +149,7 @@ during recreation.
   - J2 ±63°: the segment‑1 motor hits the right hinge cheek. **New I‑16.**
   - J3/J4 ±54°: the Output block fork hits the Wall's distal rail ends. **New I‑17.**
   - The off-axis GT2‑80 output (I‑6) orbits and rubs the Wall from +5°. Noted under I‑6.
-  - The instructor confirmed that the built arm had limited travel and that it is a design flaw to fix. I‑16 and I‑17 are now High 🔧.
+  - Instructor: the built arm used standard 40 mm NEMA17s, so the stand-in is right. J2 at ±63° is acceptable and not a priority (I‑16 Low, accepted). J3/J4 must reach at least ±90° (I‑17 High 🔧).
 - Known artefacts in the check (not issues):
   - `gt2_80_output × belt:stage_2`: the belt is static while its pulley orbits.
   - `coupling_shaft × carrier_stage2_output` grows by about 20 mm³ at +63°, because the gearbox rides the waist rigidly.
@@ -159,7 +159,7 @@ during recreation.
 - URDF deferred: it needs a mesh per link in link frames, and nothing downstream uses it yet.
 
 ### Next session (7): design review, I‑1 first
-1. Agree the fix order for design.md §8 with the instructor. I‑1 (J2 axis 0.5 mm offset, three bearings) is first, then I‑2 and I‑6 (hex alignment, J3 output on axis). The travel limits I‑16 (J2) and I‑17 (J3/J4) are confirmed field flaws and belong near the top. Set a target travel per joint first, then fix each one and confirm it with `checks/joint_clearance.py`. Fixing I‑6 first removes the off-axis pulley rub, so I‑17 is then just the fork against the Wall.
+1. Fix order: I‑1 (J2 axis 0.5 mm offset, three bearings) first. Then I‑6 (J3 output on axis; this also removes the pulley's rub on the Wall), then I‑17 (J3/J4 travel ≥ ±90°: clear the Wall's distal end against the Output block fork; up to ±100° nothing else is in the way). I‑2 comes after these. I‑16 (J2 ±63°) is accepted, so leave it. Confirm I‑17 with `checks/joint_clearance.py --joint j3_elbow --angles 90,-90,95,-95` (and `j4_wrist`).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it as an intentional departure in `checks/fusion_map.json` or retire its entry), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
