@@ -1,0 +1,48 @@
+"""Top plate (Fusion "Top"), arm frame (design.md §4).
+
+7 mm plate z 37..44 with the R40 distal end. Ø37 6805 seat through at
+J3. Ø10 x 1.7 boss underneath at the dual pulley with a Ø6.1 dowel socket
+(floor at the plate underside). Idler slots y 20..65 at both idler x:
+Ø5.3 x 2 from below, Ø8 above. 7 x M3 to the Wall (Ø3.3, Ø6 x 3
+counterbore from the top) and two Ø4.2 x 10 proximal inserts at z = 40.5.
+No motor holes.
+"""
+from cadgen import step
+
+from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE, DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y,
+                             M3_CBORE, M3_CLEAR, M3_INSERT, PROXIMAL_INSERT_DEPTH, PROXIMAL_INSERT_Y,
+                             WALL_SCREW_XY, X_PROXIMAL, Z_TOP_TOP, Z_WALL_TOP, plate, xcyl, yslot, zcyl)
+from lib import params
+
+BOSS_BOTTOM = 35.3
+IDLER_SLOT_W, IDLER_SLOT_Z = 5.3, 39.0
+IDLER_CBORE_W = 8.0
+WALL_CBORE_Z = 41.0
+INSERT_Z = 40.5
+
+
+def top_body():
+    body = plate(Z_WALL_TOP, Z_TOP_TOP)
+    body += zcyl(DOWEL_BOSS_D, DUAL_X, DUAL_Y, BOSS_BOTTOM, Z_WALL_TOP)
+    body -= zcyl(DOWEL_HOLE, DUAL_X, DUAL_Y, BOSS_BOTTOM, Z_WALL_TOP)
+    body -= zcyl(params.BEARING_6805_SEAT_D, J3_X, J3_Y, Z_WALL_TOP, Z_TOP_TOP)
+    for x in IDLER_XS:
+        body -= yslot(x, *IDLER_SLOT_Y, IDLER_SLOT_W, Z_WALL_TOP, IDLER_SLOT_Z)
+        body -= yslot(x, *IDLER_SLOT_Y, IDLER_CBORE_W, IDLER_SLOT_Z, Z_TOP_TOP)
+    for x, y in WALL_SCREW_XY:
+        body -= zcyl(M3_CLEAR, x, y, Z_WALL_TOP, WALL_CBORE_Z)
+        body -= zcyl(M3_CBORE, x, y, WALL_CBORE_Z, Z_TOP_TOP)
+    for y in PROXIMAL_INSERT_Y:
+        body -= xcyl(M3_INSERT, y, INSERT_Z, X_PROXIMAL, X_PROXIMAL + PROXIMAL_INSERT_DEPTH)
+    return body
+
+
+@step(out="../../STEP/belt_arm/top.step")
+def top():
+    part = top_body()
+    part.label = "top"
+    return part
+
+
+if __name__ == "__main__":
+    top()

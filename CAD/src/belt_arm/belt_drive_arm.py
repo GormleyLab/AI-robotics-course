@@ -1,0 +1,99 @@
+"""Belt drive arm segment assembly (J3 elbow), arm frame.
+
+Printed parts are modelled in place; purchased parts use the Fusion
+placements, so I-5 (5 mm idler bores on the 6 mm dowels) and I-6 (GT2-80
+output 9.08 mm off J3, Pin hexes rotated in their sockets) are reproduced.
+
+Belts are not in Fusion (I-8) and are added here as envelopes (not gated):
+the GT2 pitch line over the pitch circles from lib/gt2.py, offset to the
+land (pulley OD) and the belt back, teeth left out, 6 mm wide and centred on each stage's driven
+80T band. An idler is wrapped (on the belt back) only if it reaches the
+strand at its Fusion position, at the y = 20 slot end: the stage-1 idler
+deflects the belt 1.8 mm; the stage-2 idler misses it by 2.0 mm, because
+the output pulley is off-axis (I-6), so that belt is an open loop.
+"""
+from cadgen import build123d as bd
+from cadgen import step
+
+from belt_arm.base import base
+from belt_arm.common import DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y, MOTOR_X, MOTOR_Y, \
+    OUTPUT_PULLEY_XY, PIN_2_PLACEMENT, Z_BASE_TOP
+from belt_arm.dual_gt2_pulley import dual_gt2_pulley
+from belt_arm.gt2_80_output import gt2_80_output
+from belt_arm.output_block import output_block
+from belt_arm.pin import pin
+from belt_arm.spacer_5mm import spacer_5mm
+from belt_arm.spacer_15mm import spacer_15mm
+from belt_arm.top import top
+from belt_arm.wall import wall
+from lib import gt2, params
+from purchased.bearing_6805 import bearing_6805
+from purchased.bushing_6x8x10 import bushing_6x8x10
+from purchased.dowel_pin_6x30 import dowel_pin_6x30
+from purchased.gt2_idler_20t import gt2_idler_20t
+from purchased.gt2_pulley_20t import gt2_pulley_20t
+from purchased.nema17 import nema17
+
+MOTOR_PULLEY_Z = 13.7                  # vendor 20T bottom face, as Fusion's GT2-20 (band z 15.2..22.2)
+IDLER_Z = (12.0, 22.0)                 # idler bottom faces (bands 13.5..20.5 / 23.5..30.5)
+IDLER_2_SHIFT = bd.Pos(IDLER_XS[1] - IDLER_XS[0], 0, 0)
+BELT_Z = (12.7, 23.7)                  # belt bottoms: centred on the 80T bands 12.2..19.2 / 23.2..30.2
+
+R_PITCH_20 = gt2.pitch_diameter(params.GT2_TEETH_MOTOR) / 2
+R_PITCH_80 = gt2.pitch_diameter(params.GT2_TEETH_ARM_DRIVEN) / 2
+R_IDLER_BACK = -(gt2.outside_diameter(params.GT2_TEETH_MOTOR) / 2 + gt2.BELT_BACK)
+
+
+def stage_circles(driver_xy, driven_xy, idler_xy):
+    """Belt circles in CCW loop order: driver, idler (if it reaches the
+    lower strand), driven."""
+    a, b = (*driver_xy, R_PITCH_20), (*driven_xy, R_PITCH_80)
+    idler = (*idler_xy, R_IDLER_BACK)
+    return [a, idler, b] if gt2.idler_depth(a, b, idler) > 0 else [a, b]
+
+
+STAGE_1 = stage_circles((MOTOR_X, MOTOR_Y), (DUAL_X, DUAL_Y), (IDLER_XS[0], IDLER_SLOT_Y[0]))
+STAGE_2 = stage_circles((DUAL_X, DUAL_Y), OUTPUT_PULLEY_XY, (IDLER_XS[1], IDLER_SLOT_Y[0]))
+
+
+def _named(shape, label):
+    shape.label = label
+    return shape
+
+
+@step(out="../../STEP/belt_arm/belt_drive_arm.step")
+def belt_drive_arm():
+    idler_1 = (IDLER_XS[0], IDLER_SLOT_Y[0])
+    idler_2 = (IDLER_XS[1], IDLER_SLOT_Y[0])
+    parts = [
+        _named(base(), "base"),
+        _named(wall(), "wall"),
+        _named(top(), "top"),
+        _named(dual_gt2_pulley(), "dual_gt2_pulley"),
+        _named(gt2_80_output(), "gt2_80_output"),
+        _named(pin(), "pin:base"),
+        _named(PIN_2_PLACEMENT * pin(), "pin:top"),
+        _named(output_block(), "output_block"),
+        _named(spacer_5mm(), "spacer_5mm:idler_1"),
+        _named(spacer_15mm(), "spacer_15mm:idler_1"),
+        _named(IDLER_2_SHIFT * bd.Pos(0, 0, 25.0) * spacer_5mm(), "spacer_5mm:idler_2"),
+        _named(IDLER_2_SHIFT * bd.Pos(0, 0, -15.0) * spacer_15mm(), "spacer_15mm:idler_2"),
+        _named(bd.Pos(MOTOR_X, MOTOR_Y, 0) * nema17(), "nema17:j3"),
+        _named(bd.Pos(MOTOR_X, MOTOR_Y, MOTOR_PULLEY_Z) * gt2_pulley_20t(), "gt2_pulley_20t:j3"),
+        _named(bd.Pos(DUAL_X, DUAL_Y, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:dual_pulley"),
+        _named(bd.Pos(*idler_1, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:idler_1"),
+        _named(bd.Pos(*idler_2, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:idler_2"),
+        _named(bd.Pos(DUAL_X, DUAL_Y, 10.7) * bushing_6x8x10(), "bushing:lower"),
+        _named(bd.Pos(DUAL_X, DUAL_Y, 20.7) * bushing_6x8x10(), "bushing:upper"),
+        _named(bd.Pos(*idler_1, IDLER_Z[0]) * gt2_idler_20t(), "gt2_idler_20t:1"),
+        _named(bd.Pos(*idler_2, IDLER_Z[1]) * gt2_idler_20t(), "gt2_idler_20t:2"),
+        _named(bd.Pos(J3_X, J3_Y, 0.2) * bearing_6805(), "bearing_6805:base"),
+        _named(bd.Pos(J3_X, J3_Y, 37.2) * bearing_6805(), "bearing_6805:top"),
+        _named(bd.Pos(0, 0, BELT_Z[0]) * gt2.belt_envelope(STAGE_1), "belt:stage_1"),
+        _named(bd.Pos(0, 0, BELT_Z[1]) * gt2.belt_envelope(STAGE_2), "belt:stage_2"),
+    ]
+    return bd.Compound(children=parts, label="belt_drive_arm")
+
+
+if __name__ == "__main__":
+    belt_drive_arm()

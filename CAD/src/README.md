@@ -16,7 +16,7 @@ Unchanged models report `current`. Assemblies (Sessions 3–6) build their child
 | `params.py` | Locked interface dimensions (design.md §5) |
 | `tolerances.py` | Fit profiles: `FUSION` (nominal, replica phase), `PLA_FDM`, `RESIN` |
 | `gears.py` | Involute spur gear and internal ring-gear cutter (validated: 15T m1.5 planet within 0.09 % of Fusion volume) |
-| `gt2.py` | GT2 pulley profile, pitch/outside diameter, belt length (validated: 20T/80T sections within 0.1 % of Fusion) |
+| `gt2.py` | GT2 pulley profile, flanged pulley, pitch/outside diameter, belt length; belt path, idler engagement and belt envelope over pulleys and idlers (validated: 20T/80T sections within 0.1 % of Fusion) |
 | `cots.py` | Parametric stand-ins for purchased parts with no usable step.parts model |
 
 ## Purchased parts (`purchased/` → `STEP/purchased/`)
@@ -33,7 +33,7 @@ Frame: axis +Z, end face (motor: mounting face) at z = 0.
 | `bearing_6807.py` | Stand-in 35×47×7 | Box top (J1) |
 | `thrust_bearing_51108.py` | Stand-in 40×60×13 | J1 (×2) |
 | `gt2_pulley_20t.py` | step.parts `gt2_pulley_20t_bore5_w6`, bore cut through both flanges (the vendor file leaves them solid) | Motor pulleys |
-| `gt2_idler_20t.py` | step.parts `gt2_toothed_idler_bore5_w6` (Fusion bore; see I-5) | Arm idlers (×2 per segment) |
+| `gt2_idler_20t.py` | step.parts `gt2_toothed_idler_bore5_w6`, bore cut through both flanges (Fusion bore; see I-5) | Arm idlers (×2 per segment) |
 | `dowel_pin_6x30.py` | Stand-in | Arm axles (×3 per segment) |
 | `planet_pin_6x22.py` | Stand-in (Fusion "Pin 6x11mm") | Planets (×6) |
 | `bushing_6x8x10.py` | Stand-in | Planets (×6), dual pulley (×2 per segment) |
@@ -78,6 +78,29 @@ base frame) and shared helpers.
 
 Helper (not an entrypoint): `common.py`. Check: `checks/j1_yaw_clearance.py` (I-14).
 
+Both vendor 20T files are plain Ø15.23 bands, not toothed (a GT2 20T has OD 12.22); belt envelopes use the `lib/gt2.py` diameters.
+
+## Belt drive arm segment (`belt_arm/` → `STEP/belt_arm/`), Session 5
+
+Arm frame: the Fusion "Belt Drive Arm" frame as-is (plates in XY, Base
+underside at z = 0, proximal end at x = -40, J3 ‖ Z through (160, 40)).
+Parts are modelled in place; `common.py` holds the shared positions,
+`OUTPUT_PULLEY_XY` (9.08 mm off J3, I-6) and `PIN_2_PLACEMENT`.
+
+| Script | Fusion part | Notes |
+| --- | --- | --- |
+| `base.py` | Base | Motor pilot, J3 6805 seat, dowel boss, idler slots |
+| `wall.py` | Wall | U-frame, 7 insert holes |
+| `top.py` | Top | |
+| `dual_gt2_pulley.py` | Dual GT2 pulley | 80T + 20T flanged, `lib/gt2.flanged_pulley` |
+| `gt2_80_output.py` | GT2-80 output | 21.65 AF socket; gated with `"method": "sliced"` (the 3D boolean returns a wrong result) |
+| `pin.py` | Pin (×2) | Modelled as Pin:1; Pin:2 at `PIN_2_PLACEMENT` |
+| `output_block.py` | Output block | Fork, mitred R5 root fillets, hex socket, link interface |
+| `spacer_5mm.py`, `spacer_15mm.py` | Spacer 5mm / 15mm (×2 each) | Modelled at idler 1 |
+| `belt_drive_arm.py` | Assembly | Adds the two belt envelopes (not in Fusion, not gated). Not named `belt_arm.py`: that would shadow the package |
+
+Helper (not an entrypoint): `common.py`.
+
 ## Printed parts still to come
 
-Session 5, under `belt_arm/`. Every printed part needs an entry in `checks/fusion_map.json`, and must pass `python checks/compare_to_fusion.py --map checks/fusion_map.json`.
+None for the replica. Every printed part needs an entry in `checks/fusion_map.json`, and must pass `python checks/compare_to_fusion.py --map checks/fusion_map.json`.

@@ -170,37 +170,55 @@ y = 3.5 / 76.5 and z = 3.5 / 40.5), which form the 73 × 37 link interface.
 1. NEMA17 under `Base` at (−10, 40), pilot through Ø30, M3 on the 31 mm pattern.
 2. GT2 **20T** (COTS, 5 mm bore) drives `Dual GT2 pulley` at (75, 40): **80T**
    driven, then **20T** driver. It turns on two 6×8×10 bushings on a 6×30 dowel pin.
-3. The dual pulley drives `GT2-80 output` (80T) at (160, 40), which is keyed by
-   a **21.66 AF hex bore** onto two `Pin` hex shafts.
-4. Each stage has a center distance of 85, which gives a 274.3 mm open-belt
-   pitch length. A 280 mm (140T) loop *(inferred)* would be taken up by the idlers.
+3. The dual pulley drives `GT2-80 output` (80T), which is keyed by a **21.65 AF
+   hex socket** (circumradius 12.5, the same as the coupling shaft) onto two
+   `Pin` hex shafts. It is meant to sit on J3 at (160, 40), but Fusion places it
+   at (165.59, 47.15), 9.08 mm off the axis ([I‑6](#8-observed-issues-and-open-questions)).
+4. The intended center distance is 85 for both stages, which gives a 274.3 mm
+   open-belt pitch length. As modelled, stage 2 is 90.87 (open belt 285.8 mm).
+   A 280 mm (140T) loop *(inferred)* would be taken up by the idlers.
 5. Each belt has a `GT2-20 idler` on a 6×30 dowel pin with 5 / 15 mm spacers.
-   The pins sit in **slots in the Top plate (y 20 ↔ 65)** so the idler slides to
-   tension the belt. The Base has matching Ø10 / Ø5.3 positions at y = 20 and y = 65.
+   The dowels sit in **slots in both plates (y 20 ↔ 65)**, so the idler slides to
+   tension the belt: Base Ø10 × 3 from below, then Ø5.3; Top Ø5.3 × 2, then Ø8
+   from above. The dowels stop at the plate faces (z 7 / 37), so the slots
+   presumably take M5 clamp screws *(inferred)*. At the y = 20 slot end
+   (the Fusion position) the stage-1 idler deflects the belt 1.8 mm (274.4 mm
+   loop; 277.7 mm at y = 30). The stage-2 idler misses its belt by 2.0 mm
+   because of the off-axis output pulley.
+6. The pulley bands are not in line axially ([I‑15](#8-observed-issues-and-open-questions)):
+   - stage 1: the motor 20T band (z 15.2–22.2) sits 3 mm above the dual 80T band (12.2–19.2);
+   - stage 2: the dual 20T band (22.2–29.2) sits 1 mm below the output 80T band (23.2–30.2).
 
 ### J3 output
 1. Two `Pin` parts run in 6805 bearings, one seated in `Base` and one in `Top`
-   (Ø37 seats at (160, 40)). Each Pin is a Ø30 × 2 flange, a Ø25 × 10 journal,
-   and a 21.48 AF × 15 hex.
-2. The Pins enter the GT2‑80 output from above and below. `Output block` also
-   intersects both Pins (I‑6). The block has hex-oriented faces, so it is
-   probably keyed to the Pins as well; confirm this when recreating it.
-3. `Output block` (80 × 44 × 90) slides into the open distal end of the U-wall
-   and projects 34 mm beyond the R40 end. Its distal face carries the 73 × 37 M3
-   link interface (Ø3.3 + Ø6 counterbore) for the next segment or the end
-   effector. It also has two Ø10 cross holes (cable routing *(inferred)*).
+   (Ø37 seats at (160, 40)). Each Pin is a Ø30 × 2 flange (outside the plate),
+   a Ø25 × 10 journal, and a 21.48 AF × 15 hex (circumradius 12.4, 0.17 under
+   the sockets).
+2. The Pins enter the Output block and the GT2‑80 output from below (Pin 1) and
+   above (Pin 2, flipped and turned 137.23°). The block is keyed to them: a
+   21.65 AF hex socket (corners on ±Y) runs through both prongs and two
+   Ø28.5 × 1 bosses with R1 rounded edges that bear on the 6805 inner races.
+   As modelled, the Pin hexes are 30° (Pin 1) and 17.2° (Pin 2) off the block
+   socket (I‑6).
+3. `Output block` (80 × 44 × 90) is a 20 mm distal end plate with a 35 × 28 fork
+   that runs back to J3 between the plates. The fork is split by a 10.5 mm slot
+   (z 21.7–32.2) for the GT2‑80 output, and joins the end plate with R5 fillets,
+   mitred at the corners (Session 1 read these as "Ø10 cross holes"). The end
+   plate projects 34 mm beyond the R40 end. Its distal face carries the 73 × 37
+   M3 link interface (Ø3.3 + Ø6 × 3 counterbore from the inside) for the next
+   segment or the end effector.
 
 ### Parts
 
 | Part | Qty | Make | Envelope | Key features |
 |---|---|---|---|---|
-| `Base` | 1 | Print | 240 × 80 × 10.7 | NEMA17 pilot Ø30 plus 4 × M3 (Ø3.3, Ø6 counterbore). Ø37 6805 seat. Dowel holes Ø6.1. Idler positions Ø10 × 3 / Ø5.3. Ø6 counterbore + Ø3.3 for M3 to the Wall. Proximal Ø4.2 inserts. |
-| `Wall` | 1 | Print | 203.5 × 80 × 30 | U-frame; 7 × Ø4.2 vertical insert holes through the full 30 (used from both faces). Ø7 at x = 160. |
-| `Top` | 1 | Print | 240 × 80 × 8.7 | Mirror of the Base pattern. Idler slots (Ø8 / Ø5.3, y 20 ↔ 65). Ø37 6805 seat. Ø6.1 × 1.7 boss socket for the dual-pulley dowel. Proximal Ø4.2 inserts. |
-| `Dual GT2 pulley` | 1 | Print | Ø52.4 × 20 | GT2 80T (z −10…−3) + 20T (z 0…7) on one body, Ø8 bore |
-| `GT2-80 output` | 1 | Print | Ø52.4 × 10 | GT2 80T, 21.66 AF hex bore |
-| `Pin` | 2 | Print | Ø30 × 27 | Flange / journal / hex, as above |
-| `Output block` | 1 | Print | 80 × 44 × 90 | J3 output bracket and link interface |
+| `Base` | 1 | Print | 240 × 80 × 10.7 | NEMA17 pilot Ø30 plus 4 × M3 (Ø3.3, Ø6 × 3 counterbore from the top). Ø37 6805 seat. Ø10 × 3.7 dowel boss with a Ø6.1 socket. Idler slots y 20 ↔ 65 (Ø10 × 3 from below, then Ø5.3). 7 × M3 to the Wall (Ø6 × 3 counterbore from below, Ø3.3). Proximal Ø4.2 × 10 inserts. |
+| `Wall` | 1 | Print | 203.5 × 80 × 30 | U-frame: 7 mm end wall and side rails with half-round R3.5 ends at x = 160; 7 × Ø4.2 vertical insert holes through the full 30 (used from both faces). |
+| `Top` | 1 | Print | 240 × 80 × 8.7 | Ø37 6805 seat. Ø10 × 1.7 dowel boss underneath with a Ø6.1 socket. Idler slots y 20 ↔ 65 (Ø5.3 × 2 from below, then Ø8). 7 × M3 to the Wall (Ø3.3, Ø6 × 3 counterbore from the top). Proximal Ø4.2 × 10 inserts. No motor holes. |
+| `Dual GT2 pulley` | 1 | Print | Ø52.4 × 20 | Flanged GT2 80T (band z 12.2–19.2) + flanged 20T (band 22.2–29.2) on one body, Ø8 bore |
+| `GT2-80 output` | 1 | Print | Ø52.4 × 10 | Flanged GT2 80T, 21.65 AF hex socket; 9.08 mm off J3 as placed (I‑6) |
+| `Pin` | 2 | Print | Ø30 × 27 | Flange / journal / 21.48 AF hex, as above |
+| `Output block` | 1 | Print | 80 × 44 × 90 | J3 output bracket (fork, 21.65 AF socket, bosses) and link interface |
 | `Spacer 5mm` / `Spacer 15mm` | 2 / 2 | Print | Ø10 / Ø6.3 | Idler height spacers |
 | `GT2-20` | 1 | Buy | Ø14.2 × 10 | 20T, 5 mm bore (motor) |
 | `GT2-20 idler` | 2 | Buy | Ø14.2 × 10 | 20T toothed idler, **5 mm bore in the CAD**; the part actually used is unknown, see [I‑5](#8-observed-issues-and-open-questions) |
@@ -227,7 +245,7 @@ Segment 2 (J4) is an identical copy of this segment.
 | IF‑7 | Gearbox output hex | Carrier p2 output ↔ Coupling shaft | 21.65 AF hex in a 21.65 AF socket (circumradius 12.5, line-to-line); Ø25 shaft |
 | IF‑8 | **Link interface** | Coupling shaft, arm proximal end, Output block | 4 × M3 on 73 × 37, arm thickness 44, width 80 |
 | IF‑9 | NEMA17 | All three motors | 31 × 31 M3, Ø22 pilot, 5 mm shaft |
-| IF‑10 | J3 hex | Pin ↔ GT2‑80 output ↔ Output block | 21.48 / 21.66 AF; Ø25 journal; 6805 seats at (160, 40) |
+| IF‑10 | J3 hex | Pin ↔ GT2‑80 output ↔ Output block | Pin 21.48 AF (circumradius 12.4) in 21.65 AF sockets (circumradius 12.5); Ø25 journal; 6805 seats at (160, 40) |
 | IF‑11 | GT2 geometry | All pulleys | 2 mm pitch; 20T / 80T / 160T; 6 mm belt; 7 mm tooth width |
 
 ---
@@ -260,7 +278,7 @@ During the **replica phase**, every part keeps its Fusion local frame, so that
 `checks/compare_to_fusion.py` can compare like with like. Each subassembly
 keeps its Fusion frame:
 - `Joint 1 and 2`: origin at the box corner; top of `Box bottom` at z = 0; J1 at (75, 75). The joint12 parts are modelled in this frame as placed (`src/joint12/common.py`). The gearbox frame maps into it by `Pos(-17, 75, 70) * Rot(0, 0, 90) * Rot(-90, 0, 0)` (`GEARBOX_PLACEMENT`), which is the same for every gearbox part.
-- `Belt Drive Arm`: origin at the proximal end + 40, on the Base underside; plates in XY; J3 at (160, 40).
+- `Belt Drive Arm`: origin at the proximal end + 40, on the Base underside; plates in XY; J3 at (160, 40). The belt_arm parts are modelled in this frame as placed (`src/belt_arm/common.py`); only Pin 2 needs a placement (`PIN_2_PLACEMENT`).
 
 The **full-arm assembly** (Session 6) uses a robot frame:
 - origin on the J1 axis at the top surface of `Box top`;
@@ -277,19 +295,20 @@ the last offering are marked 🔧.
 | ID | Severity | Issue | Evidence |
 |---|---|---|---|
 | I‑1 | **High** 🔧 | **J2 is misaligned and over-constrained.** The gearbox axis is at z = 70.0, but the hinge 6805 seats and the coupling shaft are at z = 70.5 (0.5 mm offset). The output shaft runs in three bearings (front cover, left cheek, right cheek via the coupling), so any offset binds. Students reported J2 stiffness and binding. | `checks/inspect/interference.py`: Carrier p2 output × left 6805 = 86 mm³; axis survey |
-| I‑2 | Medium | The output hex (21.65 AF) and the coupling socket (21.66 AF) overlap by 2803 mm³ in the model: the hex is rotated 43.5°, not a multiple of 60°, and is offset by I‑1. The fit itself is line-to-line (socket 21.651 AF, circumradius 12.5, against a 21.65 hex; Session 1 read 21.66 from rounded values), which leaves no print allowance. | interference |
+| I‑2 | Medium | The output hex (21.65 AF) and the coupling socket (21.65 AF) overlap by 2803 mm³ in the model: the hex is rotated 43.5°, not a multiple of 60°, and is offset by I‑1. The fit itself is line-to-line (socket 21.651 AF, circumradius 12.5, against a 21.65 hex; Session 1 read 21.66 from rounded values), which leaves no print allowance. | interference |
 | I‑3 | Medium 🔧 | **Gear wear and backlash.** m1.5 (transverse) 15° helical PLA gears with 9 mm face width at 16:1 near the output. The helix adds an axial thrust that the carriers and washers must react. There is no clearance or backlash allowance; the planets mesh at nominal center distance. | gear data |
-| I‑4 | Medium 🔧 | **Belt tensioning.** The arm idlers slide in slots with no positive lock, and J1 relies on a friction-locked motor slot. | geometry |
+| I‑4 | Medium 🔧 | **Belt tensioning.** The arm idlers slide in slots with no positive lock, and J1 relies on a friction-locked motor slot. The idler dowels are only clamped between the plates (they stop at the plate faces). | geometry |
 | I‑5 | Medium | The `GT2-20 idler` has a 5 mm bore but sits on a 6 mm dowel pin (86 mm³ overlap). The part actually used is unknown. | interference |
-| I‑6 | Low | The `Pin` hex in `GT2-80 output` overlaps by 98 and 1812 mm³. Pin 2 is rotated 137.2°, so its hex is misaligned. The Pins also overlap `Output block` by 374 and 83 mm³, so check the hex pocket depth. | interference |
+| I‑6 | Medium | **The J3 output is misplaced in the model.** The `GT2-80 output` is centred at (165.59, 47.15), 9.08 mm off the J3 axis, so the Pins overlap it by 98 and 1812 mm³ and stage 2 runs at a 90.87 center distance instead of 85; its idler then misses the belt by 2.0 mm. The Pin hexes are also turned in their sockets: Pin 1 is 30° off the `Output block` socket (374 mm³) and Pin 2, rotated 137.2°, is 17.2° off (83 mm³). The socket depths are fine (Session 5). The intended design is clearly all three hexes on J3, aligned. | interference; `checks/inspect/world_faces.py` (Session 5) |
 | I‑7 | Low | Planets overlap the ring and sun by 25–65 mm³: they sit at the Fusion tooth phases, which don't mesh. This is cosmetic. The recreated gearbox reproduces it: sun × planet 65.0 mm³ (Fusion 65.0); ring × planet 54 / 52 mm³ (Fusion 36 / 26, from the remaining ring tip-shape difference). | interference |
-| I‑8 | Low | The J1 motor, J1 20T pulley, all belts, all fasteners, segment 2, J4 and the end effector are missing from the CAD. The recreation adds the J1 motor and 20T pulley (Session 4, assumed mid-slot placement). | tree |
+| I‑8 | Low | The J1 motor, J1 20T pulley, all belts, all fasteners, segment 2, J4 and the end effector are missing from the CAD. The recreation adds the J1 motor and 20T pulley (Session 4, assumed mid-slot placement) and the two arm belt envelopes (Session 5). | tree |
 | I‑9 | Low | Naming errors: `GT2-120` is 160T; `Pin 6x11mm` is 22 long; `Component1/2/7` wrappers; an empty `Component2`; a `test` product in the arm. | tree |
 | I‑10 | Low | The hinge left cheek has 5 of the 6 front-cover bolt holes. | features |
 | I‑11 | Info | All bearing seats are at the nominal OD; PLA needs a press-fit allowance. | features |
 | I‑12 | Info | The thrust bearings (40 ID) ride on a Ø35 shaft, leaving 2.5 mm radial slop; they are centered only by the Ø60/61 recesses. | features |
 | I‑13 | Info | The hinge has two R42.5 boss profiles at different heights (z = 62.5 and 70.5). Check whether the offset is intentional. | features |
 | I‑14 | Medium | **J1 yaw is limited by the J1 motor** (found once the motor was modelled, Session 4). The hinge floor corners sweep r = 55.7 about J1; the motor frame's near face is 53.85 from the axis at mid-slot, so the hinge hits it. Clear range around 0° (10° steps): ±20° at x = 140, ±40° at x = 150 (blocked at ±50°, clear again from ±60° to ±110°), ±120° at x = 160. Beyond about ±120° the gearbox (ring gear, carriers, covers) hits the motor at every slot position. Assumes the motor square to the box; belt not modelled. | `checks/j1_yaw_clearance.py` |
+| I‑15 | Low | **Arm pulley bands are out of line axially.** Stage 1: the motor 20T band (z 15.2–22.2) is 3 mm above the dual 80T band (12.2–19.2), so a 6 mm belt centred on the 80T band runs 3.5 mm on the motor pulley. Stage 2: the dual 20T band (22.2–29.2) is 1 mm below the output 80T band (23.2–30.2). The motor pulley can slide on its shaft; the dual pulley's split cannot. | Session 5 assembly, belt envelopes |
 
 ### Open questions (deferred)
 - Q1: The belt lengths actually bought, for J1 and the arm stages.

@@ -47,12 +47,15 @@ PLANET_CENTRE_R = GEAR_MODULE * (SUN_TEETH + PLANET_TEETH) / 2  # 22.5
 GEAR_FACE_WIDTH = 9.0
 GEARBOX_OD = 85.0
 
-# --- IF-7: gearbox output hex
-OUTPUT_HEX_AF = 21.48              # male hex on Carrier p2 output and arm Pins
-# Female hex in the GT2-80 output (Session 1 dump, 2-decimal rounding; re-measure
-# in Session 5). The coupling-shaft socket measures 21.651 (circumradius 12.5),
-# line-to-line with the 21.65 gearbox hex (I-2); see joint12/coupling_shaft.py.
-OUTPUT_HEX_SOCKET_AF = 21.66
+# --- IF-7 / IF-10: output hexes
+# Female hex in the coupling shaft, GT2-80 output and Output block: 21.65 AF
+# (circumradius 12.5), line-to-line with the 21.65 gearbox output hex (I-2).
+# Re-measured in Session 5; the Session 1 value 21.66 came from 2-decimal dumps.
+OUTPUT_HEX_SOCKET_R = 12.5
+OUTPUT_HEX_SOCKET_AF = OUTPUT_HEX_SOCKET_R * 3 ** 0.5     # 21.65
+# Male hex on the arm Pins: 21.48 AF (circumradius 12.4), 0.17 under the sockets.
+PIN_HEX_R = 12.4
+PIN_HEX_AF = PIN_HEX_R * 3 ** 0.5                       # 21.48
 OUTPUT_SHAFT_D = 25.0
 
 # --- IF-8: universal link interface (4 x M3)

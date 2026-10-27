@@ -241,5 +241,126 @@
     "ref": "#o1.6.1",
     "frame": "world",
     "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/base.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.1",
+    "frame": "world",
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/wall.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.2",
+    "frame": "world",
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/top.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.3",
+    "frame": "world",
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/dual_gt2_pulley.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.9.1.2",
+    "frame": "world",
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/gt2_80_output.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.23.1",
+    "frame": "world",
+    "slice_axis": "z",
+    "method": "sliced"
+  },
+  {
+    "generated": "STEP/belt_arm/pin.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.20",
+    "frame": "world",
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/pin.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.21",
+    "frame": "world",
+    "transform": [
+      [
+        "pos",
+        -160.0,
+        -40.0,
+        2.8
+      ],
+      [
+        "rot",
+        -180.0,
+        0.0,
+        137.23053694471352
+      ],
+      [
+        "pos",
+        160.0,
+        40.0,
+        47.4
+      ]
+    ],
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/output_block.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.22",
+    "frame": "world",
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/spacer_5mm.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.12",
+    "frame": "world",
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/spacer_5mm.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.17",
+    "frame": "world",
+    "transform": [
+      85.0,
+      0,
+      25.0,
+      0,
+      0,
+      0
+    ],
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/spacer_15mm.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.14",
+    "frame": "world",
+    "slice_axis": "z"
+  },
+  {
+    "generated": "STEP/belt_arm/spacer_15mm.step",
+    "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
+    "ref": "#o1.15",
+    "frame": "world",
+    "transform": [
+      85.0,
+      0,
+      -15.0,
+      0,
+      0,
+      0
+    ],
+    "slice_axis": "z"
   }
 ]

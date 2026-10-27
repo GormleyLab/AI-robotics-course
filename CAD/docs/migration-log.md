@@ -13,8 +13,8 @@ during recreation.
 | 2 | Project scaffold (`src/`, `STEP/`, `lib/`), tolerance and gear/GT2 helpers, COTS via step.parts, `checks/compare_to_fusion.py` | Done |
 | 3 | Planetary gearbox parts + assembly | Done |
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
-| 5 | Belt drive arm segment parts + assembly (belt envelopes) | Next |
-| 6 | Full arm (two segments), kinematics, optional URDF | |
+| 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
+| 6 | Full arm (two segments), kinematics, optional URDF | Next |
 | 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks | |
 
 ## Session 1 — 2026-10-26
@@ -107,14 +107,39 @@ during recreation.
   - `params.OUTPUT_HEX_SOCKET_AF` (21.66) is kept only for the GT2‑80 output until Session 5 re-measures it.
 - New inspection tool: `checks/inspect/world_faces.py` (every face in world frame; `--min-area` hides teeth).
 
-### Next session (5): belt drive arm segment
-1. Check that the "Belt Drive Arm" frame is clean. Use the placements in `tmp/inspect/Belt Drive Arm.txt` (regenerate with `dump_features.py`). If it is, model in place as in `joint12/`; otherwise pick one clean frame and a single transform.
-2. Recreate in `src/belt_arm/`: `base.py`, `wall.py`, `top.py`, `dual_gt2_pulley.py` (80T + 20T), `gt2_80_output.py`, `pin.py`, `output_block.py`, `spacer_5mm.py`, `spacer_15mm.py`. Get features with `checks/inspect/world_faces.py` and tooth phases with `tooth_phase.py` (`--to-part 0,0,0 --centre X,Y`).
-3. Re-measure exactly (not from the 2-decimal dumps):
-   - the GT2‑80 output hex socket. If it is 21.65, retire `params.OUTPUT_HEX_SOCKET_AF = 21.66` and update IF‑7/IF‑10;
-   - the Pin hex (21.48);
-   - check the Output block hex pockets (I‑6).
-4. Assembly `belt_arm.py`:
-   - purchased parts: NEMA17 under the Base, 20T, idlers, dowels, bushings, 6805s;
-   - two belt envelopes from `lib/gt2.py` pitch circles (centre distance 85, idler positions from IF‑10).
-5. Gate every printed part (`frame: world`); run the interference check; reproduce I‑4, I‑5 and I‑6.
+## Session 5 — 2026-10-27
+- The "Belt Drive Arm" frame is clean: every occurrence is at identity rotation except Pin:2 and the Output block (the block is a single placement, so it is modelled in world coordinates).
+- Recreated the 9 printed arm models in `src/belt_arm/`, modelled in place (`belt_arm/common.py`), plus the `belt_drive_arm.py` assembly. The name `belt_arm.py` would shadow the package, as with the gearbox.
+- Gate: 12 new entries (Pin, Spacer 5mm and Spacer 15mm have two each; the second copies use transforms). All 32 map entries pass.
+  - Base, Wall, Pin ×2 and the spacers: 0.000 %. Top: 0.001 % symmetric difference. Output block: 0.088 %.
+  - Dual pulley and GT2-80 output: 0.042 %, from the omitted groove blend arcs (as on the 160T).
+  - The GT2-80 output needs `"method": "sliced"`: the 3D boolean drops the whole Fusion solid and reports 7.2 %.
+- Exact re-measurements (`world_faces.py`):
+  - GT2-80 output socket: 21.65 AF (circumradius 12.5), the same as the coupling. `params.OUTPUT_HEX_SOCKET_AF = 21.66` is retired; `params` now has `OUTPUT_HEX_SOCKET_R = 12.5` and `PIN_HEX_R = 12.4`. IF‑10 updated.
+  - Pin hex: 21.48 AF (circumradius 12.4), corners on ±X.
+  - Output block socket: 21.65 AF, corners on ±Y. It runs through both prongs and the two Ø28.5 × 1 R1-rounded bosses on the 6805 inner races, so the pocket depths are fine.
+  - Tooth phase: groove 0 on +X on all three 80T/20T bands, so no rotation is needed.
+- **Finding: the GT2-80 output is centred at (165.5935, 47.1522), 9.08 mm off J3.** This explains the Pin overlaps of 98 / 1812 mm³. I‑6 is rewritten and raised to Medium. The Pin hexes are 30° (Pin 1) and 17.2° (Pin 2) off the block socket, which explains 374 / 83 mm³. Stage 2 runs at a 90.87 center distance.
+- Interference matches Fusion pair for pair: I‑5 86.4 ×2; I‑6 98.0, 1812.0, 373.7 and 83.0.
+- Vendor idler fix: the step.parts idler leaves its flanges solid, as the 20T pulley does. `purchased/gt2_idler_20t.py` now cuts the Ø5 bore through. Both vendor parts are plain Ø15.23 bands, not toothed.
+- Belts (not gated):
+  - `lib/gt2.py` gained `flanged_pulley`, `belt_path` (exact tangent/arc pitch line and length, signed radii for back-side idlers), `idler_depth` and `belt_envelope` (pitch line −0.254 / +0.376, teeth left out).
+  - Stage 1: the idler at the y = 20 slot end deflects the belt 1.8 mm; 274.39 mm loop (277.65 at y = 30).
+  - Stage 2: the idler misses its belt by 2.0 mm (I‑6); 285.78 mm open loop.
+  - Each belt is centred on its 80T band.
+  - Remaining belt overlaps are vendor geometry: the motor 20T (84 mm³) and idler 1 (34 mm³). The exception is dual × belt 2 (2.5 mm³), which is I‑15.
+- **New issue I‑15: the arm pulley bands are out of line axially.** The motor 20T band is 3 mm above the dual 80T band; the dual 20T band is 1 mm below the output 80T band.
+- Corrections to `design.md` §4:
+  - the Base idler holes are slots as in the Top;
+  - the idler dowels are only clamped between the plates (I‑4);
+  - the Output block "Ø10 cross holes" are mitred R5 root fillets;
+  - the fork has a slot, a hex socket and bosses;
+  - the Top has no motor holes.
+
+### Next session (6): full arm
+1. Fix the robot frame (design.md §7): origin on J1 at the top of `Box top`, +Z up; confirm the +X direction.
+2. Place the arm on the coupling shaft through IF‑8. Find the transform from the arm frame (proximal end face x = −40, insert holes at y 3.5 / 76.5, z 3.5 / 40.5) to the coupling shaft's link face in the base frame. Segment 2 mounts on the Output block's distal face (x = 234.175, M3 at y 3.5 / 76.5, z 3.7 / 40.7): note the 0.2 mm z offset against the proximal inserts (3.5 / 40.5).
+3. Assembly `src/arm.py` (or similar, avoiding package names): joint12 base, segment 1, segment 2 (identical copy).
+4. Kinematics: J1–J4 axes and link lengths into design.md §1; joint zero = the Fusion pose (arm vertical). Declare kinematics per the cad skill's `references/kinematics.md`. Snapshot a few poses.
+5. Optional URDF (`$urdf` skill) from the same frames.
+6. Use the J3 axis (160, 40) for the kinematics, not the GT2-80 output centre (I‑6). The replica keeps the Fusion placement.
