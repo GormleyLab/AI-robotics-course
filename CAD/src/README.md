@@ -29,7 +29,7 @@ Frame: axis +Z, end face (motor: mounting face) at z = 0.
 
 | Script | Source | Used in |
 | --- | --- | --- |
-| `nema17.py` | Stand-in, 42.3 frame, 40 body, Ø5 × 23.7 shaft | J1, J2, J3, J4 |
+| `nema17.py` | Stand-in, 42.3 frame, 48 body (I‑19), Ø5 × 23.7 shaft | J1, J2, J3 (J4 until I‑18) |
 | `bearing_608.py` | step.parts `bearing_608_2rs_sealed_simple` | J1 pulley hub |
 | `bearing_6801.py` | Stand-in 12×21×5 | Gearbox (×2) |
 | `bearing_6803.py` | step.parts `bearing_6803_2rs` | Gearbox back cover |

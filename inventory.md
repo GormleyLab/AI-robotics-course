@@ -27,14 +27,14 @@ General-lab purchases in the same order history are left out. §6 lists spare pa
 | Zeelo GT2 6 mm closed belt, 760 mm (4-pack) | [B0CQP1N4YL](https://www.amazon.com/dp/B0CQP1N4YL) | **4** | $14.99 | Not in CAD | — | — | |
 | uxcell GT2 6 mm closed belt, 600 mm (2-pack) | [B0CMTB5WHD](https://www.amazon.com/dp/B0CMTB5WHD) | **2** | $7.68 | Not in CAD | — | — | |
 
-**J1 belt.** The recreated base needs a **366–372 mm** loop (design.md §2: the motor then sits at x ≥ 155.7 and J1 clears ±124°). No belt in that range was bought. A 350 mm loop fits the slot, but the motor sits nearer the hinge and J1 travel is reduced (I‑14). Order 370 mm loops (185 T) for Spring 2027.
+**J1 belt.** The recreated base needs a **370–372 mm** loop (design.md §2: the motor then sits at x ≥ 158.0 and J1 clears ±124°). No belt in that range was bought. A 350 mm loop fits the slot, but the motor sits nearer the hinge and J1 travel is reduced (I‑14). Order 370 mm loops (185 T) for Spring 2027.
 
 > **To order:** GT2 6 mm closed belt, **370 mm** (185 T, `370-2GT-6`), **9** (1 per set). These Amazon listings include a 370 mm × 6 mm option. The size is chosen on the product page, so check that 370 mm and 6 mm width are selected before buying:
 > - [B0H152X8XD](https://www.amazon.com/dp/B0H152X8XD): 2GT/GT2 timing belt, 276–370 mm, 6 mm width, **10-pack**. This covers all 9 sets with one order.
 > - [B0DWKCJ6DJ](https://www.amazon.com/dp/B0DWKCJ6DJ): GT2 timing belt, 350–380 mm, 6 mm width, sold singly.
 > - [B0H338VH6R](https://www.amazon.com/dp/B0H338VH6R): GT2 closed loop, 360–380 mm in 2 mm steps, 6 mm width.
 >
-> Belts from 366 to 372 mm also work (design.md §2), so 366, 368 and 372 mm are acceptable if 370 mm is out of stock.
+> A 372 mm belt also gives full J1 travel if 370 mm is out of stock. 366 and 368 mm belts fit, but J1 travel drops to ±122° and ±123° with the 48 mm motor (design.md I‑19).
 
 ## 2. Arm: bearings, pins and bushings
 
