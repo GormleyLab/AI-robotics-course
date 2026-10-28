@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑8 open) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑8, I‑18, I‑19 open) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -226,8 +226,10 @@ during recreation.
 - **I‑13 intentional** (commit "Close I-13"; docs only). The right cheek is rounded about z 62.5 instead of 70.5 to clear the segment‑1 motor. A right cheek rounded about 70.5 overlaps the motor by 592 mm³ at every J2 angle, 0° included. The cheek as built is clear to ±63° and touches at ±64° (5 mm³, I‑16) (`tmp/i13_cheek.py`). Gotcha: segments 1 and 2 both label their motor `nema17:j3`, so key leaves by link plus label; the first version of the script keyed by label alone, lost segment 1's motor and reported clear.
 
 ### Next steps (continue Session 7 or start Session 8)
-1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open. Next: DfAM checks with `DEFAULT = PLA_FDM` (step 4).
+1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, and so are I‑18 (the J4 pancake motor, step 6) and I‑19 (the NEMA17 body length, step 7). Next: DfAM checks with `DEFAULT = PLA_FDM` (step 4).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
 5. Optional URDF (`$urdf`) from `full_arm/common.py`: one STL per link, in the link's joint frame.
+6. I‑18: replace the J4 NEMA17 on segment 2 with the pancake NEMA17 used on the built arm (new purchased part, `full_arm/` segment 2, J3/J4 clearance rerun).
+7. I‑19: measure the NEMA17 body on the built arm (the course bought 48 mm motors; the stand-in is 40 mm). If 48, set `body_length=48.0` for J1–J3 and rerun the J1, J2 and J3 clearance checks (I‑14, I‑16).
