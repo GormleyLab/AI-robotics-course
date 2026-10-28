@@ -238,3 +238,4 @@ during recreation.
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
 5. Optional URDF (`$urdf`) from `full_arm/common.py`: one STL per link, in the link's joint frame.
+6. **cadgen 0.8 migration: deferred** (instructor, Session 8). The project stays pinned to cadgen 0.7.26. 0.8 can't run a 0.7 project: every `@step` model, the `full_arm` kinematics, the `.step.json` sidecar and the `read_scene` checks (including the Fusion gate) must be ported, and the Open CASCADE 8 kernel can shift assembled parts. Do it as its own planned session, following the 0.7 → 0.8 guide in the text-to-cad repo (`docs/migrations/migrating-0.7-to-0.8.md`), and compare every export against the committed 0.7 STEP files.
