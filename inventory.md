@@ -17,7 +17,7 @@ General-lab purchases in the same order history are left out. §6 lists spare pa
 |---|---|---|---|---|---|---|---|
 | STEPPERONLINE NEMA17 2 A, 84 oz·in, 48 mm body (5-pack) | [B00QEYADRQ](https://www.amazon.com/dp/B00QEYADRQ) | 5 packs = **25** | $274.95 | `purchased/nema17.py`: J1, J2, J3 | 3 | 27 | |
 | STEPPERONLINE NEMA17 2 A, 48 mm, with 1 m cable (single) | [B00PNEQKC0](https://www.amazon.com/dp/B00PNEQKC0) | **4** | $55.80 | Same motor, ordered singly (spares) | — | — | |
-| STEPPERONLINE NEMA17 pancake, 1 A, 16 N·cm, 20 mm body (5-pack) | [B091YDBK1S](https://www.amazon.com/dp/B091YDBK1S) | 3 packs = **15** | $118.50 | J4 motor on segment 2: it's lighter, and J4 needs less torque. The CAD still models segment 2 with the full-size `purchased/nema17.py` | 1 | 9 | |
+| STEPPERONLINE NEMA17 pancake, 1 A, 16 N·cm, 20 mm body (5-pack) | [B091YDBK1S](https://www.amazon.com/dp/B091YDBK1S) | 3 packs = **15** | $118.50 | `purchased/nema17_pancake.py`: J4 motor on segment 2. It's lighter, and J4 needs less torque (design.md I‑18) | 1 | 9 | |
 | WINSINN GT2 20T pulley, 5 mm bore, 6 mm belt (5-pack) | [B077GNZK3J](https://www.amazon.com/dp/B077GNZK3J) | 4 packs = **20** | $23.52 | `purchased/gt2_pulley_20t.py`: motor pulleys (J1, J3, J4) | 3 | 27 | |
 | WINSINN GT2 20T idler, 5 mm bore (5-pack) | [B07BPGYX3G](https://www.amazon.com/dp/B07BPGYX3G) | 6 packs = **30** | $47.28 | `purchased/gt2_idler_20t.py`: arm idlers, 2 per segment | 4 | 36 | |
 | Zeelo GT2 6 mm closed belt, 280 mm (10-pack) | [B0CQP4F56W](https://www.amazon.com/dp/B0CQP4F56W) | 2 packs = **20** | $29.98 | Segment belts, 2 per segment (274.4 mm loop, design.md §4) | 4 | 36 | |

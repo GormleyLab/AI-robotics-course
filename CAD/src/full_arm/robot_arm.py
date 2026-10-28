@@ -11,6 +11,8 @@ Zero is the Fusion pose (arm vertical). Links:
   and segment 2 except its J4 output;
 - wrist_link (J4): segment 2's J4 output (end effector mount, IF-8).
 
+Segment 2 is driven by the pancake NEMA17 (I-18); segment 1 by the full-size one.
+
 Simplifications: the gearbox rides the waist rigidly (its output carrier
 does not turn with J2), and no pulley or idler spins with its joint. The
 replica's open issues (design.md §8) come along with the parts.
@@ -63,7 +65,7 @@ def robot_arm():
     from joint12.joint_1_and_2 import joint12_parts
 
     base = joint12_parts()
-    seg_1, seg_2 = segment_parts(), segment_parts()
+    seg_1, seg_2 = segment_parts(), segment_parts(pancake=True)
     on_base = placement(ROBOT_FROM_BASE)
     on_seg_1 = on_base * placement(BASE_FROM_SEGMENT)
     on_seg_2 = on_seg_1 * placement(SEGMENT_1_FROM_SEGMENT_2)

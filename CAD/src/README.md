@@ -29,7 +29,8 @@ Frame: axis +Z, end face (motor: mounting face) at z = 0.
 
 | Script | Source | Used in |
 | --- | --- | --- |
-| `nema17.py` | Stand-in, 42.3 frame, 48 body (I‑19), Ø5 × 23.7 shaft | J1, J2, J3 (J4 until I‑18) |
+| `nema17.py` | Stand-in, 42.3 frame, 48 body (I‑19), Ø5 × 23.7 shaft | J1, J2, J3 |
+| `nema17_pancake.py` | Stand-in, 42.3 frame, 20 body, Ø5 × 23.7 shaft (I‑18) | J4 (segment 2) |
 | `bearing_608.py` | step.parts `bearing_608_2rs_sealed_simple` | J1 pulley hub |
 | `bearing_6801.py` | Stand-in 12×21×5 | Gearbox (×2) |
 | `bearing_6803.py` | step.parts `bearing_6803_2rs` | Gearbox back cover |
@@ -118,7 +119,7 @@ Robot frame: origin on J1 at the top of the box top, +Z up, +X = base-frame
 
 | Script | Contents | Notes |
 | --- | --- | --- |
-| `robot_arm.py` | Base + segment 1 + segment 2 | Five links (base, waist, upper arm, forearm, wrist) with `revolute` mates J1–J4 and poses `zero`, `reach`, `pick`, `folded`. Built from `joint12_parts()` and `segment_parts()`. Not gated |
+| `robot_arm.py` | Base + segment 1 + segment 2 | Five links (base, waist, upper arm, forearm, wrist) with `revolute` mates J1–J4 and poses `zero`, `reach`, `pick`, `folded`. Built from `joint12_parts()` and `segment_parts()`; segment 2 with `pancake=True` (I‑18). Not gated |
 
 Helper (not an entrypoint): `common.py`. Check: `checks/joint_clearance.py --joint <name> --angles ...` (I-14, I-16, I-17).
 

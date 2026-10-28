@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑8, I‑18 open) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑8 open) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -229,12 +229,12 @@ during recreation.
 
 - Purchased-parts inventory (`inventory.md`, repo root) from the Amazon orders; it linked the parts to the CAD and turned up two motor mismatches, logged as I‑18 and I‑19.
 - **I‑19 fixed** (commit "Fix I-19"; no printed part or gate change). The instructor confirmed that the course motors have a 48 mm body, so `purchased/nema17.py` now has `body_length=48.0` (J1, J2, J3). Checks: J1 ±124° now needs a 370–372 mm belt (366 / 368 mm: ±122° / ±123°; `checks/j1_yaw_clearance.py` at 1° steps, which takes over an hour for four slot positions, so it was narrowed to 122°–126° in `tmp/`). J2 is unchanged at ±63° (motor × hinge at ±64°). J3 and J4 are clear at their limits. design.md §1, §2, I‑14 and I‑16 were updated, `docs/img/joint12_iso.png` was re-rendered (`--display parts --camera iso`), and the `inventory.md` J1 belt note now says 370–372 mm.
+- **I‑18 fixed** (commit "Fix I-18"; no printed part or gate change). New `purchased/nema17_pancake.py` (20 mm body). `segment_parts(pancake=True)` swaps the segment motor; the full arm builds segment 2 that way, while `belt_drive_arm.step` keeps the full-size motor. J3 and J4 limits are unchanged (first contacts at +104° / −95°, as before). `docs/img/robot_arm_zero.png` and `robot_arm_pick.png` were re-rendered (`--kinematics zero|pick --camera iso`); they also show the 48 mm motors of I‑19.
 - STEP rewrites of unchanged parts (1e‑16 float noise in a few printed parts and vendor fasteners) were reverted before committing.
 
 ### Next steps (continue Session 8)
-1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, and so is I‑18 (the J4 pancake motor, step 6). I‑19 (48 mm motor body) is fixed. Next: DfAM checks with `DEFAULT = PLA_FDM` (step 4).
+1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, I‑18 (J4 pancake motor) and I‑19 (48 mm motor body) are fixed. Next: DfAM checks with `DEFAULT = PLA_FDM` (step 4).
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM/DFM checks on the printed parts (`$dfam-check`), with the `PLA_FDM` tolerance profile.
 5. Optional URDF (`$urdf`) from `full_arm/common.py`: one STL per link, in the link's joint frame.
-6. I‑18: replace the J4 NEMA17 on segment 2 with the pancake NEMA17 used on the built arm (new purchased part, `full_arm/` segment 2, J3/J4 clearance rerun).

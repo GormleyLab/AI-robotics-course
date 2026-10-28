@@ -10,6 +10,9 @@ I-6 is fixed: the GT2-80 output and both Pin hexes sit on J3, in line with
 the Output block socket. I-15 is fixed: every band on a belt is in line with
 it (the motor 20T slides down its shaft; the dual pulley changed).
 
+The segment's motor is the full-size NEMA17; the full arm builds segment 2
+with the pancake instead, as on the built arm (I-18).
+
 Belts are not in Fusion (I-8) and are added here as envelopes (not gated):
 the GT2 pitch line over the pitch circles from lib/gt2.py, offset to the
 land (pulley OD) and the belt back, teeth left out, 6 mm wide and centred on each stage's driven
@@ -42,6 +45,7 @@ from purchased.gt2_idler_20t import gt2_idler_20t
 from purchased.gt2_pulley_20t import gt2_pulley_20t
 from purchased.hex_nut_m5 import hex_nut_m5
 from purchased.nema17 import nema17
+from purchased.nema17_pancake import nema17_pancake
 from purchased.socket_head_m3x35 import socket_head_m3x35
 
 # Belt planes (I-15 fixed): stage 1 centred at z 17.0 on the idler-1 band, stage 2 at
@@ -79,8 +83,11 @@ def _named(shape, label):
     return shape
 
 
-def segment_parts():
-    """Labelled parts of one segment, in the arm frame (also used by the full arm)."""
+def segment_parts(pancake=False):
+    """Labelled parts of one segment, in the arm frame (also used by the full arm).
+
+    ``pancake`` drives the segment with the 20 mm pancake NEMA17 (segment 2, J4; I-18).
+    """
     idler_1 = (IDLER_XS[0], IDLER_SLOT_Y[0])
     idler_2 = (IDLER_XS[1], IDLER_SLOT_Y[0])
     return [
@@ -96,7 +103,8 @@ def segment_parts():
         _named(spacer_15mm(), "spacer_15mm:idler_1"),
         _named(IDLER_2_SHIFT * bd.Pos(0, 0, 25.0) * spacer_5mm(), "spacer_5mm:idler_2"),
         _named(IDLER_2_SHIFT * bd.Pos(0, 0, -15.0) * spacer_15mm(), "spacer_15mm:idler_2"),
-        _named(bd.Pos(MOTOR_X, MOTOR_Y, 0) * nema17(), "nema17:j3"),
+        _named(bd.Pos(MOTOR_X, MOTOR_Y, 0) * (nema17_pancake() if pancake else nema17()),
+               "nema17_pancake:j3" if pancake else "nema17:j3"),
         _named(bd.Pos(MOTOR_X, MOTOR_Y, MOTOR_PULLEY_Z) * gt2_pulley_20t(), "gt2_pulley_20t:j3"),
         _named(bd.Pos(DUAL_X, DUAL_Y, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:dual_pulley"),
         _named(bd.Pos(*idler_1, IDLER_SCREW_Z) * button_head_m5x40(), "button_head_m5x40:idler_1"),
