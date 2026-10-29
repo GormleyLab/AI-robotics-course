@@ -2,7 +2,8 @@
 
 J3 output bracket. A 20 mm distal end plate (x 214.175..234.175, the full
 80 x 44 section, z 0.2..44.2) carries the 73 x 37 M3 link interface (IF-8):
-Ø3.3 through with Ø6 x 3 counterbores from the inside. A 35 x 28 fork
+Ø3.3 through with Ø6 x 3 counterbores from the inside, each run out
+through the two faces of its corner (I-21). A 35 x 28 fork
 (y 22.5..57.5, z 8.2..36.2) runs back to x = 144.175 and joins the plate
 with R5 fillets, mitred at the corners (the Session 1 "Ø10 cross holes").
 The fork is split by a 10.5 slot (z 21.7..32.2, to x = 199.175) for the
@@ -16,6 +17,7 @@ from cadgen import build123d as bd
 from cadgen import step
 
 from belt_arm.common import J3_X, J3_Y, M3_CBORE, box, xcyl
+from joint12.common import corner_runout
 from lib import params
 from lib.tolerances import hex_socket_r, profile
 
@@ -76,7 +78,8 @@ def output_block_body():
         bd.RegularPolygon(hex_socket_r(params.OUTPUT_HEX_SOCKET_R, FIT.hex_socket), 6, rotation=90), hex_z1 - hex_z0)
     for y in LINK_Y:
         for z in LINK_Z:
-            body -= xcyl(M3_CBORE, y, z, X_PLATE, X_PLATE + CBORE_DEPTH)
+            corner = (0.0 if y < params.ARM_WIDTH / 2 else params.ARM_WIDTH, Z0 if z < (Z0 + Z1) / 2 else Z1)
+            body -= bd.extrude(bd.Plane.YZ.offset(X_PLATE) * corner_runout(M3_CBORE, y, z, *corner), CBORE_DEPTH)
             body -= xcyl(FIT.m3_clear, y, z, X_PLATE + CBORE_DEPTH, X_END)
     return body
 

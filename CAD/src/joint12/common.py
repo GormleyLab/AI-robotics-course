@@ -25,7 +25,22 @@ GEARBOX_PLACEMENT = bd.Pos(-17.0, J2_Y, J2_Z) * bd.Rot(0, 0, 90) * TO_FUSION
 # Along-X parts (axis on J2) are modelled about +Z, then turned onto +X.
 Z_TO_X = bd.Rot(0, 90, 0)
 
-M3_CBORE = 6.0
+M3_CBORE = 6.0      # M3 button head (ISO 7380, Ø5.7)
+
+
+def corner_runout(d: float, u: float, v: float, u_edge: float, v_edge: float) -> bd.Sketch:
+    """Counterbore of diameter d at (u, v) run out through the two faces of
+    the corner at (u_edge, v_edge) (I-21): the circle plus two strips to the
+    faces, so the inner side keeps the round. In-plane sketch, extrude it."""
+    r = d / 2
+    su, sv = (1 if u_edge > u else -1), (1 if v_edge > v else -1)
+
+    def rect(u0, u1, v0, v1):
+        return bd.Pos((u0 + u1) / 2, (v0 + v1) / 2) * bd.Rectangle(abs(u1 - u0), abs(v1 - v0))
+
+    out_u, out_v = u_edge + su, v_edge + sv
+    return (bd.Pos(u, v) * bd.Circle(r) + rect(u - su * r, out_u, v, out_v)
+            + rect(u, out_u, v - sv * r, out_v))
 
 _MIN = (bd.Align.MIN, bd.Align.MIN, bd.Align.MIN)
 _CMIN = (bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)

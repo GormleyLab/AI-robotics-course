@@ -233,14 +233,28 @@
     "fusion": "STEP/imported/fusion/Joint 1 and 2.step",
     "ref": "#o1.3",
     "frame": "world",
-    "slice_axis": "z"
+    "slice_axis": "z",
+    "departure": {
+      "issue": "I-21",
+      "why": "the three front-cover Ø6 counterbores under the R42.5 rim (30, 90, 150 deg) run out radially through it as open U-slots (0.25 mm skin)",
+      "bbox": 0.0,
+      "vol_pct": 0.018,
+      "symdiff_pct": 0.018
+    }
   },
   {
     "generated": "STEP/joint12/coupling_shaft.step",
     "fusion": "STEP/imported/fusion/Joint 1 and 2.step",
     "ref": "#o1.11",
     "frame": "world",
-    "slice_axis": "x"
+    "slice_axis": "x",
+    "departure": {
+      "issue": "I-21",
+      "why": "the four IF-8 Ø6 access bores run out through the two faces of their corner (0.5 mm to the side faces, 0.23 mm to the R40 end)",
+      "bbox": 0.0,
+      "vol_pct": 0.112,
+      "symdiff_pct": 0.112
+    }
   },
   {
     "generated": "STEP/joint12/gt2_pulley_160t.step",
@@ -256,11 +270,11 @@
     "frame": "world",
     "slice_axis": "z",
     "departure": {
-      "issue": "I-17",
-      "why": "the two distal Wall screws (counterbore + clearance) move from x = 160 to 130 with the shortened Wall rails",
+      "issue": "I-17, I-21",
+      "why": "I-17: the two distal Wall screws (counterbore + clearance) move from x = 160 to 130 with the shortened Wall rails. I-21: the Wall-screw Ø6 counterbores run out through the nearest plate edge as open U-slots (3.5 from the edge left a 0.5 mm skin)",
       "bbox": 0.0,
-      "vol_pct": 0.0,
-      "symdiff_pct": 0.431
+      "vol_pct": 0.13,
+      "symdiff_pct": 0.562
     }
   },
   {
@@ -284,11 +298,11 @@
     "frame": "world",
     "slice_axis": "z",
     "departure": {
-      "issue": "I-17, I-4",
-      "why": "I-17: the two distal Wall screws (clearance + counterbore) move from x = 160 to 130 with the shortened Wall rails. I-4: the 8 mm idler nut slots run 1 mm further at each end (centres y 19..66)",
+      "issue": "I-17, I-4, I-21",
+      "why": "I-17: the two distal Wall screws (clearance + counterbore) move from x = 160 to 130 with the shortened Wall rails. I-4: the 8 mm idler nut slots run 1 mm further at each end (centres y 19..66). I-21: the Wall-screw Ø6 counterbores run out through the nearest plate edge as open U-slots (3.5 from the edge left a 0.5 mm skin)",
       "bbox": 0.0,
-      "vol_pct": 0.138,
-      "symdiff_pct": 0.55
+      "vol_pct": 0.262,
+      "symdiff_pct": 0.675
     }
   },
   {
@@ -413,7 +427,14 @@
     "fusion": "STEP/imported/fusion/Belt Drive Arm.step",
     "ref": "#o1.22",
     "frame": "world",
-    "slice_axis": "z"
+    "slice_axis": "z",
+    "departure": {
+      "issue": "I-21",
+      "why": "the four IF-8 Ø6 counterbores run out through the two faces of their corner (3.5 from each left a 0.5 mm skin)",
+      "bbox": 0.0,
+      "vol_pct": 0.041,
+      "symdiff_pct": 0.218
+    }
   },
   {
     "generated": "STEP/belt_arm/spacer_5mm.step",

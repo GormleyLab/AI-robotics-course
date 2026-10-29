@@ -50,7 +50,7 @@ SPACER_R = 5.0
 PROXIMAL_INSERT_Y = (3.5, 76.5)
 PROXIMAL_INSERT_DEPTH = 10.0
 
-M3_CBORE = 6.0
+M3_CBORE = 6.0      # M3 button head (ISO 7380, Ø5.7)
 DOWEL_HOLE_D = 6.1                  # Fusion: 0.1 over the 6 mm dowel; + FIT.slip in each plate
 DOWEL_BOSS_D = 10.0
 
@@ -58,6 +58,19 @@ DOWEL_BOSS_D = 10.0
 def plate(z0: float, z1: float) -> bd.Part:
     """Arm outline (x -40..160 with the R40 end about J3), z0..z1."""
     return box(X_PROXIMAL, J3_X, 0, params.ARM_WIDTH, z0, z1) + zcyl(2 * END_R, J3_X, J3_Y, z0, z1)
+
+
+def edge_runout(x: float, y: float, z0: float, z1: float) -> bd.Part:
+    """Ø6 counterbore at (x, y) run out through the nearest plate edge as an
+    open U-slot (I-21). The Wall screws sit 3.5 from an edge, which left a
+    0.5 mm skin outside a Ø6 counterbore."""
+    w = M3_CBORE
+    to_y0, to_y1, to_x0 = y, params.ARM_WIDTH - y, x - X_PROXIMAL
+    if to_x0 < min(to_y0, to_y1):
+        return zcyl(w, x, y, z0, z1) + box(X_PROXIMAL - 1, x, y - w / 2, y + w / 2, z0, z1)
+    if to_y0 < to_y1:
+        return zcyl(w, x, y, z0, z1) + box(x - w / 2, x + w / 2, -1, y, z0, z1)
+    return zcyl(w, x, y, z0, z1) + box(x - w / 2, x + w / 2, y, params.ARM_WIDTH + 1, z0, z1)
 
 
 def ycyl(d: float, x: float, z: float, y0: float, y1: float) -> bd.Part:

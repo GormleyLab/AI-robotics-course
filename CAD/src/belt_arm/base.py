@@ -5,15 +5,16 @@
 from the top). Ø37 6805 seat through at J3. Ø10 x 3.7 boss on top at the
 dual pulley with a Ø6.1 dowel socket (floor at the plate top). Idler slots
 y 20..65 at both idler x: Ø10 x 3 from below, Ø5.3 above. 7 x M3 to the
-Wall (Ø6 x 3 counterbore from below, Ø3.3) and two Ø4.2 x 10 proximal
-inserts at z = 3.5.
+Wall (Ø6 x 3 counterbore from below, run out through the nearest edge as
+an open U-slot (I-21), Ø3.3) and two Ø4.2 x 10 proximal inserts at z = 3.5.
 """
 from cadgen import build123d as bd
 from cadgen import step
 
 from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE_D, DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y,
                              M3_CBORE, MOTOR_X, MOTOR_Y, PROXIMAL_INSERT_DEPTH,
-                             PROXIMAL_INSERT_Y, WALL_SCREW_XY, X_PROXIMAL, Z_BASE_TOP, plate, xcyl, yslot, zcyl)
+                             PROXIMAL_INSERT_Y, WALL_SCREW_XY, X_PROXIMAL, Z_BASE_TOP, edge_runout, plate, xcyl,
+                             yslot, zcyl)
 from lib import params
 from lib.tolerances import hole, profile
 
@@ -47,7 +48,7 @@ def base_body():
         body -= yslot(x, *IDLER_SLOT_Y, IDLER_SLOT_W, IDLER_CBORE_Z, Z_BASE_TOP)
 
     for x, y in WALL_SCREW_XY:
-        body -= zcyl(M3_CBORE, x, y, 0, WALL_CBORE_Z)
+        body -= edge_runout(x, y, 0, WALL_CBORE_Z)
         body -= zcyl(FIT.m3_clear, x, y, WALL_CBORE_Z, Z_BASE_TOP)
     for y in PROXIMAL_INSERT_Y:
         body -= xcyl(FIT.insert_m3, y, INSERT_Z, X_PROXIMAL, X_PROXIMAL + PROXIMAL_INSERT_DEPTH)

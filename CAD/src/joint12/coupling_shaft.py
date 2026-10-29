@@ -2,7 +2,9 @@
 
 J2 output and segment-1 mount, on the hinge J2 axis (y = 75, z = 70.5).
 A 44 mm block (x 52.8..96.8, 80 wide) with an R40 rounded bottom and a flat
-top at z = 100.5 carrying the 73 x 37 M3 link interface (IF-8). A hex
+top at z = 100.5 carrying the 73 x 37 M3 link interface (IF-8): Ø6 access
+bores up to z = 80.5 from below, each run out through the two faces of its
+corner (I-21). A hex
 socket 21.65 AF x 15 deep (circumradius 12.5, corners at +-Z) takes the
 gearbox output hex from the -X face (IF-7). The +X face carries a curved
 transition (Ø33 -> Ø29 over 3 mm, three-point arc through the Fusion
@@ -12,7 +14,7 @@ cheek 6805.
 from cadgen import build123d as bd
 from cadgen import step
 
-from joint12.common import J2_Y, J2_Z, M3_CBORE, Z_TO_X, box, xcyl, zcyl
+from joint12.common import J2_Y, J2_Z, M3_CBORE, Z_TO_X, box, corner_runout, xcyl, zcyl
 from lib import params
 from lib.tolerances import hex_socket_r, profile, shaft
 
@@ -57,7 +59,9 @@ def coupling_shaft_body():
     for x in LINK_X:
         for y in LINK_Y:
             body -= zcyl(FIT.m3_clear, x, y, LINK_CBORE_Z1, Z_TOP)
-            body -= zcyl(M3_CBORE, x, y, ROUND_Z - END_R, LINK_CBORE_Z1)
+            corner = (X0 if x < (X0 + X1) / 2 else X1, Y0 if y < J2_Y else Y1)
+            z0 = ROUND_Z - END_R
+            body -= bd.Pos(0, 0, z0) * bd.extrude(corner_runout(M3_CBORE, x, y, *corner), LINK_CBORE_Z1 - z0)
     return body
 
 

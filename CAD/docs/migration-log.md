@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑20 fixed; I‑8, I‑21–I‑23 open) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑20, I‑21 fixed; I‑8, I‑22, I‑23 open) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -243,9 +243,15 @@ during recreation.
   - Meshes at default tolerance: `gt2_80_output` and `gt2_pulley_160t` watertight. `dual_gt2_pulley` has one degenerate triangle on one 80T tooth tip (3 open edges); the B-rep there is clean, and 1e‑3 / 2e‑3 / 1e‑4 exports are watertight. Logged as a residual in I‑20.
   - Gate: 160T PASS (0.014 % vol), 80T output PASS (0.025 %), dual DEPART (I‑15) at 0.270 % vol / 29.057 % symdiff against the recorded 0.28 / 29.061; the map was not changed.
   - Rebuilt the three pulleys, `belt_drive_arm`, `joint_1_and_2` and `robot_arm`. The float-noise rewrites (Top, Wall, carrier stage‑2 output, M5 nut, M3 × 35: same volume, faces and bbox to 5e‑16) were restored. No snapshot was re-rendered: 0.003 mm² per groove does not show.
+- **I‑21 fixed** (commit "Fix I-21"). The instructor first chose Ø5.6 counterbores, then open U-slots: `inventory.md` shows that the course's M3 screws are button heads (ISO 7380, Ø5.7), which a Ø5.6 counterbore cannot take.
+  - Every Ø6 counterbore that sat 3.5 mm from a face now runs out through it. New helpers: `belt_arm.common.edge_runout` (Base, Top: the 7 Wall screws, straight slot to the nearest edge) and `joint12.common.corner_runout` (a sketch: circle plus strips to both faces of a corner; Output block on Plane.YZ, Coupling shaft on XY). The Hinge gets radial slots at 30°, 90° and 150° (`COVER_RUNOUT_ANGLES`). `M3_CBORE` stays 6.0.
+  - Checks: each part only loses material (no volume added; bbox unchanged; one valid solid). The Coupling shaft loses 8 pieces for 4 corners because its R40 round splits each corner in two. dfam-check on the PLA_FDM copy: thin skins gone (min walls in design.md I‑21).
+  - Gate: Base and Top failed until re-recorded, as the drift check should; Output block, Coupling shaft and Hinge passed the plain tolerance but are recorded as departures, following the Session 7 practice.
+  - Re-rendered `belt_arm_iso.png`, `joint12_iso.png` (`--display parts --camera iso`), `robot_arm_zero.png` and `robot_arm_pick.png` (`--kinematics zero|pick --camera iso`), all 1600 × 1200. `belt_arm_internals.png` hides the Top, and the Base slots face down, so it is unchanged.
+  - Same build hygiene as I‑20: the float-noise rewrites (Wall, carrier stage‑2 output, M5 nut, M3 × 35) were restored.
 
 ### Next steps (continue Session 8)
-1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, I‑18 (J4 pancake motor) and I‑19 (48 mm motor body) are fixed. The DfAM pass (step 4) logged I‑20 to I‑23; I‑20 is fixed. Next: I‑21 to I‑23, each waiting on the instructor's choice among the options in design.md §8.
+1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, I‑18 (J4 pancake motor) and I‑19 (48 mm motor body) are fixed. The DfAM pass (step 4) logged I‑20 to I‑23; I‑20 and I‑21 are fixed. Next: I‑22 and I‑23, each waiting on the instructor's choice among the options in design.md §8.
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM checks: done (PLA_FDM, Session 8). Rerun after I‑20 to I‑23 are fixed. DFM (`$dfm`) does not apply: every part is printed.

@@ -8,14 +8,16 @@ the M5 nut (8 AF) slides in it flats-first. The nut slot runs 1 mm past the
 Ø5.3 slot at each end, so the nut's corners (4.62 from its centre) clear the
 R4 ends with the screw at either end (I-4 fix; Fusion: y 20..65, nut
 0.62 mm short). 7 x M3 to the Wall (Ø3.3, Ø6 x 3
-counterbore from the top) and two Ø4.2 x 10 proximal inserts at z = 40.5.
+counterbore from the top, run out through the nearest edge as an open
+U-slot, I-21) and two Ø4.2 x 10 proximal inserts at z = 40.5.
 No motor holes.
 """
 from cadgen import step
 
 from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE_D, DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y,
-                             M3_CBORE, PROXIMAL_INSERT_DEPTH, PROXIMAL_INSERT_Y,
-                             WALL_SCREW_XY, X_PROXIMAL, Z_TOP_TOP, Z_WALL_TOP, plate, xcyl, yslot, zcyl)
+                             PROXIMAL_INSERT_DEPTH, PROXIMAL_INSERT_Y,
+                             WALL_SCREW_XY, X_PROXIMAL, Z_TOP_TOP, Z_WALL_TOP, edge_runout, plate, xcyl, yslot,
+                             zcyl)
 from lib import params
 from lib.tolerances import hole, profile
 
@@ -39,7 +41,7 @@ def top_body():
         body -= yslot(x, *IDLER_NUT_SLOT_Y, IDLER_CBORE_W, IDLER_SLOT_Z, Z_TOP_TOP)
     for x, y in WALL_SCREW_XY:
         body -= zcyl(FIT.m3_clear, x, y, Z_WALL_TOP, WALL_CBORE_Z)
-        body -= zcyl(M3_CBORE, x, y, WALL_CBORE_Z, Z_TOP_TOP)
+        body -= edge_runout(x, y, WALL_CBORE_Z, Z_TOP_TOP)
     for y in PROXIMAL_INSERT_Y:
         body -= xcyl(FIT.insert_m3, y, INSERT_Z, X_PROXIMAL, X_PROXIMAL + PROXIMAL_INSERT_DEPTH)
     return body

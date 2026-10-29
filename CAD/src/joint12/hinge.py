@@ -9,6 +9,8 @@ z = -8 and a Ø61 x 10 upper-thrust pocket (IF-1). 4 x M5 Ø5.3 at r = 10
 with Ø12 counterbores from the floor take the bolts into the 160T pulley.
 The left cheek has 5 of the 6 front-cover M3 holes: the bottom one would sit
 inside the floor with no screw access, so it is left out (I-10, accepted).
+The three under the R42.5 rim (30, 90, 150 deg) have their Ø6 counterbores
+run out radially through the rim as open U-slots (I-21).
 """
 from cadgen import build123d as bd
 from cadgen import step
@@ -33,6 +35,9 @@ PULLEY_BOLT_R = 10.0
 CBORE_D, CBORE_Z0 = 12.0, 23.0
 COVER_BOLT_ANGLES = (-30.0, 30.0, 90.0, 150.0, 210.0)   # 270 is inside the floor (I-10, accepted)
 COVER_CBORE_DEPTH = 2.0
+# Counterbores whose Ø6 reaches r = 42.25 inside the R42.5 rim (0.25 mm skin):
+# run out radially through it (I-21). -30 / 210 sit 5.5 mm inside the cheek's sides.
+COVER_RUNOUT_ANGLES = (30.0, 90.0, 150.0)
 
 
 def _cheek(x0: float, x1: float, round_z: float) -> bd.Part:
@@ -68,6 +73,10 @@ def hinge_body():
         y, z = on_j2_circle(params.GEARBOX_BOLT_CIRCLE_R, a)
         body -= xcyl(FIT.m3_clear, y, z, X0, X0 + CHEEK - COVER_CBORE_DEPTH)
         body -= xcyl(M3_CBORE, y, z, X0 + CHEEK - COVER_CBORE_DEPTH, X0 + CHEEK)
+        if a in COVER_RUNOUT_ANGLES:
+            r = params.GEARBOX_BOLT_CIRCLE_R
+            slot = box(X0 + CHEEK - COVER_CBORE_DEPTH, X0 + CHEEK, r, CHEEK_TOP_R + 1, -M3_CBORE / 2, M3_CBORE / 2)
+            body -= bd.Pos(0, J2_Y, J2_Z) * bd.Rot(a, 0, 0) * slot
     return body
 
 
