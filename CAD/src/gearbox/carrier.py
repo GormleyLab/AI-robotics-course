@@ -14,7 +14,7 @@ Angles are relative to ``pin_angle`` (the first planet pin). Gearbox frame.
 """
 from __future__ import annotations
 
-from cadgen import build123d as bd
+import build123d as bd
 
 from gearbox.common import disc, hole, polar, revolve_rz
 from lib import gears, params

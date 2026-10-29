@@ -17,9 +17,14 @@ from __future__ import annotations
 
 import argparse
 import math
+import sys
+from pathlib import Path
 
-from cadgen import build123d as bd
-from cadgen import read_scene, read_step
+import build123d as bd
+from cadgen import read_step
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # checks/: scene.py
+from scene import read_scene  # noqa: E402
 
 _MIN = (bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)
 

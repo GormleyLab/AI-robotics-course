@@ -6,7 +6,7 @@ chamfered, conical top); Ø16.94 neck with a Ø19.94 collar, then the Ø16.94
 journal through the 6803 in the back cover. Ø5.3 motor bore with a D-flat
 (x >= -2.138) and a Ø4 set-screw hole from -X at z = 16.8.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from gearbox.carrier import sun_gear

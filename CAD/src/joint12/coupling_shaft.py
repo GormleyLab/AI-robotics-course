@@ -11,7 +11,7 @@ transition (Ø33 -> Ø29 over 3 mm, three-point arc through the Fusion
 B-spline), a Ø29 x 2 shoulder and a Ø25 x 7 stub that runs in the right
 cheek 6805.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from joint12.common import J2_Y, J2_Z, M3_CBORE, Z_TO_X, box, corner_runout, xcyl, zcyl

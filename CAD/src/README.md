@@ -1,13 +1,16 @@
 # Models
 
-Run from `CAD/` with cadgen's pinned Python:
+Run from `CAD/` with cadgen 0.8.2 (installed once by
+`uvx --no-config --managed-python --python 3.13 --from cadgen==0.8.2 cadgen doctor`):
 
 ```bash
-PY="uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python"
-PYTHONPATH=src $PY src/purchased/nema17.py
+CADGEN="$HOME/.local/bin/cadgen +0.8.2"
+PYTHONPATH=src $CADGEN run src/purchased/nema17.py
+$CADGEN snapshot <id> tmp/arm.png --pose pick   # the id a run prints
 ```
 
-Unchanged models report `current`. Committed STEPs use the nominal `FUSION` fit profile; to print, see [Printing the parts](../README.md#printing-the-parts). Assemblies (Sessions 3–6) build their children.
+Each run rewrites the model's STEP (`@step(out=...)`) and prints its document's
+id and viewer page; an unchanged rerun reports `nothing ran`. Committed STEPs use the nominal `FUSION` fit profile; to print, see [Printing the parts](../README.md#printing-the-parts). Assemblies (Sessions 3–6) build their children.
 
 ## Shared library (`lib/`, not entrypoints)
 

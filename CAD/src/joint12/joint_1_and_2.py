@@ -12,7 +12,7 @@ down, square to the box so its screws sit in the M3 slots, where a 370 mm
 mid-slot, x = 150, where the hinge stops J1 at +/-40 deg); the 20T pulley's toothed band
 (z 1..9 of the vendor part) centred on the 160T band (z = -8).
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from gearbox.planetary_gearbox import planetary_gearbox
@@ -44,21 +44,21 @@ def _named(shape, label):
 def joint12_parts():
     """Labelled parts of the base, in the base frame (also used by the full arm)."""
     return [
-        _named(box_bottom(), "box_bottom"),
-        _named(box_top(), "box_top"),
-        _named(hinge(), "hinge"),
-        _named(gt2_pulley_160t(), "gt2_pulley_160t"),
-        _named(coupling_shaft(), "coupling_shaft"),
-        _named(bd.Pos(J1_X, J1_Y, 12.0) * thrust_bearing_51108(), "thrust_bearing:upper"),
-        _named(bd.Pos(J1_X, J1_Y, -8.0) * thrust_bearing_51108(), "thrust_bearing:lower"),
-        _named(bd.Pos(J1_X, J1_Y, 5.0) * bearing_6807(), "bearing_6807"),
-        _named(bd.Pos(J1_X, J1_Y, -25.0) * bearing_608(), "bearing_608"),
-        _named(bd.Pos(39.0, J2_Y, J2_Z) * Z_TO_X * bearing_6805(), "bearing_6805:left_cheek"),
-        _named(bd.Pos(102.0, J2_Y, J2_Z) * Z_TO_X * bearing_6805(), "bearing_6805:right_cheek"),
-        _named(GEARBOX_PLACEMENT * planetary_gearbox(), "planetary_gearbox"),
-        _named(bd.Pos(J1_MOTOR_X, params.J1_MOTOR_SLOT_Y, J1_MOTOR_FACE_Z) * bd.Rot(180, 0, 0) * nema17(),
+        _named(box_bottom().shape, "box_bottom"),
+        _named(box_top().shape, "box_top"),
+        _named(hinge().shape, "hinge"),
+        _named(gt2_pulley_160t().shape, "gt2_pulley_160t"),
+        _named(coupling_shaft().shape, "coupling_shaft"),
+        _named(bd.Pos(J1_X, J1_Y, 12.0) * thrust_bearing_51108().shape, "thrust_bearing:upper"),
+        _named(bd.Pos(J1_X, J1_Y, -8.0) * thrust_bearing_51108().shape, "thrust_bearing:lower"),
+        _named(bd.Pos(J1_X, J1_Y, 5.0) * bearing_6807().shape, "bearing_6807"),
+        _named(bd.Pos(J1_X, J1_Y, -25.0) * bearing_608().shape, "bearing_608"),
+        _named(bd.Pos(39.0, J2_Y, J2_Z) * Z_TO_X * bearing_6805().shape, "bearing_6805:left_cheek"),
+        _named(bd.Pos(102.0, J2_Y, J2_Z) * Z_TO_X * bearing_6805().shape, "bearing_6805:right_cheek"),
+        _named(GEARBOX_PLACEMENT * planetary_gearbox().shape, "planetary_gearbox"),
+        _named(bd.Pos(J1_MOTOR_X, params.J1_MOTOR_SLOT_Y, J1_MOTOR_FACE_Z) * bd.Rot(180, 0, 0) * nema17().shape,
                "nema17:j1"),
-        _named(bd.Pos(J1_MOTOR_X, params.J1_MOTOR_SLOT_Y, J1_PULLEY_Z) * gt2_pulley_20t(), "gt2_pulley_20t:j1"),
+        _named(bd.Pos(J1_MOTOR_X, params.J1_MOTOR_SLOT_Y, J1_PULLEY_Z) * gt2_pulley_20t().shape, "gt2_pulley_20t:j1"),
     ]
 
 

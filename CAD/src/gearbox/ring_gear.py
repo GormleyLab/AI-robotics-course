@@ -6,7 +6,7 @@ a Ø72 relief groove between them and a Ø72 counterbore at the front, each
 ending in a 45 deg chamfer onto the tooth tips. 6 x M3 heat-set inserts at
 each end.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from gearbox.common import BOLT_ANGLES, BOLT_R, OD, disc, hole, revolve_rz

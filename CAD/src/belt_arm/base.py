@@ -8,7 +8,7 @@ y 20..65 at both idler x: Ø10 x 3 from below, Ø5.3 above. 7 x M3 to the
 Wall (Ø6 x 3 counterbore from below, run out through the nearest edge as
 an open U-slot (I-21), Ø3.3) and two Ø4.2 x 10 proximal inserts at z = 3.5.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from belt_arm.common import (DOWEL_BOSS_D, DOWEL_HOLE_D, DUAL_X, DUAL_Y, IDLER_SLOT_Y, IDLER_XS, J3_X, J3_Y,

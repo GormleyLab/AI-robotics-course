@@ -7,7 +7,7 @@ both 1 mm flanges solid, so the Ø5 bore is cut through here (Session 5).
 """
 from pathlib import Path
 
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import read_step, step
 
 BORE = 5.0

@@ -7,7 +7,7 @@ along +Z from the seat at z=0 and the head (Ø9.5 x 2.75) sits below.
 """
 from pathlib import Path
 
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import read_step, step
 
 _VENDOR = Path(__file__).resolve().parents[2] / "STEP" / "imported" / "vendor"

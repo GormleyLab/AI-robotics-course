@@ -14,7 +14,8 @@ import math
 import sys
 from pathlib import Path
 
-from cadgen import read_scene
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # checks/: scene.py
+from scene import read_scene  # noqa: E402
 
 OUT_DIR = Path("tmp/inspect")
 

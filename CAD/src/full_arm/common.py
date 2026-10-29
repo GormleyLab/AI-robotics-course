@@ -19,6 +19,8 @@ applied rotation first, so this module does not touch the CAD kernel.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from belt_arm.common import J3_X, J3_Y, X_PROXIMAL
 from belt_arm.output_block import X_END as OUTPUT_FACE_X, Z0 as OUTPUT_Z0
 from joint12.common import J1_X, J1_Y, J2_Y, J2_Z
@@ -71,9 +73,36 @@ J3_LIMITS = (-94, 103)
 J4_LIMITS = (-94, 103)
 
 
+@dataclass(frozen=True)
+class Joint:
+    """A revolute joint between two links, in the robot frame (degrees)."""
+    name: str
+    parent: str
+    child: str
+    origin: tuple
+    direction: tuple
+    limits: tuple
+
+
+# The chain, base to wrist; full_arm/robot_arm.py authors the joints from it,
+# and checks/joint_clearance.py turns the links downstream of one.
+JOINTS = (
+    Joint("j1_waist", "base_link", "waist_link", J1_ORIGIN, UP, J1_LIMITS),
+    Joint("j2_shoulder", "waist_link", "upper_arm_link", J2_ORIGIN, PITCH, J2_LIMITS),
+    Joint("j3_elbow", "upper_arm_link", "forearm_link", J3_ORIGIN, PITCH, J3_LIMITS),
+    Joint("j4_wrist", "forearm_link", "wrist_link", J4_ORIGIN, PITCH, J4_LIMITS),
+)
+POSES = {
+    "zero": {"j1_waist": 0, "j2_shoulder": 0, "j3_elbow": 0, "j4_wrist": 0},
+    "reach": {"j2_shoulder": 45, "j3_elbow": 45, "j4_wrist": 0},
+    "pick": {"j1_waist": 30, "j2_shoulder": 50, "j3_elbow": 54, "j4_wrist": 54},
+    "folded": {"j2_shoulder": -40, "j3_elbow": 54, "j4_wrist": 54},
+}
+
+
 def placement(pair):
     """``bd.Location`` for a (rotation, translation) pair."""
-    from cadgen import build123d as bd
+    import build123d as bd
 
     rot, pos = pair
     return bd.Pos(*pos) * bd.Rot(*rot)

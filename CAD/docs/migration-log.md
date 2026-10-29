@@ -16,6 +16,7 @@ during recreation.
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
 | 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑20–I‑22 fixed; I‑23 accepted; I‑8 open) |
+| 9 | cadgen 0.7.26 → 0.8.2 | Done |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -261,4 +262,18 @@ during recreation.
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM checks: done (PLA_FDM, Session 8); I‑20 to I‑22 fixed, I‑23 accepted. Each fix was re-checked on its own parts; a full re-run of all 23 parts is still to do. DFM (`$dfm`) does not apply: every part is printed.
 5. Optional URDF (`$urdf`) from `full_arm/common.py`: one STL per link, in the link's joint frame.
-6. **cadgen 0.8 migration: deferred** (instructor, Session 8). The project stays pinned to cadgen 0.7.26. 0.8 can't run a 0.7 project: every `@step` model, the `full_arm` kinematics, the `.step.json` sidecar and the `read_scene` checks (including the Fusion gate) must be ported, and the Open CASCADE 8 kernel can shift assembled parts. Do it as its own planned session, following the 0.7 → 0.8 guide in the text-to-cad repo (`docs/migrations/migrating-0.7-to-0.8.md`), and compare every export against the committed 0.7 STEP files.
+6. **cadgen 0.8 migration: done** (Session 9, cadgen 0.8.2). Run everything with `PYTHONPATH=src ~/.local/bin/cadgen +0.8.2 run ...` (CLAUDE.md).
+
+## Session 9 — 2026-10-28
+
+- **cadgen 0.7.26 → 0.8.2** (instructor's choice of the latest release; the installed plugin's skill pins 0.8.1). Followed the text-to-cad guide `docs/migrations/migrating-0.7-to-0.8.md` and its OpenCascade 8 / build123d 0.13 companion. 0.8.2 installs with `uvx ... --from cadgen==0.8.2 cadgen doctor`, which writes the `~/.local/bin/cadgen` launcher; every command now runs through it with `+0.8.2`.
+- **Models**: `from cadgen import build123d as bd` → `import build123d as bd` (38 files). The models keep `@step(out=...)`, which 0.8 still supports, so every run rewrites its STEP and the committed files stay the deliverable. A model call now returns a document handle, so the three assemblies compose their children as `child().shape` (58 calls in `planetary_gearbox`, `belt_drive_arm.segment_parts`, `joint_1_and_2.joint12_parts`). No colours or materials were set, so step 6 of the guide had nothing to port. Module-level `bd.Align`/`bd.Rot` constants were left alone: they load the kernel at import, which only costs time.
+- **Full-arm kinematics**: the `kinematics=` dict and its `robot_arm.step.json` sidecar (deleted) are gone. The joints are data, `full_arm/common.JOINTS` (a `Joint` dataclass: name, parent and child link, origin, direction, limits) and `POSES`; `robot_arm` authors a `bd.RevoluteJoint` on each parent link and a `bd.RigidJoint` at the same frame on the child, paired by label (the links are siblings in the robot frame), and adds the four poses as `cadgen.ap242.mechanism_state`s. `cadgen inspect` lists J1–J4 at 0 as built with the limits of Session 8, and the four states. A `--pose pick --camera iso` snapshot matches `docs/img/robot_arm_pick.png` part for part, so no snapshot was re-rendered.
+- **Checks**: 0.8 has no `read_scene`. New `checks/scene.py` gives the same view over `read_step` (`read_scene`, `resolve("#o1.12.9")`, `leaves()`, `shape()` placed in the assembly, `prototype_id` by `IsPartner`), so every tree-position ref in `fusion_map.json` and design.md still holds. Checked against 0.7's `read_scene` on the three Fusion files, `robot_arm.step` and `joint_1_and_2.step`: all 295 leaves have the same ref, volume, world and local placement (labels differ only where 0.7 collapsed a double space in Fusion's NEMA17 name). `joint_clearance.py` reads `JOINTS` instead of the sidecar; `compare_to_fusion.py` had build123d 0.12's removed `Vector.to_tuple()` in its sliced path.
+- **Verification**:
+  - Every rebuilt STEP (45 files) against its 0.7 copy, leaf by leaf: same tree and labels, world bounds within 7e‑12 mm, volumes equal except the ring gear's, 1.4 ppm (≈0.13 mm³) smaller under OCCT 8 (in the gearbox, joint 1/2 and full-arm assemblies too).
+  - Gate: all 32 entries pass (23 PASS, 9 DEPART within tolerance of their recorded deviations). Ring gear 0.108 % vol / 0.365 % symdiff (0.364 % in Session 3). The full map ran in 73 s as one process per generated file (`xargs -P 8`).
+  - `joint_clearance.py --joint j3_elbow`: clear at +103 / −94, Output block × Wall at +104 and × jack screw at −95, as in Session 8.
+  - Cold build of `robot_arm` (every part): 30 s.
+- The STEP files are all rewritten by OCCT 8's writer (most of the text changes; the geometry does not), so they were committed as rebuilt rather than restored.
+- Not done: the guide's `exports.py` and `@model`-only layout (the `@step` decorators do the same job here); `cadgen doctor --prune` of the 255 MB 0.7 store (it removes itself 7 days after 0.7 last wrote it, or now with `--all-versions` once no 0.7 plugin is left).

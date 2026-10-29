@@ -12,7 +12,7 @@ inside the floor with no screw access, so it is left out (I-10, accepted).
 The three under the R42.5 rim (30, 90, 150 deg) have their Ø6 counterbores
 run out radially through the rim as open U-slots (I-21).
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from joint12.common import (J1_X, J1_Y, J2_Y, J2_Z, M3_CBORE, box, on_j2_circle,

@@ -8,7 +8,7 @@ J1 motor shaft ran into the flange).
 """
 from pathlib import Path
 
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import read_step, step
 
 BORE = 5.0

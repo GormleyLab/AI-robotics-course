@@ -7,7 +7,7 @@ toward the Top; the proximal end face at x = -40; J3 parallel to Z through
 """
 from __future__ import annotations
 
-from cadgen import build123d as bd
+import build123d as bd
 
 from joint12.common import box, xcyl, zcyl  # noqa: F401  (re-exported for the arm parts)
 from lib import params

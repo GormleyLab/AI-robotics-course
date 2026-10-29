@@ -13,7 +13,7 @@ the motor mounting face) at z=0. Searches run in Session 2 (2026-10-26):
 """
 from __future__ import annotations
 
-from cadgen import build123d as bd
+import build123d as bd
 
 _MIN = (bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)
 

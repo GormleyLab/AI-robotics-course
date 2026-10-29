@@ -401,7 +401,7 @@ the last offering are marked 🔧.
 
 ```bash
 cd CAD
-CADPY="uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python"
+CADPY="$HOME/.local/bin/cadgen +0.8.2 run"
 F=STEP/imported/fusion
 $CADPY checks/inspect/dump_features.py "$F/Joint 1 and 2.step" "$F/Belt Drive Arm.step" \
     "$F/Planetary Gearbox - Two-stage 16to1 ratio.step"   # -> tmp/inspect/*.txt

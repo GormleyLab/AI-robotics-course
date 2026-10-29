@@ -4,8 +4,8 @@ Usage (from CAD/):
     python checks/joint_clearance.py --joint j3_elbow --angles 30,60,90,-30,-60,-90
         [--step STEP/full_arm/robot_arm.step] [--min 0.5]
 
-Reads the mates from the STEP's sidecar (``<name>.step.json``). The links
-downstream of the joint's child (following the mate chain) are rotated about
+Reads the joints from ``full_arm.common.JOINTS`` (run with ``PYTHONPATH=src``).
+The links downstream of the joint's child (following the chain) are rotated about
 the joint axis, every other joint held at zero, and tested part against part
 (bounding-box prefilter, then the boolean common) against the upstream links.
 Contacts already present at zero (gear meshes, bearings on journals, ...) are the
@@ -15,11 +15,11 @@ are reported. Run the angles of a slow joint as parallel processes.
 from __future__ import annotations
 
 import argparse
-import json
-from pathlib import Path
 
-from cadgen import build123d as bd
-from cadgen import read_scene
+import build123d as bd
+from scene import read_scene
+
+from full_arm.common import JOINTS
 
 
 def _leaves(occ, link):
@@ -46,21 +46,20 @@ def main():
     ap.add_argument("--min", type=float, default=0.5, help="mm³ growth over the zero pose to report")
     a = ap.parse_args()
 
-    mates = json.loads(Path(a.step + ".json").read_text())["kinematics"]["mates"]
-    mate = next((m for m in mates if m["name"] == a.joint), None)
-    if mate is None:
-        raise SystemExit(f"no joint {a.joint!r}; have {[m['name'] for m in mates]}")
-    children = {m["parent"]: m["child"] for m in mates}
-    moving, link = set(), mate["child"]
+    joint = next((j for j in JOINTS if j.name == a.joint), None)
+    if joint is None:
+        raise SystemExit(f"no joint {a.joint!r}; have {[j.name for j in JOINTS]}")
+    children = {j.parent: j.child for j in JOINTS}
+    moving, link = set(), joint.child
     while link:
-        moving.add(link.lstrip("#"))
+        moving.add(link)
         link = children.get(link)
 
     scene = read_scene(a.step)
     parts = [p for root in scene.roots for occ in root.children for p in _leaves(occ, occ.label)]
     mov = [(f"{l}/{n}", s) for l, n, s in parts if l in moving]
     fix = [(f"{l}/{n}", s) for l, n, s in parts if l not in moving]
-    axis = bd.Axis(tuple(mate["axis"]["origin"]), tuple(mate["axis"]["dir"]))
+    axis = bd.Axis(joint.origin, joint.direction)
 
     def hits(angle):
         out = {}
@@ -73,7 +72,7 @@ def main():
         return out
 
     base = hits(0.0)
-    lo, hi = mate["limits"]["value"]
+    lo, hi = joint.limits
     print(f"{a.joint}: {len(mov)} moving x {len(fix)} fixed parts, declared limits {lo:g}..{hi:g} deg", flush=True)
     for ang in (float(v) for v in a.angles.split(",")):
         h = hits(ang)

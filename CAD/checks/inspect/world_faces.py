@@ -12,8 +12,11 @@ radius, axis point and direction. Faces smaller than ``--min-area`` mm^2
 from __future__ import annotations
 
 import argparse
+import sys
+from pathlib import Path
 
-from cadgen import read_scene
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # checks/: scene.py
+from scene import read_scene  # noqa: E402
 
 
 def _v(p) -> str:

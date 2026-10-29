@@ -36,8 +36,14 @@ To get print-ready parts:
 3. **Regenerate.** From `CAD/`, rebuild the full arm, which rebuilds every part:
 
    ```bash
-   PYTHONPATH=src uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python src/full_arm/robot_arm.py
-   PYTHONPATH=src uvx --no-config --managed-python --python 3.13 --from cadgen==0.7.26 python src/fit_coupon.py
+   PYTHONPATH=src ~/.local/bin/cadgen +0.8.2 run src/full_arm/robot_arm.py
+   PYTHONPATH=src ~/.local/bin/cadgen +0.8.2 run src/fit_coupon.py
+   ```
+
+   The first time, install cadgen 0.8.2 and its `cadgen` launcher with
+
+   ```bash
+   uvx --no-config --managed-python --python 3.13 --from cadgen==0.8.2 cadgen doctor
    ```
 
 4. **Print from the regenerated `STEP/` files**, then set `DEFAULT` back to

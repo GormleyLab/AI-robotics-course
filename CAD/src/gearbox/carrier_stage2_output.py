@@ -12,7 +12,7 @@ stops 1 mm short of the socket floor (14 mm engaged), it is the Pin size
 (0.17 under the socket) and its corners are on gearbox +-Y, which is base
 +-Z, as in the coupling socket.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from gearbox.carrier import carrier_output_plate

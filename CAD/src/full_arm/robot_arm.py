@@ -17,50 +17,39 @@ Simplifications: the gearbox rides the waist rigidly (its output carrier
 does not turn with J2), and no pulley or idler spins with its joint. The
 replica's open issues (design.md §8) come along with the parts.
 """
-import cadgen
+import build123d as bd
 from cadgen import step
+from cadgen.ap242 import mechanism_state
 
-from full_arm.common import (BASE_FROM_SEGMENT, J1_LIMITS, J1_ORIGIN, J2_LIMITS, J2_ORIGIN, J3_LIMITS,
-                             J3_ORIGIN, J4_LIMITS, J4_ORIGIN, PITCH, ROBOT_FROM_BASE, SEGMENT_1_FROM_SEGMENT_2,
-                             UP, placement)
+from full_arm.common import (BASE_FROM_SEGMENT, JOINTS, POSES, ROBOT_FROM_BASE, SEGMENT_1_FROM_SEGMENT_2,
+                             placement)
 
 BASE_LINK = {"box_bottom", "box_top", "thrust_bearing:upper", "thrust_bearing:lower", "bearing_6807",
              "bearing_608", "nema17:j1", "gt2_pulley_20t:j1"}
 UPPER_ARM = {"coupling_shaft"}
 SEGMENT_OUTPUT = {"output_block", "gt2_80_output", "pin:base", "pin:top"}
 
-KINEMATICS = {
-    "mates": [
-        cadgen.revolute("j1_waist", parent="#base_link", child="#waist_link",
-                        origin=J1_ORIGIN, direction=UP, limits=J1_LIMITS),
-        cadgen.revolute("j2_shoulder", parent="#waist_link", child="#upper_arm_link",
-                        origin=J2_ORIGIN, direction=PITCH, limits=J2_LIMITS),
-        cadgen.revolute("j3_elbow", parent="#upper_arm_link", child="#forearm_link",
-                        origin=J3_ORIGIN, direction=PITCH, limits=J3_LIMITS),
-        cadgen.revolute("j4_wrist", parent="#forearm_link", child="#wrist_link",
-                        origin=J4_ORIGIN, direction=PITCH, limits=J4_LIMITS),
-    ],
-    "poses": {
-        "zero": {"j1_waist": 0, "j2_shoulder": 0, "j3_elbow": 0, "j4_wrist": 0},
-        "reach": {"j2_shoulder": 45, "j3_elbow": 45, "j4_wrist": 0},
-        "pick": {"j1_waist": 30, "j2_shoulder": 50, "j3_elbow": 54, "j4_wrist": 54},
-        "folded": {"j2_shoulder": -40, "j3_elbow": 54, "j4_wrist": 54},
-    },
-}
-
 
 def _group(label, parts, loc):
-    from cadgen import build123d as bd
-
     group = loc * bd.Compound(children=parts, label=label)
     group.label = label
     return group
 
 
-@step(out="../../STEP/full_arm/robot_arm.step", kinematics=KINEMATICS)
-def robot_arm():
-    from cadgen import build123d as bd
+def _add_joints(links):
+    """J1-J4 from full_arm/common.JOINTS. The links are siblings in the robot
+    frame, so each joint is given in world coordinates and paired by label:
+    a revolute joint on the parent link, a rigid joint at the same frame on
+    the child. Every joint reads 0 as built (the Fusion pose)."""
+    by_label = {link.label: link for link in links}
+    for j in JOINTS:
+        parent, child = by_label[j.parent], by_label[j.child]
+        joint = bd.RevoluteJoint(j.name, parent, axis=bd.Axis(j.origin, j.direction), angular_range=j.limits)
+        bd.RigidJoint(j.name, child, joint.location)
 
+
+@step(out="../../STEP/full_arm/robot_arm.step")
+def robot_arm():
     from belt_arm.belt_drive_arm import segment_parts
     from joint12.joint_1_and_2 import joint12_parts
 
@@ -89,7 +78,11 @@ def robot_arm():
         ], bd.Location()),
         _group("wrist_link", [_group("segment_2_output", output(seg_2), on_seg_2)], bd.Location()),
     ]
-    return bd.Compound(children=links, label="robot_arm")
+    _add_joints(links)
+    arm = bd.Compound(children=links, label="robot_arm")
+    for name, values in POSES.items():
+        mechanism_state(arm, name, **values)
+    return arm
 
 
 if __name__ == "__main__":

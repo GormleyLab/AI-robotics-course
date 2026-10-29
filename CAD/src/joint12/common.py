@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import math
 
-from cadgen import build123d as bd
+import build123d as bd
 
 from gearbox.common import TO_FUSION
 from lib import params

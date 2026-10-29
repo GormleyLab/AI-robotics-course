@@ -14,7 +14,7 @@ M5 Ø5.3 (clearance), the 8 mm M5 nut slot (slip), M3 and M5 threaded-insert
 holes (heat-set in FDM, bonded in resin; the M5 insert stands 3.5 proud of
 the 6 mm plate), and a Ø12 x 5 peg for the 6801 bore (printed shaft, press).
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from lib import params

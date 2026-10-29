@@ -5,7 +5,7 @@ Vendor STEP from step.parts: https://www.step.parts/parts/bearing_6803_2rs
 """
 from pathlib import Path
 
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import read_step, step
 
 _VENDOR = Path(__file__).resolve().parents[2] / "STEP" / "imported" / "vendor"

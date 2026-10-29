@@ -7,7 +7,7 @@ Pins and the Output block socket; groove 0 on +Y. Fusion has the same
 pulley turned 90 deg (corners on ±X) and centred 9.08 mm off J3 at
 (165.59, 47.15) (I-6, fixed).
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from belt_arm.common import J3_X, J3_Y

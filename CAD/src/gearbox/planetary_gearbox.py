@@ -10,7 +10,7 @@ every phase taken at one z (the helices keep it along z): planet tooth phase
 angle a and a ring tooth at ``ring`` (derived in design.md I-7).
 ``gearbox.common.TO_FUSION`` maps this frame onto the Fusion gearbox frame.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from gearbox.back_cover import back_cover
@@ -55,31 +55,31 @@ def _named(shape, label):
 @step(out="../../STEP/gearbox/planetary_gearbox.step")
 def planetary_gearbox():
     parts = [
-        _named(ring_gear(), "ring_gear"),
-        _named(back_cover(), "back_cover"),
-        _named(front_cover(), "front_cover"),
-        _named(nema17_mount(), "nema17_mount"),
-        _named(bd.Rot(0, 0, INPUT_TURN) * input_shaft(), "input_shaft"),
-        _named(bd.Rot(0, 0, STAGE1_TURN) * carrier_plate(), "carrier_plate:stage1"),
-        _named(bd.Rot(0, 0, STAGE1_TURN) * carrier_stage1_output(), "carrier_stage1_output"),
-        _named(STAGE2_PLACEMENT * carrier_plate(), "carrier_plate:stage2"),
-        _named(carrier_stage2_output(), "carrier_stage2_output"),
-        _named(bd.Pos(0, 0, 7.0) * bearing_6803(), "bearing_6803:input"),
-        _named(bd.Pos(0, 0, -17.0) * bearing_6801(), "bearing_6801:stage1"),
-        _named(bd.Pos(0, 0, -41.0) * bearing_6801(), "bearing_6801:stage2"),
-        _named(bd.Pos(0, 0, -52.0) * bearing_6805(), "bearing_6805:output"),
-        _named(bd.Pos(0, 0, MOTOR_FACE_Z) * bd.Rot(180, 0, 0) * nema17(), "nema17"),
+        _named(ring_gear().shape, "ring_gear"),
+        _named(back_cover().shape, "back_cover"),
+        _named(front_cover().shape, "front_cover"),
+        _named(nema17_mount().shape, "nema17_mount"),
+        _named(bd.Rot(0, 0, INPUT_TURN) * input_shaft().shape, "input_shaft"),
+        _named(bd.Rot(0, 0, STAGE1_TURN) * carrier_plate().shape, "carrier_plate:stage1"),
+        _named(bd.Rot(0, 0, STAGE1_TURN) * carrier_stage1_output().shape, "carrier_stage1_output"),
+        _named(STAGE2_PLACEMENT * carrier_plate().shape, "carrier_plate:stage2"),
+        _named(carrier_stage2_output().shape, "carrier_stage2_output"),
+        _named(bd.Pos(0, 0, 7.0) * bearing_6803().shape, "bearing_6803:input"),
+        _named(bd.Pos(0, 0, -17.0) * bearing_6801().shape, "bearing_6801:stage1"),
+        _named(bd.Pos(0, 0, -41.0) * bearing_6801().shape, "bearing_6801:stage2"),
+        _named(bd.Pos(0, 0, -52.0) * bearing_6805().shape, "bearing_6805:output"),
+        _named(bd.Pos(0, 0, MOTOR_FACE_Z) * bd.Rot(180, 0, 0) * nema17().shape, "nema17"),
     ]
     for stage, cfg in STAGES.items():
         for i, a in enumerate(cfg["angles"], start=1):
             centre = polar(R, a).position
             tag = f"s{stage}p{i}"
-            parts.append(_named(bd.Pos(centre.X, centre.Y, cfg["planet_z"]) * bd.Rot(0, 0, cfg["phase"]) * planet_gear(),
+            parts.append(_named(bd.Pos(centre.X, centre.Y, cfg["planet_z"]) * bd.Rot(0, 0, cfg["phase"]) * planet_gear().shape,
                                 f"planet_gear:{tag}"))
-            parts.append(_named(polar(R, a, cfg["pin_z"]) * planet_pin_6x22(), f"planet_pin:{tag}"))
-            parts.append(_named(polar(R, a, cfg["bushing_z"]) * bushing_6x8x10(), f"bushing:{tag}"))
+            parts.append(_named(polar(R, a, cfg["pin_z"]) * planet_pin_6x22().shape, f"planet_pin:{tag}"))
+            parts.append(_named(polar(R, a, cfg["bushing_z"]) * bushing_6x8x10().shape, f"bushing:{tag}"))
             for j, wz in enumerate(cfg["washer_z"], start=1):
-                parts.append(_named(polar(R, a, wz) * washer_6(), f"washer:{tag}w{j}"))
+                parts.append(_named(polar(R, a, wz) * washer_6().shape, f"washer:{tag}w{j}"))
     return bd.Compound(children=parts, label="planetary_gearbox")
 
 

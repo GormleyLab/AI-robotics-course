@@ -10,7 +10,7 @@ I-15 fix (Fusion: no hub, 80T band 12.2..19.2, 20T band 22.2..29.2). The 80T
 band now lines up with the stage-1 idler and the 20T band with the GT2-80
 output band.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from belt_arm.common import DUAL_X, DUAL_Y, zcyl

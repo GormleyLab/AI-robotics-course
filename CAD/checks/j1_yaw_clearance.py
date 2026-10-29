@@ -13,8 +13,8 @@ from __future__ import annotations
 
 import argparse
 
-from cadgen import build123d as bd
-from cadgen import read_scene
+import build123d as bd
+from scene import read_scene
 
 J1 = (75.0, 75.0)
 ROTATING = ("hinge", "coupling_shaft", "bearing_6805:left_cheek", "bearing_6805:right_cheek")

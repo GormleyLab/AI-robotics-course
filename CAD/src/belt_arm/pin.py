@@ -6,7 +6,7 @@ on ±Y like the Output block socket, z 7.2..22.2) into the Output block and
 the GT2-80 output. Fusion has the hex corners on ±X, 30 deg off the socket
 (I-6, fixed). Pin:2 is the same part at common.PIN_2_PLACEMENT.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from belt_arm.common import J3_X, J3_Y, zcyl

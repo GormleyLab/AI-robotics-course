@@ -16,9 +16,13 @@ from __future__ import annotations
 
 import argparse
 import math
+import sys
+from pathlib import Path
 
-from cadgen import build123d as bd
-from cadgen import read_scene
+import build123d as bd
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # checks/: scene.py
+from scene import read_scene  # noqa: E402
 
 
 def main():

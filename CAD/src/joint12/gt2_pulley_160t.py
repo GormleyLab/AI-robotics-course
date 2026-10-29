@@ -5,7 +5,7 @@ between two flanges that rise 1 mm at 45 deg to Ø103.35 with 0.2 mm edge
 chamfers. Disc z -13..-3 with a Ø60 x 5 lower-thrust pocket on top and
 4 x Ø5.3 at r = 10 (M5 to the hinge); solid Ø8 x 12 hub down into the 608.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from joint12.common import J1_X, J1_Y, zcyl

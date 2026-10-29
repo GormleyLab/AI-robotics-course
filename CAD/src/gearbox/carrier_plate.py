@@ -3,7 +3,7 @@
 Modelled in its stage-1 placement (gearbox frame z -14..5, first pin at
 26.41 deg). Stage 2 uses ``STAGE2_PLACEMENT``.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from gearbox.carrier import carrier_plate as plate_factory

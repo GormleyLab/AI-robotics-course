@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import math
 
-from cadgen import build123d as bd
+import build123d as bd
 
 PITCH = 2.0
 PITCH_LINE_OFFSET = 0.254

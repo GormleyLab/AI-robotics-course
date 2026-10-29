@@ -22,7 +22,7 @@ the same 85 mm 20T -> 80T layout, so both idlers deflect their belts 1.8 mm.
 (With Fusion's off-axis output pulley, I-6, the stage-2 idler missed its belt
 by 2.0 mm.)
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from belt_arm.base import base
@@ -91,34 +91,34 @@ def segment_parts(pancake=False):
     idler_1 = (IDLER_XS[0], IDLER_SLOT_Y[0])
     idler_2 = (IDLER_XS[1], IDLER_SLOT_Y[0])
     return [
-        _named(base(), "base"),
-        _named(wall(), "wall"),
-        _named(top(), "top"),
-        _named(dual_gt2_pulley(), "dual_gt2_pulley"),
-        _named(gt2_80_output(), "gt2_80_output"),
-        _named(pin(), "pin:base"),
-        _named(PIN_2_PLACEMENT * pin(), "pin:top"),
-        _named(output_block(), "output_block"),
-        _named(spacer_5mm(), "spacer_5mm:idler_1"),
-        _named(spacer_15mm(), "spacer_15mm:idler_1"),
-        _named(IDLER_2_SHIFT * bd.Pos(0, 0, 25.0) * spacer_5mm(), "spacer_5mm:idler_2"),
-        _named(IDLER_2_SHIFT * bd.Pos(0, 0, -15.0) * spacer_15mm(), "spacer_15mm:idler_2"),
-        _named(bd.Pos(MOTOR_X, MOTOR_Y, 0) * (nema17_pancake() if pancake else nema17()),
+        _named(base().shape, "base"),
+        _named(wall().shape, "wall"),
+        _named(top().shape, "top"),
+        _named(dual_gt2_pulley().shape, "dual_gt2_pulley"),
+        _named(gt2_80_output().shape, "gt2_80_output"),
+        _named(pin().shape, "pin:base"),
+        _named(PIN_2_PLACEMENT * pin().shape, "pin:top"),
+        _named(output_block().shape, "output_block"),
+        _named(spacer_5mm().shape, "spacer_5mm:idler_1"),
+        _named(spacer_15mm().shape, "spacer_15mm:idler_1"),
+        _named(IDLER_2_SHIFT * bd.Pos(0, 0, 25.0) * spacer_5mm().shape, "spacer_5mm:idler_2"),
+        _named(IDLER_2_SHIFT * bd.Pos(0, 0, -15.0) * spacer_15mm().shape, "spacer_15mm:idler_2"),
+        _named(bd.Pos(MOTOR_X, MOTOR_Y, 0) * (nema17_pancake().shape if pancake else nema17().shape),
                "nema17_pancake:j3" if pancake else "nema17:j3"),
-        _named(bd.Pos(MOTOR_X, MOTOR_Y, MOTOR_PULLEY_Z) * gt2_pulley_20t(), "gt2_pulley_20t:j3"),
-        _named(bd.Pos(DUAL_X, DUAL_Y, Z_BASE_TOP) * dowel_pin_6x30(), "dowel_pin:dual_pulley"),
-        _named(bd.Pos(*idler_1, IDLER_SCREW_Z) * button_head_m5x40(), "button_head_m5x40:idler_1"),
-        _named(bd.Pos(*idler_2, IDLER_SCREW_Z) * button_head_m5x40(), "button_head_m5x40:idler_2"),
-        _named(bd.Pos(*idler_1, IDLER_NUT_Z) * hex_nut_m5(), "hex_nut_m5:idler_1"),
-        _named(bd.Pos(*idler_2, IDLER_NUT_Z) * hex_nut_m5(), "hex_nut_m5:idler_2"),
-        _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[0]) * bushing_6x8x10(), "bushing:lower"),
-        _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[1]) * bushing_6x8x10(), "bushing:upper"),
-        *(_named(bd.Pos(x, JACK_SCREW_SEAT_Y, z) * bd.Rot(-90, 0, 0) * socket_head_m3x35(),
+        _named(bd.Pos(MOTOR_X, MOTOR_Y, MOTOR_PULLEY_Z) * gt2_pulley_20t().shape, "gt2_pulley_20t:j3"),
+        _named(bd.Pos(DUAL_X, DUAL_Y, Z_BASE_TOP) * dowel_pin_6x30().shape, "dowel_pin:dual_pulley"),
+        _named(bd.Pos(*idler_1, IDLER_SCREW_Z) * button_head_m5x40().shape, "button_head_m5x40:idler_1"),
+        _named(bd.Pos(*idler_2, IDLER_SCREW_Z) * button_head_m5x40().shape, "button_head_m5x40:idler_2"),
+        _named(bd.Pos(*idler_1, IDLER_NUT_Z) * hex_nut_m5().shape, "hex_nut_m5:idler_1"),
+        _named(bd.Pos(*idler_2, IDLER_NUT_Z) * hex_nut_m5().shape, "hex_nut_m5:idler_2"),
+        _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[0]) * bushing_6x8x10().shape, "bushing:lower"),
+        _named(bd.Pos(DUAL_X, DUAL_Y, BUSHING_Z[1]) * bushing_6x8x10().shape, "bushing:upper"),
+        *(_named(bd.Pos(x, JACK_SCREW_SEAT_Y, z) * bd.Rot(-90, 0, 0) * socket_head_m3x35().shape,
                  f"socket_head_m3x35:jack_{i}") for i, (x, z) in enumerate(JACK_SCREW_XZ, 1)),
-        _named(bd.Pos(*idler_1, IDLER_Z[0]) * gt2_idler_20t(), "gt2_idler_20t:1"),
-        _named(bd.Pos(*idler_2, IDLER_Z[1]) * gt2_idler_20t(), "gt2_idler_20t:2"),
-        _named(bd.Pos(J3_X, J3_Y, 0.2) * bearing_6805(), "bearing_6805:base"),
-        _named(bd.Pos(J3_X, J3_Y, 37.2) * bearing_6805(), "bearing_6805:top"),
+        _named(bd.Pos(*idler_1, IDLER_Z[0]) * gt2_idler_20t().shape, "gt2_idler_20t:1"),
+        _named(bd.Pos(*idler_2, IDLER_Z[1]) * gt2_idler_20t().shape, "gt2_idler_20t:2"),
+        _named(bd.Pos(J3_X, J3_Y, 0.2) * bearing_6805().shape, "bearing_6805:base"),
+        _named(bd.Pos(J3_X, J3_Y, 37.2) * bearing_6805().shape, "bearing_6805:top"),
         _named(bd.Pos(0, 0, BELT_Z[0]) * gt2.belt_envelope(STAGE_1), "belt:stage_1"),
         _named(bd.Pos(0, 0, BELT_Z[1]) * gt2.belt_envelope(STAGE_2), "belt:stage_2"),
     ]

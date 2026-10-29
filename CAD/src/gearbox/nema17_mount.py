@@ -5,7 +5,7 @@ screws (31 mm pattern) are countersunk from the back-cover side (z = 14); 4 x
 Ø3 holes on a 33 x 48 rectangle take screws into the back-cover inserts. A
 Ø3.5 radial hole from the -X side reaches the bore.
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from gearbox.common import disc, hole, polar

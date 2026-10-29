@@ -13,7 +13,7 @@ rounded edges that bear on the 6805 inner races (z 7.2 / 37.2). The Pin
 hexes and the GT2-80 output socket line up with it (I-6 fixed; in Fusion
 the Pins are 30 and 17.2 deg off).
 """
-from cadgen import build123d as bd
+import build123d as bd
 from cadgen import step
 
 from belt_arm.common import J3_X, J3_Y, M3_CBORE, box, xcyl

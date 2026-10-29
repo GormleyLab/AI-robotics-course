@@ -39,8 +39,9 @@ import sys
 import time
 from pathlib import Path
 
-from cadgen import build123d as bd
-from cadgen import read_scene, read_step
+import build123d as bd
+from cadgen import read_step
+from scene import read_scene
 
 
 def _fusion_part(path: str, ref: str, frame: str = "local") -> bd.Shape:
@@ -144,12 +145,12 @@ def _sliced_symdiff(a: bd.Shape, b: bd.Shape, axis: str, slices: int = SLICES) -
     normal[i] = 1.0
     nudges = _in_plane_nudges(i)
     bb = a.bounding_box().add(b.bounding_box())
-    lo, hi = bb.min.to_tuple()[i], bb.max.to_tuple()[i]
+    lo, hi = tuple(bb.min)[i], tuple(bb.max)[i]
     extent = 4 * max(bb.size.X, bb.size.Y, bb.size.Z)
     step = (hi - lo) / slices
     total = 0.0
     for k in range(slices):
-        origin = list(bb.center().to_tuple())
+        origin = list(bb.center())
         origin[i] = lo + (k + 0.5) * step
         sheet = bd.Plane(origin=origin, z_dir=normal) * bd.Rectangle(extent, extent)
         sa, sb = a & sheet, b & sheet
