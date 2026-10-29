@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑20–I‑22 fixed; I‑8, I‑23 open) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑20–I‑22 fixed; I‑23 accepted; I‑8 open) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -253,11 +253,12 @@ during recreation.
   - Checks: only material added, 83.1 mm³ (the four 1.5 mm hole bottoms). dfam-check on the PLA_FDM copy: the 1.0 mm floor is gone. Gate: PASS at 0.181 %, recorded as an I‑22 departure.
   - Hardware: the short insert is not stocked and is not on Amazon (3DJake US, ruthex GE‑M3Sx40‑002). `inventory.md` §3 has a To order note, and `inventory.xlsx` has a TO ORDER row 29 (inserted with openpyxl; the formulas, totals, data validation, autofilter and cell hyperlinks below it were shifted by hand, because `insert_rows` moves none of them; checked cell by cell against the old file). The 5.7 mm row drops the back cover: ~44 per arm, ~396 for 9 sets. The mount screws must be M3 × 14: M3 × 16 bottoms out in the 4.5 mm hole.
   - Rebuilt back_cover, planetary_gearbox, joint_1_and_2 and robot_arm, and restored the usual float-noise rewrites. No snapshot shows the insert depth.
+- **I‑23 accepted** (commit "Close I-23"; instructor's choice, docs only). The ring gear's M3 insert holes stay 1.15 mm from the Ø85 OD, because the heat-set inserts were not a problem in the prototypes. Rejected: bonded inserts (the same 0.85 mm wall over the knurls) and a Ø87 ring (breaks IF‑6). design.md I‑23 names the first remedy if a reprint bulges.
 
 ### Next steps (continue Session 8)
-1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, I‑18 (J4 pancake motor) and I‑19 (48 mm motor body) are fixed. The DfAM pass (step 4) logged I‑20 to I‑23; I‑20 to I‑22 are fixed. Next: I‑23, waiting on the instructor's choice among the options in design.md §8.
+1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, I‑18 (J4 pancake motor) and I‑19 (48 mm motor body) are fixed. The DfAM pass (step 4) logged I‑20 to I‑23; I‑20 to I‑22 are fixed and I‑23 is accepted, so the DfAM pass is closed. Next: re-run the DfAM check on the whole PLA_FDM set (step 4), then the optional URDF (step 5); I‑8 stays open.
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
-4. DfAM checks: done (PLA_FDM, Session 8). Rerun after I‑20 to I‑23 are fixed. DFM (`$dfm`) does not apply: every part is printed.
+4. DfAM checks: done (PLA_FDM, Session 8); I‑20 to I‑22 fixed, I‑23 accepted. Each fix was re-checked on its own parts; a full re-run of all 23 parts is still to do. DFM (`$dfm`) does not apply: every part is printed.
 5. Optional URDF (`$urdf`) from `full_arm/common.py`: one STL per link, in the link's joint frame.
 6. **cadgen 0.8 migration: deferred** (instructor, Session 8). The project stays pinned to cadgen 0.7.26. 0.8 can't run a 0.7 project: every `@step` model, the `full_arm` kinematics, the `.step.json` sidecar and the `read_scene` checks (including the Fusion gate) must be ported, and the Open CASCADE 8 kernel can shift assembled parts. Do it as its own planned session, following the 0.7 → 0.8 guide in the text-to-cad repo (`docs/migrations/migrating-0.7-to-0.8.md`), and compare every export against the committed 0.7 STEP files.
