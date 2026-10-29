@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑20, I‑21 fixed; I‑8, I‑22, I‑23 open) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑20–I‑22 fixed; I‑8, I‑23 open) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -249,9 +249,13 @@ during recreation.
   - Gate: Base and Top failed until re-recorded, as the drift check should; Output block, Coupling shaft and Hinge passed the plain tolerance but are recorded as departures, following the Session 7 practice.
   - Re-rendered `belt_arm_iso.png`, `joint12_iso.png` (`--display parts --camera iso`), `robot_arm_zero.png` and `robot_arm_pick.png` (`--kinematics zero|pick --camera iso`), all 1600 × 1200. `belt_arm_internals.png` hides the Top, and the Base slots face down, so it is unchanged.
   - Same build hygiene as I‑20: the float-noise rewrites (Wall, carrier stage‑2 output, M5 nut, M3 × 35) were restored.
+- **I‑22 fixed** (commit "Fix I-22"; instructor's choice: the 4 mm insert). `back_cover.MOUNT_INSERT_DEPTH` 6.0 → 4.5 for the ruthex M3S × 4.0, which has the same knurl as the M3 × 5.7, so `FIT.insert_m3` is unchanged. This leaves 2.5 mm over the carrier recess.
+  - Checks: only material added, 83.1 mm³ (the four 1.5 mm hole bottoms). dfam-check on the PLA_FDM copy: the 1.0 mm floor is gone. Gate: PASS at 0.181 %, recorded as an I‑22 departure.
+  - Hardware: the short insert is not stocked and is not on Amazon (3DJake US, ruthex GE‑M3Sx40‑002). `inventory.md` §3 has a To order note, and `inventory.xlsx` has a TO ORDER row 29 (inserted with openpyxl; the formulas, totals, data validation, autofilter and cell hyperlinks below it were shifted by hand, because `insert_rows` moves none of them; checked cell by cell against the old file). The 5.7 mm row drops the back cover: ~44 per arm, ~396 for 9 sets. The mount screws must be M3 × 14: M3 × 16 bottoms out in the 4.5 mm hole.
+  - Rebuilt back_cover, planetary_gearbox, joint_1_and_2 and robot_arm, and restored the usual float-noise rewrites. No snapshot shows the insert depth.
 
 ### Next steps (continue Session 8)
-1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, I‑18 (J4 pancake motor) and I‑19 (48 mm motor body) are fixed. The DfAM pass (step 4) logged I‑20 to I‑23; I‑20 and I‑21 are fixed. Next: I‑22 and I‑23, each waiting on the instructor's choice among the options in design.md §8.
+1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, I‑18 (J4 pancake motor) and I‑19 (48 mm motor body) are fixed. The DfAM pass (step 4) logged I‑20 to I‑23; I‑20 to I‑22 are fixed. Next: I‑23, waiting on the instructor's choice among the options in design.md §8.
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM checks: done (PLA_FDM, Session 8). Rerun after I‑20 to I‑23 are fixed. DFM (`$dfm`) does not apply: every part is printed.

@@ -59,7 +59,7 @@ Per-arm counts are approximate: design.md does not record every screw length (§
 
 | Item | ASIN | Bought | Spent | CAD part / use | Per arm | 9 sets |
 |---|---|---|---|---|---|---|
-| ruthex M3 × 5.7 heat-set insert (100-pack) | [B08BCRZZS3](https://www.amazon.com/dp/B08BCRZZS3) | 6 packs = **600** | $58.44 | `FIT.insert_m3`: ring gear (12), back cover (4), carrier plates (6), Wall (9 per segment), Base/Top proximal (4 per segment) | ~48 | ~432 |
+| ruthex M3 × 5.7 heat-set insert (100-pack) | [B08BCRZZS3](https://www.amazon.com/dp/B08BCRZZS3) | 6 packs = **600** | $58.44 | `FIT.insert_m3`: ring gear (12), carrier plates (6), Wall (9 per segment), Base/Top proximal (4 per segment). The back cover takes the short M3 × 4 (note below) | ~44 | ~396 |
 | ruthex M5 × 9.5 heat-set insert (50-pack) | [B07YSVXWS8](https://www.amazon.com/dp/B07YSVXWS8) | **50** | $9.99 | `FIT.insert_m5`: box bottom (7) | 7 | 63 |
 | FFVRVSS brass insert assortment M2–M5 (328 pc) with heat-set tool | [B0FH4JQ3VB](https://www.amazon.com/dp/B0FH4JQ3VB) | 1 kit | $6.92 | Insert tips for soldering irons; spare inserts | — | — |
 | iexcell M3 × 8 button head, 12.9 (100-pack) | [B0CP4B16KF](https://www.amazon.com/dp/B0CP4B16KF) | 2 packs = **200** | $17.72 | M3 screws (lengths not recorded) | ~75 M3 screws in total, mixed lengths: motors (4 × 4), gearbox covers, mount and carriers (~22), segment plates (14 per segment), link interfaces (4 × 3) | ~675 |
@@ -73,6 +73,10 @@ Per-arm counts are approximate: design.md does not record every screw length (§
 | Kadrick M5 assortment, 8–40 mm, with nuts and washers (960 pc) | [B0DRCBVH8K](https://www.amazon.com/dp/B0DRCBVH8K) | 1 kit | $22.99 | Box top–bottom screws (7), M5 nuts for the idler axles (`purchased/hex_nut_m5.py`, 2 per segment) | 7 screws + 4 nuts | 63 + 36 |
 | ZDingTech M4 × 5 set screw (110-pack) | [B0CF299SDT](https://www.amazon.com/dp/B0CF299SDT) | **110** | $6.69 | Probably the gearbox input-shaft set screw (Ø4 cross hole) | 1 | 9 |
 | 304 SS flat washer assortment M2–M12 (1100 pc) | [B0DZ5H9T4Z](https://www.amazon.com/dp/B0DZ5H9T4Z) | 1 kit | $6.99 | General | — | — |
+
+> **To order:** ruthex **M3S × 4.0** short heat-set insert (100-pack), **36** (4 per set, so one pack covers 9 sets). The back cover's four NEMA17-mount insert holes are 4.5 mm deep since design.md I‑22, so that 2.5 mm of plastic remains over the carrier recess; the M3 × 5.7 no longer fits there. Same knurl as the M3 × 5.7 (Ø4.6, Ø4.0 hole), so `FIT.insert_m3` is unchanged. Not found on Amazon: [3DJake US](https://www.3djake.com/ruthex/threaded-insert-m3s-100-pieces), ruthex GE‑M3Sx40‑002 (EAN 4260528721238).
+>
+> **Screws for the NEMA17 mount → back cover:** M3 × **14** (4 per set). The screw runs from the mount's back face (10 mm plate) into the cover, so M3 × 14 takes the full 4 mm insert and stops 0.5 mm short of the hole floor. M3 × 16 (stocked) would bottom out on the floor; M3 × 12 engages only 2 mm. Check the Kadrick M3 assortment for M3 × 14 before ordering.
 
 ## 4. Electronics
 

@@ -3,7 +3,8 @@
 Ø72 x 7 recess for the stage-1 carrier, Ø26 x 5 seat for the 6803
 (17x26x5) input bearing, Ø24 lip, Ø18 through bore. 6 x M3 clearance to the
 ring gear inserts with nut/head pockets that run out to the rim; 4 x M3
-inserts for the NEMA17 mount.
+inserts for the NEMA17 mount, 4.5 deep for a 4 mm insert so that 2.5 mm
+remain over the carrier recess (I-22; Fusion: 6 deep, 1.0 mm floor).
 """
 from cadgen import step
 
@@ -16,7 +17,7 @@ FIT = profile("back_cover")
 Z0, Z1 = 0.0, 14.0
 MOUNT_INSERT_R = 29.125
 MOUNT_INSERT_ANGLES = (55.49, 124.51, -55.49, -124.51)  # 33 x 48 rectangle
-MOUNT_INSERT_DEPTH = 6.0
+MOUNT_INSERT_DEPTH = 4.5   # ruthex M3S x 4.0 + 0.5 (I-22 fixed; Fusion 6.0 for the M3 x 5.7)
 
 
 def back_cover_body():

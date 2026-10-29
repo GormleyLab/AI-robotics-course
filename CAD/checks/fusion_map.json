@@ -58,7 +58,14 @@
       0,
       0
     ],
-    "slice_axis": "y"
+    "slice_axis": "y",
+    "departure": {
+      "issue": "I-22",
+      "why": "the four NEMA17-mount M3 insert holes are 4.5 deep (ruthex M3S x 4.0), not 6, leaving 2.5 mm over the carrier recess instead of 1.0",
+      "bbox": 0.0,
+      "vol_pct": 0.181,
+      "symdiff_pct": 0.181
+    }
   },
   {
     "generated": "STEP/gearbox/front_cover.step",
