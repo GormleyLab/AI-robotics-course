@@ -3,7 +3,7 @@
 Gearbox frame (gearbox/common.py), z from -47 (front cover) to 0 (back cover).
 Two 12-wide toothed bands (stage 1 at z -12..0, stage 2 at -35.5..-23.5),
 a Ø72 relief groove between them and a Ø72 counterbore at the front, each
-ending in a 45 deg chamfer onto the tooth tips. 6 x M3 heat-set inserts at
+ending in a 45 deg chamfer that runs 0.05 past the tooth tips (I-24). 6 x M3 heat-set inserts at
 each end.
 """
 import build123d as bd
@@ -24,6 +24,9 @@ RELIEF_D = 72.0
 INSERT_DEPTH = 10.0
 # (relief start z, chamfer start z): relief is Ø72 from start to chamfer start
 RELIEFS = ((-47.0, -39.3), (-23.5, -15.8))
+# I-24: the chamfer ends this far inside the tip circle, so it trims the tips
+# instead of meeting them edge-on (a zero-width seam OCCT 8 meshes open).
+CHAMFER_OVERRUN = 0.05
 HELIX_ANGLE = params.GEAR_HELIX_ANGLE  # 15 deg; teeth turn CCW as z increases
 # Both bands are the same helix shifted axially: measured (tmp slices at the
 # pitch circle) tooth centre 0.0 deg at each band's lower end, +5.458 deg at
@@ -51,8 +54,9 @@ def ring_gear_body():
                                         tip_round=RING_TIP_ROUND)
         body -= bd.Pos(0, 0, z0) * bd.Rot(0, 0, start) * cutter
     for z0, z_chamfer in RELIEFS:
-        r = RELIEF_D / 2
-        body -= revolve_rz([(0, z0), (r, z0), (r, z_chamfer), (r_tip, z_chamfer + (r - r_tip)), (0, z_chamfer + (r - r_tip))])
+        r, r_end = RELIEF_D / 2, r_tip - CHAMFER_OVERRUN
+        z_end = z_chamfer + (r - r_end)
+        body -= revolve_rz([(0, z0), (r, z0), (r, z_chamfer), (r_end, z_end), (0, z_end)])
     for a in BOLT_ANGLES:
         body -= hole(FIT.insert_m3, BOLT_R, a, Z_BACK - INSERT_DEPTH, Z_BACK)
         body -= hole(FIT.insert_m3, BOLT_R, a, Z_FRONT, Z_FRONT + INSERT_DEPTH)
