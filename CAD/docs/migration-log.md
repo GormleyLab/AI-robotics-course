@@ -15,7 +15,7 @@ during recreation.
 | 4 | Joint 1/2 base parts + assembly (add the J1 motor and 20T pulley) | Done |
 | 5 | Belt drive arm segment parts + assembly (belt envelopes) | Done |
 | 6 | Full arm (two segments), kinematics, optional URDF | Done (URDF deferred) |
-| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑8, I‑20–I‑23 open) |
+| 7+ | Design review and fixes (I‑1 first), DfAM/DFM checks; optional URDF | In progress (I‑1, I‑2, I‑4 arm, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15, I‑17, I‑18, I‑19 done; I‑3, I‑4 J1, I‑10, I‑12, I‑16 accepted; I‑13 intentional; I‑20 fixed; I‑8, I‑21–I‑23 open) |
 
 ## Session 1 — 2026-10-26
 - Added `checks/inspect/dump_features.py` (tree, placements, per-part
@@ -239,9 +239,13 @@ during recreation.
   - Below the limit but intrinsic, not logged: gear tooth tips (0.18–0.34 mm) and GT2 teeth (0.7–0.87 mm).
   - Print orientation (support area at 45°): flip Top, Back cover, Box top, Carrier plate, both carrier outputs, Coupling shaft and Input shaft; Output block on its side (rot 90° about Y, 15.5 → 1.1 %); Hinge on its side (rot 90° about X, 11.4 → 6.9 %, still supported); pulleys axis vertical; the rest as modelled.
   - Not measured by the tool: minimum hole diameter, minimum feature, bridges (the Hinge's Ø61 pocket roof is the obvious one).
+- **I‑20 fixed** (commit "Fix I-20"; `lib/gt2.py` only). Cause: a 0.0258 mm radial step on each side of every groove, where the clipped R1 flank met the R0.555 bottom arc (320 short edges on the 80T), which the mesher could not weld. `_groove` is now one explicit outline with a 0.17 mm line tangent to the bottom arc, the convex hull of the old groove: 0.00285 mm² more per groove, toward Fusion's blend arcs. An explicit groove-cut construction with the old outline (identical solid) did not help, and neither did `clean()` or `ShapeFix`.
+  - Meshes at default tolerance: `gt2_80_output` and `gt2_pulley_160t` watertight. `dual_gt2_pulley` has one degenerate triangle on one 80T tooth tip (3 open edges); the B-rep there is clean, and 1e‑3 / 2e‑3 / 1e‑4 exports are watertight. Logged as a residual in I‑20.
+  - Gate: 160T PASS (0.014 % vol), 80T output PASS (0.025 %), dual DEPART (I‑15) at 0.270 % vol / 29.057 % symdiff against the recorded 0.28 / 29.061; the map was not changed.
+  - Rebuilt the three pulleys, `belt_drive_arm`, `joint_1_and_2` and `robot_arm`. The float-noise rewrites (Top, Wall, carrier stage‑2 output, M5 nut, M3 × 35: same volume, faces and bbox to 5e‑16) were restored. No snapshot was re-rendered: 0.003 mm² per groove does not show.
 
 ### Next steps (continue Session 8)
-1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, I‑18 (J4 pancake motor) and I‑19 (48 mm motor body) are fixed. The DfAM pass (step 4) logged I‑20 to I‑23, all open. Next: I‑20 (pulley mesh seams, no geometry change), then I‑21 to I‑23, each waiting on the instructor's choice among the options in design.md §8.
+1. Every issue except I‑8 is closed: I‑1, I‑2, I‑5, I‑6, I‑7, I‑9, I‑11, I‑14, I‑15 and I‑17 are fixed, I‑4 is fixed for the arm (J1 accepted), I‑3, I‑10, I‑12 and I‑16 are accepted, and I‑13 is intentional. I‑8 (the J1 belt, fasteners and end effector are not modelled) is still open, I‑18 (J4 pancake motor) and I‑19 (48 mm motor body) are fixed. The DfAM pass (step 4) logged I‑20 to I‑23; I‑20 is fixed. Next: I‑21 to I‑23, each waiting on the instructor's choice among the options in design.md §8.
 2. One issue per commit: change the model, rerun the gate (expect the fixed part to leave the Fusion replica; record it with a `departure` object in `checks/fusion_map.json`, or, if the part is a rigid motion of the original, a transform back, as for I‑6), update design.md (part rows, §5, §8 with the commit).
 3. Re-run `checks/joint_clearance.py` after any change near a joint; I‑16 and I‑17 decide the usable workspace.
 4. DfAM checks: done (PLA_FDM, Session 8). Rerun after I‑20 to I‑23 are fixed. DFM (`$dfm`) does not apply: every part is printed.

@@ -10,9 +10,11 @@ arc construction (measured in Session 1 from the 20T, 80T and 160T pulleys):
 - tip fillets: R0.15 where the flanks meet the OD
 
 The Fusion profile also has small blend arcs (R0.38-R0.54) between bottom and
-flanks; they are omitted here. Effect on the 160T J1 pulley (Session 4): the
-r 49.5-51 tooth-band section is 0.69 % heavier than Fusion (about 0.011 mm^2
-per groove), and the whole part passes the gate at 0.02 %.
+flanks; here a 0.17 mm line tangent to the bottom arc stands in for them (I-20).
+Effect on the 160T J1 pulley (Session 4, before I-20): the r 49.5-51
+tooth-band section is 0.69 % heavier than Fusion (about 0.011 mm^2 per
+groove), and the whole part passes the gate at 0.02 %. The tangent lines
+take 0.003 mm^2 more per groove.
 """
 from __future__ import annotations
 
@@ -39,18 +41,36 @@ def outside_diameter(teeth: int) -> float:
 
 
 def _groove(r_od: float) -> bd.Sketch:
-    """One groove cutter centred on +X at the OD radius (local x = radial)."""
-    lens = (
-        bd.Pos(r_od, FLANK_OFFSET) * bd.Circle(FLANK_R)
-    ) & (
-        bd.Pos(r_od, -FLANK_OFFSET) * bd.Circle(FLANK_R)
-    )
-    bottom_x = r_od - BOTTOM_CENTRE_DEPTH
-    # Above the bottom-arc centre the lens shapes the flank; below it the
-    # groove is bounded by the R0.555 bottom arc.
-    upper = lens & (bd.Pos(bottom_x + 1.0, 0) * bd.Rectangle(2.0, 4.0))
-    lower = bd.Pos(bottom_x, 0) * bd.Circle(BOTTOM_R)
-    return upper + lower
+    """One groove cutter centred on +X at the OD radius (local x = radial).
+
+    Closed outline: the flank arcs run from the lens tip outside the OD down
+    to the bottom-arc centre line (half-width 0.581), then a line tangent to
+    the R0.555 bottom arc (0.17 long), then the bottom arc. The tangent line
+    stands in for Fusion's blend arcs; it replaced a 0.026 mm radial step
+    (lens minus bottom arc half-width) that the mesher could not weld (I-20).
+    """
+    u_b = -BOTTOM_CENTRE_DEPTH
+    tip = math.sqrt(FLANK_R ** 2 - FLANK_OFFSET ** 2)          # lens tip, local u
+    k = -FLANK_OFFSET + math.sqrt(FLANK_R ** 2 - u_b ** 2)      # flank half-width at u_b
+    a = math.pi / 2 + math.acos(BOTTOM_R / k)                   # tangent point angle on the bottom arc
+    t = (u_b + BOTTOM_R * math.cos(a), BOTTOM_R * math.sin(a))
+
+    def flank_mid(s: float) -> tuple[float, float]:
+        # point on the flank arc of side s (centre (0, -s * offset)) halfway down
+        u = (tip + u_b) / 2
+        return u, s * (-FLANK_OFFSET + math.sqrt(FLANK_R ** 2 - u ** 2))
+
+    def v(u: float, y: float) -> bd.Vector:
+        return bd.Vector(r_od + u, y)
+
+    wire = bd.Wire([
+        bd.Edge.make_three_point_arc(v(tip, 0), v(*flank_mid(1)), v(u_b, k)),
+        bd.Edge.make_line(v(u_b, k), v(*t)),
+        bd.Edge.make_three_point_arc(v(*t), v(u_b - BOTTOM_R, 0), v(t[0], -t[1])),
+        bd.Edge.make_line(v(t[0], -t[1]), v(u_b, -k)),
+        bd.Edge.make_three_point_arc(v(u_b, -k), v(*flank_mid(-1)), v(tip, 0)),
+    ])
+    return bd.Sketch() + bd.Face(wire)
 
 
 def pulley_profile(teeth: int) -> bd.Sketch:
