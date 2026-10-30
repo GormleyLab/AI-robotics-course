@@ -93,7 +93,16 @@
       180,
       0,
       0
-    ]
+    ],
+    "slice_axis": "z",
+    "method": "sliced",
+    "departure": {
+      "issue": "I-26",
+      "why": "the \u00d87 radial access hole is at the input-shaft set screw (z 16.8), not z 19.5, and runs out through the back-cover face as an open U-slot; sliced because the slot walls are tangent to the Fusion hole and the 3D boolean fails",
+      "bbox": 0.0,
+      "vol_pct": 0.013,
+      "symdiff_pct": 1.033
+    }
   },
   {
     "generated": "STEP/gearbox/carrier_plate.step",

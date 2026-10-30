@@ -6,13 +6,16 @@ thick (was 10) so the motor face sits at z = 32 and the set screw in the
 input shaft (z = 16.8) lands on the shaft's flat, not its round first ~10 mm.
 The motor screws (31 mm pattern) go in from the back-cover side (z = 14)
 through Ø7 x 3 counterbores; 4 x M3 clearance holes on a 33 x 48 rectangle
-take screws into the back-cover inserts. A Ø7 radial hole from the -X side
-reaches the bore at z = 19.5.
+take screws into the back-cover inserts. A Ø7 radial access hole from the -X
+side reaches the bore in line with the input-shaft set screw (z = 16.8; I-26,
+Fusion z = 19.5); it would break 0.7 through the z = 14 face, so it runs out
+through that face as an open U-slot.
 """
 import build123d as bd
 from cadgen import step
 
 from gearbox.common import disc, hole
+from gearbox.input_shaft import SET_SCREW_Z
 from lib import params
 from lib.tolerances import profile
 
@@ -23,7 +26,7 @@ PLATE_X, PLATE_Y, CORNER_R = 41.0, 56.0, 5.0
 MOTOR_SCREW_R = params.NEMA17_BOLT_SPACING / 2 * 2**0.5   # 21.92
 CBORE_D, CBORE_DEPTH = 7.0, 3.0
 COVER_SCREW_R, COVER_SCREW_ANGLES = 29.125, (55.49, 124.51, -55.49, -124.51)
-ACCESS_D, ACCESS_Z = 7.0, 19.5
+ACCESS_D, ACCESS_Z = 7.0, SET_SCREW_Z   # Fusion z 19.5 (I-26)
 
 
 def nema17_mount_body():
@@ -35,8 +38,10 @@ def nema17_mount_body():
     for a in COVER_SCREW_ANGLES:
         plate -= hole(FIT.m3_clear, COVER_SCREW_R, a, Z0, Z1)
     access_len = PLATE_X / 2 - 11.0  # from the -X edge into the Ø24 bore
-    access = bd.Pos(-(PLATE_X / 2 - access_len / 2), 0, ACCESS_Z) * bd.Rot(0, 90, 0) * bd.Cylinder(
-        ACCESS_D / 2, access_len)
+    access_x = -(PLATE_X / 2 - access_len / 2)
+    access = bd.Pos(access_x, 0, ACCESS_Z) * bd.Rot(0, 90, 0) * bd.Cylinder(ACCESS_D / 2, access_len)
+    access += bd.Pos(access_x, 0, Z0 - 1.0) * bd.Box(  # U-slot out through the z = 14 face
+        access_len, ACCESS_D, ACCESS_Z - Z0 + 1.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
     return plate - access
 
 
