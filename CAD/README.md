@@ -9,6 +9,10 @@ on J3 (elbow) and J4 (wrist). The parts are Python models (build123d via
 360 design. The generated STEP files are committed, so you can open or reuse
 them without installing anything.
 
+Working with Claude Code? [`docs/claude-code-guide.md`](docs/claude-code-guide.md)
+explains how the project fits together and gives example prompts for
+preparing prints and editing parts.
+
 ## Printing the parts
 
 > **The committed STEP files are not print-ready.** They keep the original
@@ -94,4 +98,4 @@ inserts), and what is deliberately left alone (gear teeth), is in
 | `src/` | The Python models; catalog and run instructions in [`src/README.md`](src/README.md) |
 | `checks/` | Verification scripts: the Fusion comparison, interference and joint-clearance sweeps |
 | `tools/` | `print_parts.py`: builds print sets at chosen fit profiles into `tmp/print/` ([Printing the parts](#printing-the-parts)) |
-| `docs/` | [`design.md`](docs/design.md) (parts, interfaces, gear and belt data, issue log) and [`migration-log.md`](docs/migration-log.md) (the Fusion → Python migration, session by session) |
+| `docs/` | [`claude-code-guide.md`](docs/claude-code-guide.md) (prints and edits with Claude Code), [`design.md`](docs/design.md) (parts, interfaces, gear and belt data, issue log) and [`migration-log.md`](docs/migration-log.md) (the Fusion → Python migration, session by session) |
