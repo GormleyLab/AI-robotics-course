@@ -84,18 +84,16 @@
   },
   {
     "generated": "STEP/gearbox/nema17_mount.step",
-    "fusion": "STEP/imported/fusion/Planetary Gearbox - Two-stage 16to1 ratio.step",
-    "ref": "#o1.12",
-    "frame": "world",
+    "fusion": "STEP/imported/fusion/NEMA17_thicker_mount.step",
+    "ref": "#o1",
     "transform": [
       0,
       0,
-      0,
-      -90,
+      24,
+      180,
       0,
       0
-    ],
-    "slice_axis": "y"
+    ]
   },
   {
     "generated": "STEP/gearbox/carrier_plate.step",
@@ -171,7 +169,7 @@
     "slice_axis": "y",
     "departure": {
       "issue": "I-2",
-      "why": "output end shortened 6.2 mm (Ø25 shaft ends 0.5 short of the coupling face, hex 14.5 long, 1 short of the socket floor); hex 21.48 AF (Pin size), not 21.65, turned to corners on +-Y to match the coupling socket",
+      "why": "output end shortened 6.2 mm (\u00c3\u02dc25 shaft ends 0.5 short of the coupling face, hex 14.5 long, 1 short of the socket floor); hex 21.48 AF (Pin size), not 21.65, turned to corners on +-Y to match the coupling socket",
       "bbox": 6.2,
       "vol_pct": 9.242,
       "symdiff_pct": 10.304
@@ -243,7 +241,7 @@
     "slice_axis": "z",
     "departure": {
       "issue": "I-21",
-      "why": "the three front-cover Ø6 counterbores under the R42.5 rim (30, 90, 150 deg) run out radially through it as open U-slots (0.25 mm skin)",
+      "why": "the three front-cover \u00c3\u02dc6 counterbores under the R42.5 rim (30, 90, 150 deg) run out radially through it as open U-slots (0.25 mm skin)",
       "bbox": 0.0,
       "vol_pct": 0.018,
       "symdiff_pct": 0.018
@@ -257,7 +255,7 @@
     "slice_axis": "x",
     "departure": {
       "issue": "I-21",
-      "why": "the four IF-8 Ø6 access bores run out through the two faces of their corner (0.5 mm to the side faces, 0.23 mm to the R40 end)",
+      "why": "the four IF-8 \u00c3\u02dc6 access bores run out through the two faces of their corner (0.5 mm to the side faces, 0.23 mm to the R40 end)",
       "bbox": 0.0,
       "vol_pct": 0.112,
       "symdiff_pct": 0.112
@@ -278,7 +276,7 @@
     "slice_axis": "z",
     "departure": {
       "issue": "I-17, I-21",
-      "why": "I-17: the two distal Wall screws (counterbore + clearance) move from x = 160 to 130 with the shortened Wall rails. I-21: the Wall-screw Ø6 counterbores run out through the nearest plate edge as open U-slots (3.5 from the edge left a 0.5 mm skin)",
+      "why": "I-17: the two distal Wall screws (counterbore + clearance) move from x = 160 to 130 with the shortened Wall rails. I-21: the Wall-screw \u00c3\u02dc6 counterbores run out through the nearest plate edge as open U-slots (3.5 from the edge left a 0.5 mm skin)",
       "bbox": 0.0,
       "vol_pct": 0.13,
       "symdiff_pct": 0.562
@@ -292,7 +290,7 @@
     "slice_axis": "z",
     "departure": {
       "issue": "I-17, I-4",
-      "why": "I-17: side rails end at x = 130 (half-round centres), not 160, to clear the Output block fork; the two distal insert holes move with them. I-4: two horizontal Ø4.2 jack-screw insert holes through the y = 0 rail at the idlers",
+      "why": "I-17: side rails end at x = 130 (half-round centres), not 160, to clear the Output block fork; the two distal insert holes move with them. I-4: two horizontal \u00c3\u02dc4.2 jack-screw insert holes through the y = 0 rail at the idlers",
       "bbox": 30.0,
       "vol_pct": 13.312,
       "symdiff_pct": 13.312
@@ -306,7 +304,7 @@
     "slice_axis": "z",
     "departure": {
       "issue": "I-17, I-4, I-21",
-      "why": "I-17: the two distal Wall screws (clearance + counterbore) move from x = 160 to 130 with the shortened Wall rails. I-4: the 8 mm idler nut slots run 1 mm further at each end (centres y 19..66). I-21: the Wall-screw Ø6 counterbores run out through the nearest plate edge as open U-slots (3.5 from the edge left a 0.5 mm skin)",
+      "why": "I-17: the two distal Wall screws (clearance + counterbore) move from x = 160 to 130 with the shortened Wall rails. I-4: the 8 mm idler nut slots run 1 mm further at each end (centres y 19..66). I-21: the Wall-screw \u00c3\u02dc6 counterbores run out through the nearest plate edge as open U-slots (3.5 from the edge left a 0.5 mm skin)",
       "bbox": 0.0,
       "vol_pct": 0.262,
       "symdiff_pct": 0.675
@@ -320,7 +318,7 @@
     "slice_axis": "z",
     "departure": {
       "issue": "I-15",
-      "why": "80T moved up 1.3 (band 13.5..20.5, in line with idler 1) on a new Ø12 x 1.3 hub that keeps the pulley on the Base boss; 20T moved up 1.0 (band 23.2..30.2, in line with the GT2-80 output)",
+      "why": "80T moved up 1.3 (band 13.5..20.5, in line with idler 1) on a new \u00c3\u02dc12 x 1.3 hub that keeps the pulley on the Base boss; 20T moved up 1.0 (band 23.2..30.2, in line with the GT2-80 output)",
       "bbox": 1.0,
       "vol_pct": 0.28,
       "symdiff_pct": 29.061
@@ -437,7 +435,7 @@
     "slice_axis": "z",
     "departure": {
       "issue": "I-21",
-      "why": "the four IF-8 Ø6 counterbores run out through the two faces of their corner (3.5 from each left a 0.5 mm skin)",
+      "why": "the four IF-8 \u00c3\u02dc6 counterbores run out through the two faces of their corner (3.5 from each left a 0.5 mm skin)",
       "bbox": 0.0,
       "vol_pct": 0.041,
       "symdiff_pct": 0.218

@@ -76,7 +76,7 @@ Per-arm counts are approximate: design.md does not record every screw length (§
 
 > **To order:** ruthex **M3S × 4.0** short heat-set insert (100-pack), **36** (4 per set, so one pack covers 9 sets). The back cover's four NEMA17-mount insert holes are 4.5 mm deep since design.md I‑22, so that 2.5 mm of plastic remains over the carrier recess; the M3 × 5.7 no longer fits there. Same knurl as the M3 × 5.7 (Ø4.6, Ø4.0 hole), so `FIT.insert_m3` is unchanged. Not found on Amazon: [3DJake US](https://www.3djake.com/ruthex/threaded-insert-m3s-100-pieces), ruthex GE‑M3Sx40‑002 (EAN 4260528721238).
 >
-> **Screws for the NEMA17 mount → back cover:** M3 × **14** (4 per set). The screw runs from the mount's back face (10 mm plate) into the cover, so M3 × 14 takes the full 4 mm insert and stops 0.5 mm short of the hole floor. M3 × 16 (stocked) would bottom out on the floor; M3 × 12 engages only 2 mm. Check the Kadrick M3 assortment for M3 × 14 before ordering.
+> **Screws for the NEMA17 mount** (the 18 mm thicker mount, design.md I‑25), 4 + 4 per set. **Mount → back cover: M3 × 22.** The screw runs from the mount's motor face through the 18 mm plate into the cover, so M3 × 22 takes the full 4 mm insert and stops 0.5 mm short of the hole floor. M3 × 25 would bottom out on the floor; M3 × 20 engages only 2 mm. **Mount → motor: M3 × 18**, from the Ø7 counterbores on the cover side through 15 mm of plate, 3 mm into the motor (M3 × 20 would reach 5 mm, past a typical 4.5 mm NEMA17 tapping). Check the Kadrick M3 assortment for both lengths before ordering.
 
 ## 4. Electronics
 

@@ -20,7 +20,7 @@ from gearbox.carrier_stage2_output import carrier_stage2_output
 from gearbox.common import polar
 from gearbox.front_cover import front_cover
 from gearbox.input_shaft import input_shaft
-from gearbox.nema17_mount import nema17_mount
+from gearbox.nema17_mount import Z1 as MOUNT_TOP_Z, nema17_mount
 from gearbox.planet_gear import planet_gear
 from gearbox.ring_gear import ring_gear
 from lib import params
@@ -44,7 +44,7 @@ STAGES = {
     2: dict(angles=(43.46, 163.46, -76.54), planet_z=-34.2, phase=22.8541,
             pin_z=-41.0, bushing_z=-34.7, washer_z=(-36.0, -24.3)),
 }
-MOTOR_FACE_Z = 24.0
+MOTOR_FACE_Z = MOUNT_TOP_Z     # 32 on the thicker mount (I-25; Fusion 24)
 
 
 def _named(shape, label):
