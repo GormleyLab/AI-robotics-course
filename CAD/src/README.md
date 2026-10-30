@@ -17,7 +17,7 @@ id and viewer page; an unchanged rerun reports `nothing ran`. Committed STEPs us
 | Module | Purpose |
 | --- | --- |
 | `params.py` | Locked interface dimensions (design.md §5) |
-| `tolerances.py` | Fit profiles `FUSION` (nominal, committed), `PLA_FDM`, `RESIN` (bonded inserts); `profile(part)` gives each part `PART_PROFILES[part]` or `DEFAULT`, and every fit feature is sized from it (`hole`, `shaft`, `hex_socket_r`, `.m3_clear`, `.insert_m3`, ...; design.md §6 Print fits, I-11) |
+| `tolerances.py` | Fit profiles `FUSION` (nominal, committed), `PLA_FDM`, `RESIN` (bonded inserts); `profile(part)` gives each part `PART_PROFILES[part]` or `DEFAULT`, and every fit feature is sized from it (`hole`, `shaft`, `hex_socket_r`, `.m3_clear`, `.insert_m3`, ...; design.md §6 Print fits, I-11). `configure()` sets them from a print config, for `tools/print_parts.py` only |
 | `gears.py` | Involute spur gear and internal ring-gear cutter (validated: 15T m1.5 planet within 0.09 % of Fusion volume) |
 | `gt2.py` | GT2 pulley profile, flanged pulley, pitch/outside diameter, belt length; belt path, idler engagement and belt envelope over pulleys and idlers (validated: 20T/80T sections within 0.1 % of Fusion) |
 | `cots.py` | Parametric stand-ins for purchased parts with no usable step.parts model |

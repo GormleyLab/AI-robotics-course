@@ -313,10 +313,14 @@ Parts are printed on whichever printer is free, so the profile is chosen per
 part; each part sizes only the features it contains, so mixed PLA and resin
 parts need no coordination. The committed STEPs use `FUSION` everywhere (all
 zero), so they stay the Fusion replica and the gate is unchanged. **To print:**
-set `DEFAULT = PLA_FDM`, list resin parts in `PART_PROFILES` (e.g.
-`{"wall": RESIN}`), rerun the models, and print from the regenerated STEPs
-(steps in [`CAD/README.md`](../README.md#printing-the-parts)). Tune the profiles
-first with `src/fit_coupon.py` (not gated): one of each fit, at its own profile.
+`tools/print_parts.py` builds a print set from a git-ignored JSON config
+(a default profile, per-part profiles, adjusted or added profiles) into
+`tmp/print/`. It sets the profiles with `tolerances.configure()` in its own
+process before importing any part, so `DEFAULT` and `PART_PROFILES` are
+never edited and `STEP/` is never written (steps in
+[`CAD/README.md`](../README.md#printing-the-parts)). Tune the profiles first
+with the fit coupon (`fit_coupon`, not gated): one of each fit, at its own
+profile.
 
 | Class | `PLA_FDM` / `RESIN` (mm, on Ø) | Features |
 |---|---|---|

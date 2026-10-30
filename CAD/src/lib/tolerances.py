@@ -3,12 +3,13 @@
 Every fit feature of the printed parts (I-11 fixed) is its Fusion value
 plus (hole) or minus (shaft) the allowance for its class in the part's
 profile: ``profile("<part>")`` returns ``PART_PROFILES[part]`` if listed,
-else ``DEFAULT``. The committed STEPs use ``FUSION`` everywhere, so they stay
-the Fusion replica and pass the gate. To print, set ``DEFAULT = PLA_FDM``,
-list any parts going to the resin printer in ``PART_PROFILES`` (for example
-``{"wall": RESIN}``), and rerun the models; tune the profiles first with
-``src/fit_coupon.py``. Each part sizes only the features it contains, so a
-resin part next to a PLA part needs nothing else.
+else ``DEFAULT``. The committed values are ``DEFAULT = FUSION`` and no
+overrides, so the models and their STEPs stay the Fusion replica and pass
+the gate; never commit them changed. Print sets are built by
+``tools/print_parts.py``, which calls ``configure()`` with a git-ignored
+config in its own process before importing any part, and writes to
+``tmp/print/``, never ``STEP/``. Each part sizes only the features it
+contains, so a resin part next to a PLA part needs nothing else.
 
 Each fit is a diametral allowance in mm. Classes (design.md §6, Print fits):
 ``press`` bearing ODs in printed seats, printed shafts in bearing bores,
@@ -26,7 +27,7 @@ M3 x 5.7 (knurl Ø4.6, heat-set hole Ø4.0) and M5 x 9.5 (knurl Ø7.1, hole
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, replace
 
 
 @dataclass(frozen=True)
@@ -80,11 +81,53 @@ if _unknown:
     raise ValueError(f"PART_PROFILES names unknown parts {sorted(_unknown)}; known: {PARTS}")
 
 
+# The presets by name, as a print config names them.
+PROFILES = {"FUSION": FUSION, "PLA_FDM": PLA_FDM, "RESIN": RESIN}
+
+_resolved = False  # set by the first profile() call; configure() must come before it
+
+
 def profile(part: str) -> FitProfile:
     """Fit profile for the printed part ``part`` (its model name)."""
+    global _resolved
     if part not in PARTS:
         raise ValueError(f"{part!r} is not in tolerances.PARTS")
+    _resolved = True
     return PART_PROFILES.get(part, DEFAULT)
+
+
+def configure(default: str = "FUSION", parts: dict[str, str] | None = None,
+              profiles: dict[str, dict] | None = None) -> None:
+    """Choose this process's profiles from a print config (``tools/print_parts.py``).
+
+    ``profiles`` adjusts a preset (``{"RESIN": {"press": 0.07}}``) or adds one
+    from a ``base`` (``{"TOUGH": {"base": "RESIN", "press": 0.08}}``);
+    ``default`` and ``parts`` (part name -> profile name) pick from them. Each
+    part module reads its profile once, at import, so this must run before any
+    part is imported; it raises if a profile was already handed out. It changes
+    only this process: the models and committed STEPs keep ``FUSION``."""
+    global DEFAULT, PART_PROFILES
+    if _resolved:
+        raise RuntimeError("configure() after profile(): a part module was imported first")
+    named = dict(PROFILES)
+    for name, values in (profiles or {}).items():
+        values = dict(values)
+        base = values.pop("base", name)
+        if base not in named:
+            raise ValueError(f"profile {name!r}: unknown base {base!r}; known: {sorted(named)}")
+        unknown = set(values) - {f.name for f in fields(FitProfile)} - {"name"}
+        if unknown:
+            raise ValueError(f"profile {name!r}: unknown fields {sorted(unknown)}")
+        values.setdefault("name", name.lower().replace("_", "-"))
+        named[name] = replace(named[base], **values)
+    for name in [default, *(parts or {}).values()]:
+        if name not in named:
+            raise ValueError(f"unknown profile {name!r}; known: {sorted(named)}")
+    unknown = set(parts or {}) - set(PARTS)
+    if unknown:
+        raise ValueError(f"parts names unknown parts {sorted(unknown)}; known: {PARTS}")
+    DEFAULT = named[default]
+    PART_PROFILES = {part: named[name] for part, name in (parts or {}).items()}
 
 
 def hole(nominal: float, fit: float) -> float:

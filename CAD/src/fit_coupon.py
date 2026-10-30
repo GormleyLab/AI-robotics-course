@@ -1,9 +1,9 @@
 """Print-fit test coupon (I-11): one of each fit, at its profile (``profile("fit_coupon")``).
 
-Not an arm part and not in Fusion, so it is not gated. Print it with the
-profile you mean to use (``lib/tolerances.py``: ``DEFAULT``, or list
-``fit_coupon`` in ``PART_PROFILES``), try each feature with its hardware,
-and adjust the profile before regenerating the arm parts.
+Not an arm part and not in Fusion, so it is not gated. Build it at the
+profile you mean to use with ``tools/print_parts.py`` (``--only fit_coupon``),
+try each feature with its hardware, and adjust the profile in the print
+config before building the arm parts.
 
 172 x 64 x 6 plate, z 0..6. Back row (y = 42), left to right: 6805 seat
 Ø37 (press), output hex socket 21.65 AF (hex_socket, try the printed Pin or
