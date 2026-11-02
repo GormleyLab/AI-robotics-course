@@ -21,7 +21,7 @@ FLANGE_D = 30.0
 
 def pin_body():
     body = zcyl(FLANGE_D, J3_X, J3_Y, Z_FLANGE, Z_JOURNAL)
-    body += zcyl(shaft(params.OUTPUT_SHAFT_D, FIT.press), J3_X, J3_Y, Z_JOURNAL, Z_HEX)
+    body += zcyl(shaft(params.OUTPUT_SHAFT_D, FIT.press_shaft), J3_X, J3_Y, Z_JOURNAL, Z_HEX)
     body += bd.Pos(J3_X, J3_Y, Z_HEX) * bd.extrude(bd.RegularPolygon(params.PIN_HEX_R, 6, rotation=90), Z_END - Z_HEX)
     return body
 

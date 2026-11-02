@@ -22,7 +22,7 @@ def carrier_stage1_output_body():
     body += disc(24.7, -24.4, -21.0)
     body += sun_gear(SUN_Z, SUN_W, SUN_PHASE)
     body += disc(15.0, -36.0, SUN_Z)
-    body += disc(shaft(12.0, FIT.press), -41.0, -36.0)    # journal in the stage-2 6801
+    body += disc(shaft(12.0, FIT.press_shaft), -41.0, -36.0)    # journal in the stage-2 6801
     return body
 
 

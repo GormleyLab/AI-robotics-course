@@ -324,7 +324,8 @@ profile.
 
 | Class | `PLA_FDM` / `RESIN` (mm, on Ø) | Features |
 |---|---|---|
-| `press` | 0.10 / 0.05 | Bearing seats: 6807 Ø47 (`Box top`), 608 Ø22 (`Box bottom`), 6805 Ø37 (`Hinge` ×2, gearbox front cover, arm `Base`/`Top`), 6803 Ø26 (back cover), 6801 Ø21 (both carrier output halves). Printed shafts in bearing bores, made smaller: `Hinge` Ø35, coupling stub, stage‑2 output shaft and arm `Pin` Ø25, input shaft Ø11.94 / Ø16.94 (already 0.06 under in Fusion), stage‑1 carrier journal Ø12. Bushings in `Planet` and dual-pulley Ø8 bores; planet pins in the carriers' Ø6 holes |
+| `press` | 0.10 / 0.05 | Bearing seats: 6807 Ø47 (`Box top`), 608 Ø22 (`Box bottom`), 6805 Ø37 (`Hinge` ×2, gearbox front cover, arm `Base`/`Top`), 6803 Ø26 (back cover), 6801 Ø21 (both carrier output halves). Bushings in `Planet` and dual-pulley Ø8 bores; planet pins in the carriers' Ø6 holes |
+| `press_shaft` | 0.10 / 0.05 | Printed shafts in bearing bores, made smaller: `Hinge` Ø35, coupling stub, stage‑2 output shaft and arm `Pin` Ø25, input shaft Ø11.94 / Ø16.94 (already 0.06 under in Fusion), stage‑1 carrier journal Ø12. Separate from `press` because a process can print holes and shafts off by different amounts: the first Form 4 Grey V5 coupon (2026‑11‑02) had its `press` holes tight and its shafts right |
 | `slip` | 0.20 / 0.10 | Dowel Ø6.1 (arm `Base`/`Top` bosses), M5 nut slot 8 (`Top`), thrust washer recesses Ø60 (`Box top`, `GT2-160` pocket), motor shaft D‑bore Ø5.3 (input shaft) |
 | `running` | 0.35 / 0.20 | Unused: nothing turns in a printed bore (planets run on bushings, J3 on 6805s) |
 | `clearance` | 0.2 / 0.1 | M3 Ø3.3 and M5 Ø5.3 holes and slots, idler slots |

@@ -32,7 +32,7 @@ HEX_LEN = 14.5                     # 1.0 short of the socket floor (I-2 fixed: F
 def carrier_stage2_output_body():
     body = carrier_output_plate(Z_TOP, PIN_ANGLE, FIT)
     body += disc(29.0, -45.0, -43.0)
-    body += disc(shaft(params.OUTPUT_SHAFT_D, FIT.press), SHAFT_END_Z, -45.0)
+    body += disc(shaft(params.OUTPUT_SHAFT_D, FIT.press_shaft), SHAFT_END_Z, -45.0)
     hex_prism = bd.extrude(bd.RegularPolygon(HEX_AF / 2, 6, major_radius=False, rotation=HEX_FLAT_ANGLE + 30.0), HEX_LEN)
     body += bd.Pos(0, 0, SHAFT_END_Z - HEX_LEN) * hex_prism
     return body

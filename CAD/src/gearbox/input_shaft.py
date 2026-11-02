@@ -17,12 +17,12 @@ FIT = profile("input_shaft")
 
 # Outer envelope (r, z): journal, shoulder, gear tips with 0.4 chamfers,
 # conical gear top, neck, collar with 45 deg chamfer, upper journal.
-R12 = 5.97 - FIT.press / 2              # Ø11.94 journal in the 6801 (Fusion: 0.06 under the bore)
-R17 = 8.47 - FIT.press / 2              # Ø16.94 neck and journal in the 6803
+R12 = 5.97 - FIT.press_shaft / 2              # Ø11.94 journal in the 6801 (Fusion: 0.06 under the bore)
+R17 = 8.47 - FIT.press_shaft / 2              # Ø16.94 neck and journal in the 6803
 ENVELOPE = [
     (0, -16.8), (R12, -16.8), (R12, -11.8), (7.5, -11.8), (7.5, -10.8),
     (12.35, -10.8), (12.75, -10.4), (12.75, -0.8), (12.35, -0.4), (9.162, 0.908),
-    (R17, 1.6), (R17, 3.4), (9.97, 3.4), (9.97, 4.486), (R17, 5.986 + FIT.press / 2), (R17, 19.6), (0, 19.6),
+    (R17, 1.6), (R17, 3.4), (9.97, 3.4), (9.97, 4.486), (R17, 5.986 + FIT.press_shaft / 2), (R17, 19.6), (0, 19.6),
 ]
 # Solid core: the same profile with the gear zone at the root radius.
 CORE = ENVELOPE[:5] + [(9.375, -10.8), (9.375, 0.695)] + ENVELOPE[9:]

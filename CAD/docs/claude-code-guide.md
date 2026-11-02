@@ -92,7 +92,8 @@ each process:
 
 | Class | What it covers | `PLA_FDM` | `RESIN` |
 |---|---|---|---|
-| `press` | Bearings in printed seats, printed shafts in bearings, bushings and planet pins | 0.10 | 0.05 |
+| `press` | Bearings, bushings and planet pins in printed holes | 0.10 | 0.05 |
+| `press_shaft` | Printed shafts in bearing bores (made smaller) | 0.10 | 0.05 |
 | `slip` | Parts that slide in by hand: dowel, M5 nut slot, washer recesses, motor shaft bore | 0.20 | 0.10 |
 | `clearance` | M3 and M5 screw holes and slots | 0.2 | 0.1 |
 | `hex_socket` | Female hexes, across flats | 0.25 | 0.15 |
@@ -417,6 +418,7 @@ skipped, it says so.
 | The CAD Viewer link doesn't open | Ask Claude to start the viewer (`cadgen viewer --host 127.0.0.1 --json --detach`) and give you the link again. You can also open the STL in PreForm or any viewer directly. |
 | `git status` shows many changed STEP files after a rebuild | Usually float noise (`2.2e-16` becoming `0`) or line endings. Ask Claude to compare the geometry with the committed files and restore them if nothing really changed. |
 | A print-set run says *"MESH NOT CLOSED"* | Don't print that STL. Tell Claude the part's name; the model needs a look. |
+| PreForm (or another slicer) reports a broken or non-manifold model | Tell Claude which part and file. Don't print it, and don't rely on the slicer's automatic repair for fit features; the print tool's mesh check should be fixed to catch it. |
 | *"unknown profile"*, *"unknown parts"*, *"unknown fields"* | A typo in the print config. Ask Claude to fix it. |
 | A resin part's fits are off but the coupon fitted | Check that the part had the same post-processing as the coupon, and that it was printed from the same config (the manifest records it). |
 | Claude wants to change something you didn't ask for | Say no. It should stay within the request; anything else belongs in its own issue and commit. |

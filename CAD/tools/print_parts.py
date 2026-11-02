@@ -23,8 +23,9 @@ size, volume and mesh check.
 
 The STL is meshed at an absolute deflection with OCCT directly: build123d's
 ``export_stl`` and ``Mesher`` use a relative one, which leaves cracks between
-faces (49 open edges on the carrier plate). Each STL is checked closed: every
-edge shared by exactly two triangles.
+faces (49 open edges on the carrier plate). Vertex copies a hair apart are
+then welded to one exact position (``weld``), and each STL is checked closed
+on exact positions: every edge shared by exactly two triangles.
 """
 from __future__ import annotations
 
@@ -70,6 +71,9 @@ PRINTED = {
 
 # Mesh deflection, mm and rad: fine enough for bearing seats and gear flanks.
 LINEAR, ANGULAR = 0.01, 0.1
+# Vertex copies closer than this (mm) are one vertex. The copies seen are
+# under 1e-6 apart; distinct vertices are 0.001 or more (ring gear flanks).
+WELD = 1e-4
 
 
 def write_stl(part, path: Path) -> None:
@@ -87,19 +91,61 @@ def write_stl(part, path: Path) -> None:
     writer.ASCIIMode = False
     if not writer.Write(part.wrapped, str(path)):
         raise RuntimeError(f"could not write {path}")
+    weld(path)
+
+
+def _triangles(path: Path) -> list[tuple]:
+    data = path.read_bytes()
+    n = struct.unpack_from("<I", data, 80)[0]
+    return [struct.unpack_from("<9f", data, 84 + 50 * i + 12) for i in range(n)]
+
+
+def weld(path: Path) -> None:
+    """Rewrite a binary STL so each shared vertex has one exact position.
+
+    OCCT writes each face's own copy of a vertex, from that face's
+    parametrisation, so copies on a seam or a face boundary can differ in the
+    last float bits (the Pin: 8 pairs under 1e-6 mm apart). PreForm compares
+    exact positions and calls such a mesh broken. Copies within WELD of each
+    other take the first one's position (and -0.0 becomes 0.0)."""
+    tris = _triangles(path)
+    points = sorted({v[j:j + 3] for v in tris for j in (0, 3, 6)})
+    canon: dict[tuple, tuple] = {}
+    for i, p in enumerate(points):
+        if p in canon:
+            continue
+        canon[p] = tuple(x + 0.0 for x in p)
+        for j in range(i + 1, len(points)):
+            q = points[j]
+            if q[0] - p[0] > WELD:
+                break
+            if q not in canon and max(abs(q[k] - p[k]) for k in range(3)) <= WELD:
+                canon[q] = canon[p]
+    out = bytearray(b"Binary STL from tools/print_parts.py (welded)".ljust(80, b" "))
+    kept = []
+    for v in tris:
+        a, b, c = (canon[v[j:j + 3]] for j in (0, 3, 6))
+        if a != b and b != c and c != a:
+            kept.append((a, b, c))
+    out += struct.pack("<I", len(kept))
+    for a, b, c in kept:
+        u = [b[k] - a[k] for k in range(3)]
+        w = [c[k] - a[k] for k in range(3)]
+        nrm = (u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0])
+        size = sum(x * x for x in nrm) ** 0.5 or 1.0
+        out += struct.pack("<12fH", *(x / size for x in nrm), *a, *b, *c, 0)
+    path.write_bytes(bytes(out))
 
 
 def open_edges(path: Path) -> tuple[int, int]:
-    """(triangles, edges not shared by exactly two triangles) of a binary STL."""
-    data = path.read_bytes()
-    n = struct.unpack_from("<I", data, 80)[0]
-    ids: dict[tuple, int] = {}
+    """(triangles, edges not shared by exactly two triangles) of a binary STL,
+    comparing exact vertex positions, as a slicer does."""
+    tris = _triangles(path)
     edges: Counter = Counter()
-    for i in range(n):
-        v = struct.unpack_from("<9f", data, 84 + 50 * i + 12)
-        a, b, c = (ids.setdefault(tuple(round(x, 5) for x in v[j:j + 3]), len(ids)) for j in (0, 3, 6))
-        edges.update((min(p, q), max(p, q)) for p, q in ((a, b), (b, c), (c, a)))
-    return n, sum(1 for count in edges.values() if count != 2)
+    for v in tris:
+        a, b, c = v[0:3], v[3:6], v[6:9]
+        edges.update(frozenset(e) for e in ((a, b), (b, c), (c, a)))
+    return len(tris), sum(1 for count in edges.values() if count != 2)
 
 
 def main() -> None:

@@ -12,8 +12,10 @@ config in its own process before importing any part, and writes to
 contains, so a resin part next to a PLA part needs nothing else.
 
 Each fit is a diametral allowance in mm. Classes (design.md §6, Print fits):
-``press`` bearing ODs in printed seats, printed shafts in bearing bores,
-bushings and planet pins in printed holes; ``slip`` parts that slide in or
+``press`` bearing ODs in printed seats, bushings and planet pins in printed
+holes; ``press_shaft`` printed shafts in bearing bores (made smaller), apart
+from ``press`` because a process can print holes and shafts off by different
+amounts (the first Form 4 coupon: holes tight, shafts right); ``slip`` parts that slide in or
 along by hand (dowel, M5 nut slot, thrust washer recess, motor shaft bore);
 ``running`` is unused (nothing turns in a printed bore); ``clearance`` screw
 holes and slots; ``hex_socket`` female hexes, across flats.
@@ -33,13 +35,14 @@ from dataclasses import dataclass, fields, replace
 @dataclass(frozen=True)
 class FitProfile:
     name: str
-    press: float      # bearing OD into printed seat
+    press: float      # bearing OD, bushing or pin into a printed hole
     slip: float       # dowel / pin that must slide in by hand
     running: float    # shaft turning in a printed bore
     clearance: float  # screw clearance on top of the nominal clearance hole
     hex_socket: float # male hex into female hex (across flats)
     insert_m3: float  # M3 threaded-insert hole diameter
     insert_m5: float  # M5 threaded-insert hole diameter
+    press_shaft: float  # printed shaft into a bearing bore
 
     @property
     def m3_clear(self) -> float:
@@ -51,17 +54,17 @@ class FitProfile:
 
 
 # Fusion's sizes; its insert holes are heat-set holes (M3 0.2 over the ruthex 4.0).
-FUSION = FitProfile("fusion-nominal", 0.0, 0.0, 0.0, 0.0, 0.0, insert_m3=4.2, insert_m5=6.4)
+FUSION = FitProfile("fusion-nominal", 0.0, 0.0, 0.0, 0.0, 0.0, insert_m3=4.2, insert_m5=6.4, press_shaft=0.0)
 
 # Starting points for PLA on a 0.4 mm nozzle; tune with the fit coupon.
 # Heat-set insert holes as on the built arm.
 PLA_FDM = FitProfile("pla-fdm", press=0.10, slip=0.20, running=0.35, clearance=0.2, hex_socket=0.25,
-                     insert_m3=4.2, insert_m5=6.4)
+                     insert_m3=4.2, insert_m5=6.4, press_shaft=0.10)
 
 # Starting points for Formlabs / standard resin (SLA/MSLA). Inserts are bonded
 # with epoxy, not heat-set: knurl OD + 0.2 glue gap.
 RESIN = FitProfile("resin-sla", press=0.05, slip=0.10, running=0.20, clearance=0.1, hex_socket=0.15,
-                   insert_m3=4.8, insert_m5=7.3)
+                   insert_m3=4.8, insert_m5=7.3, press_shaft=0.05)
 
 DEFAULT = FUSION
 

@@ -60,7 +60,7 @@ def hinge_body():
     body += _inner_fillet(X0 + CHEEK, +1) + _inner_fillet(X1 - CHEEK, -1)
 
     body -= zcyl(params.THRUST_RECESS_HINGE_D, J1_X, J1_Y, Z_FLOOR_BOTTOM, Z_FLOOR_BOTTOM + POCKET_DEPTH)
-    body += zcyl(shaft(params.J1_SHAFT_D, FIT.press), J1_X, J1_Y, SHAFT_Z0, Z_FLOOR_BOTTOM + POCKET_DEPTH)
+    body += zcyl(shaft(params.J1_SHAFT_D, FIT.press_shaft), J1_X, J1_Y, SHAFT_Z0, Z_FLOOR_BOTTOM + POCKET_DEPTH)
     for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1)):
         x, y = J1_X + dx * PULLEY_BOLT_R, J1_Y + dy * PULLEY_BOLT_R
         body -= zcyl(FIT.m5_clear, x, y, SHAFT_Z0, CBORE_Z0)

@@ -39,13 +39,13 @@ def fit_coupon_body():
         body -= _cyl(d, x, BACK_Y, 0, T)
     hex_r = hex_socket_r(params.OUTPUT_HEX_SOCKET_R, FIT.hex_socket)
     body -= bd.Pos(60.0, BACK_Y, 0) * bd.extrude(bd.RegularPolygon(hex_r, 6), T)
-    body += _cyl(shaft(params.OUTPUT_SHAFT_D, FIT.press), 155.0, BACK_Y, T, T + 7.0)
+    body += _cyl(shaft(params.OUTPUT_SHAFT_D, FIT.press_shaft), 155.0, BACK_Y, T, T + 7.0)
     for d, x in ((hole(6.0, FIT.press), 10.0), (hole(8.0, FIT.press), 24.0), (hole(6.1, FIT.slip), 38.0),
                  (FIT.m3_clear, 52.0), (FIT.m5_clear, 66.0), (FIT.insert_m3, 106.0), (FIT.insert_m5, 122.0)):
         body -= _cyl(d, x, FRONT_Y, 0, T)
     nut_w = hole(8.0, FIT.slip)
     body -= bd.Pos(85.0, FRONT_Y, 0) * bd.extrude(bd.SlotCenterToCenter(10.0, nut_w), T)
-    body += _cyl(shaft(12.0, FIT.press), 155.0, FRONT_Y, T, T + 5.0)
+    body += _cyl(shaft(12.0, FIT.press_shaft), 155.0, FRONT_Y, T, T + 5.0)
     return body
 
 

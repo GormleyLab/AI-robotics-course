@@ -42,7 +42,7 @@ files stay the nominal set.
    - `parts`: a profile per part, by model name (the names in `PARTS` in
      `src/lib/tolerances.py`). Each part sizes only its own holes, seats and
      shafts, so a resin part next to a PLA part needs nothing else.
-   - `profiles`: changes to a preset's values (`press`, `slip`, `clearance`,
+   - `profiles`: changes to a preset's values (`press`, `press_shaft`, `slip`, `clearance`,
      `hex_socket`, `insert_m3`, `insert_m5`, ...), or a new profile from a
      `base`. The committed presets are unchanged.
    - `only`: the parts to build. Without it, every arm part is built (not the
