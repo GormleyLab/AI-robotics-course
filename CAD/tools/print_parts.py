@@ -1,11 +1,14 @@
 """Build a print set: the printed parts at chosen fit profiles, as meshes for the slicer.
 
-    ~/.local/bin/cadgen +0.8.2 run tools/print_parts.py tmp/print/<name>.json [--only PART ...]
+    ~/.local/bin/cadgen +0.8.2 run tools/print_parts.py print_configs/<name>.json [--only PART ...]
 
-The config (keep it in ``tmp/print/``, which git ignores) picks the profiles
-(``lib/tolerances.configure``) and, optionally, the parts::
+The config picks the profiles (``lib/tolerances.configure``) and, optionally,
+the parts. Configs validated with the fit coupon are committed in
+``print_configs/`` (one per printer and material, with the coupon results in
+``notes``); drafts and experiments go in ``tmp/print/``, which git ignores::
 
     {
+      "notes": ["Form 4, Grey V5: validated 2026-11-03 ..."],  # free text, copied to the manifest
       "default": "RESIN",                          # FUSION, PLA_FDM, RESIN or one defined below
       "parts": {"box_bottom": "PLA_FDM"},          # per-part profile
       "profiles": {"RESIN": {"press": 0.07},       # adjust a preset ...
@@ -155,8 +158,8 @@ def main() -> None:
     parser.add_argument("--out", type=Path, help="output folder (default tmp/print/<config name>/)")
     args = parser.parse_args()
 
-    config = json.loads(args.config.read_text())
-    unknown = set(config) - {"default", "parts", "profiles", "only"}
+    config = json.loads(args.config.read_text(encoding="utf-8"))
+    unknown = set(config) - {"notes", "default", "parts", "profiles", "only"}
     if unknown:
         sys.exit(f"{args.config}: unknown keys {sorted(unknown)}")
     only = args.only or config.get("only") or [p for p, (_, n) in PRINTED.items() if n]

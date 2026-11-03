@@ -142,11 +142,56 @@ change updates it in the same commit. The sections you'll use most:
 `CAD/tools/print_parts.py` builds the parts at the fit profiles you choose and
 writes them to `CAD/tmp/print/<name>/`. It never edits the committed profiles
 and never writes to `CAD/STEP/`, so preparing prints can't change the design.
-The settings live in a small JSON config, also in `CAD/tmp/print/`, which
-Claude edits for you:
+The settings live in a small JSON config:
+
+- **Validated configs** are committed in `CAD/print_configs/`, one per printer
+  and material, so the fit tuning is done once and everyone shares it:
+
+  | Config | Printer, material | Status |
+  |---|---|---|
+  | `form4_grey_v5.json` | Formlabs Form 4, Grey Resin V5 | Validated 2026‑11‑03 |
+  | `x1c_pla.json` | Bambu Lab X1C, PLA | Starting values, not yet validated |
+
+- **Drafts** (a printer or material still being tuned, one-off experiments)
+  go in `CAD/tmp/print/`, which git ignores.
+
+If your printer and material have a validated config, skip the coupon and go
+straight to [Step 2](#step-2-build-the-parts).
+
+### How Claude picks a config
+
+You don't need to name the config file. `CLAUDE.md`, which Claude reads at the
+start of every session, tells it how to pick one. When you ask for a part on a
+printer, for example *"Print a new planet gear on the Form 4"*, Claude:
+
+1. lists `CAD/print_configs/` and picks the config whose printer and material
+   match your request;
+2. asks which material is loaded if you didn't say and more than one config
+   fits that printer (for example, a Grey V5 config and a Tough 2000 config
+   for the Form 4);
+3. tells you if the only matching config isn't validated (the X1C today) or
+   nothing matches, and offers to build the fit coupon before any arm parts;
+4. builds only the parts you asked for, from that config as it is, without
+   editing it;
+5. tells you which config it used and passes on the handling advice in its
+   `notes`, such as pressing bushings in with a vise.
+
+Two things Claude can't check for itself:
+
+- **What's loaded in the printer.** Name the material if it isn't the usual
+  one. While the Form 4 has only one config, *"on the Form 4"* gets Grey V5
+  fits even if a different resin is in the tank.
+- **Whether your copy is current.** Validated configs reach you through git.
+  Pull before printing (*"Pull the latest changes"*) so you have the newest
+  configs.
+
+### The config file
+
+A config looks like this:
 
 ```json
 {
+  "notes": ["Form 4, Grey V5: validated 2026-11-03 with the fit coupon ..."],
   "default": "GREY_V5",
   "parts": {"wall": "TOUGH"},
   "profiles": {"GREY_V5": {"base": "RESIN", "press": 0.07},
@@ -155,6 +200,8 @@ Claude edits for you:
 }
 ```
 
+- `notes`: free text, usually the coupon results; it is copied into each
+  manifest.
 - `default`: the profile for every part not listed in `parts`.
 - `parts`: a different profile for particular parts. You can mix printers:
   each part sizes only its own features, so a resin gear in a PLA housing
@@ -174,10 +221,11 @@ Each part comes out as:
 Parts are centred on the origin with their base at z = 0, in the model's
 orientation. Orient them in the slicer.
 
-### Step 1: tune the fits with the coupon
+### Step 1: tune the fits with the coupon (new printer or material only)
 
-Print the fit coupon in the material you'll use, then post-process it exactly
-as you will the real parts (resin shrinks slightly in post-cure). Try every
+Skip this step if `CAD/print_configs/` already has a validated config for your
+printer and material. Otherwise, print the fit coupon in the material you'll
+use, then post-process it exactly as you will the real parts (resin shrinks slightly in post-cure). Try every
 feature with the real hardware: the 6805, 608 and 6801 bearings in their seats,
 the Ø25 and Ø12 pegs in the 6805 and 6801 bores, the planet pin, bushing and
 dowel holes, M3 and M5 screws, the M5 nut slot, the hex socket with a printed
@@ -195,11 +243,20 @@ dowel holes, M3 and M5 screws, the M5 nut slot, the hex socket with a printed
 > *"Make three coupons with press fits of 0.04, 0.06 and 0.08 so I can compare
 > them side by side."*
 
-Repeat until everything fits. The config then holds your tuned values.
+Repeat until everything fits. Then have Claude save the config to
+`CAD/print_configs/` with the results in its `notes` and commit it, so nobody
+has to tune that printer again:
+
+> *"Everything fits. Save the Form 4 config as validated and commit it."*
+
+Re-run the coupon if you change resin, printer, nozzle or post-cure.
 
 ### Step 2: build the parts
 
 > *"Build the full arm from the Form 4 config."*
+
+> *"Print a new planet gear on the Form 4."* (Claude builds just that part
+> from `print_configs/form4_grey_v5.json`.)
 
 > *"Build just the gearbox parts."*
 
@@ -262,6 +319,9 @@ starts a print itself.
   resin profiles size the holes for the same inserts bonded with slow-cure
   epoxy. Put the epoxy on the hole wall and thread a greased screw into the
   insert while it cures, so no glue gets into the threads.
+- The full bonding steps, and how to press in the bushings, are in
+  [design.md §6, Assembly notes](design.md#assembly-notes-for-the-build-guide),
+  which will feed the arm's build guide.
 - Two parts have thin walls around their insert holes in resin: the `Wall`
   (about 1.1 mm) and the ring gear (about 0.85 mm). Print them in a tough
   resin if a standard resin cracks there.
@@ -401,7 +461,7 @@ materially.
 | Claude does without asking | Claude asks first |
 |---|---|
 | Read files, run models and checks, render snapshots | Commit or push |
-| Build print sets in `CAD/tmp/print/` and edit their configs | Change a locked interface (§5) |
+| Build print sets in `CAD/tmp/print/` and edit draft configs there | Change a locked interface (§5), or a validated config in `CAD/print_configs/` |
 | Write experiments in `CAD/tmp/` | Change the committed fit profiles in `lib/tolerances.py` |
 | Restore committed STEP files that a rebuild rewrote, after checking the geometry is unchanged | Delete files outside `CAD/tmp/` |
 
@@ -420,6 +480,8 @@ skipped, it says so.
 | A print-set run says *"MESH NOT CLOSED"* | Don't print that STL. Tell Claude the part's name; the model needs a look. |
 | PreForm (or another slicer) reports a broken or non-manifold model | Tell Claude which part and file. Don't print it, and don't rely on the slicer's automatic repair for fit features; the print tool's mesh check should be fixed to catch it. |
 | *"unknown profile"*, *"unknown parts"*, *"unknown fields"* | A typo in the print config. Ask Claude to fix it. |
+| Claude used the wrong config, or a part was printed in a different material | Name the printer and material in your request (*"on the Form 4 in Tough 2000"*). The manifest's `config_file` and `notes` show which config was used. |
+| Claude says there's no validated config for your printer | Pull the latest changes first. If there still isn't one, build and test the fit coupon (Step 1). |
 | A resin part's fits are off but the coupon fitted | Check that the part had the same post-processing as the coupon, and that it was printed from the same config (the manifest records it). |
 | Claude wants to change something you didn't ask for | Say no. It should stay within the request; anything else belongs in its own issue and commit. |
 

@@ -1,0 +1,11 @@
+{
+  "notes": [
+    "Formlabs Form 4, Grey Resin V5. Validated 2026-11-03 with the fit coupon (two coupons and a printed Pin).",
+    "Good: 6805, 608 and 6801 bearing seats; Ø25 and Ø12 pegs in the 6805 and 6801 bores; planet pin hole; dowel; M3 and M5 screw holes; M5 nut slot; output hex socket with the printed Pin.",
+    "Bushing hole: tight, needs light tapping; the pin still slides and turns in the pressed bushing and there is no whitening. Press bushings in with a vise or arbor press.",
+    "Threaded-insert holes (RESIN Ø4.8 / Ø7.3, for epoxy bonding): good dry fit for the ruthex M3 and M5 inserts; bonding not yet tried.",
+    "Washed and post-cured as for the coupons. A new resin, printer or post-cure needs a new coupon."
+  ],
+  "default": "GREY_V5",
+  "profiles": {"GREY_V5": {"base": "RESIN", "press": 0.10}}
+}

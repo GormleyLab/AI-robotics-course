@@ -1,0 +1,8 @@
+{
+  "notes": [
+    "Bambu Lab X1C, PLA, 0.4 mm nozzle. NOT YET VALIDATED: the PLA_FDM starting values.",
+    "Print and test the fit coupon (--only fit_coupon) before printing arm parts, then record the results here."
+  ],
+  "default": "X1C_PLA",
+  "profiles": {"X1C_PLA": {"base": "PLA_FDM"}}
+}

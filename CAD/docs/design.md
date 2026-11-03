@@ -313,10 +313,12 @@ Parts are printed on whichever printer is free, so the profile is chosen per
 part; each part sizes only the features it contains, so mixed PLA and resin
 parts need no coordination. The committed STEPs use `FUSION` everywhere (all
 zero), so they stay the Fusion replica and the gate is unchanged. **To print:**
-`tools/print_parts.py` builds a print set from a git-ignored JSON config
-(a default profile, per-part profiles, adjusted or added profiles) into
-`tmp/print/`. It sets the profiles with `tolerances.configure()` in its own
-process before importing any part, so `DEFAULT` and `PART_PROFILES` are
+`tools/print_parts.py` builds a print set from a JSON config (a default
+profile, per-part profiles, adjusted or added profiles) into `tmp/print/`.
+Configs validated with the fit coupon are committed in `print_configs/`; the
+Form 4 Grey V5 one (2026‑11‑03) is `RESIN` with `press` 0.10. The tool sets
+the profiles with `tolerances.configure()` in its own process before
+importing any part, so `DEFAULT` and `PART_PROFILES` are
 never edited and `STEP/` is never written (steps in
 [`CAD/README.md`](../README.md#printing-the-parts)). Tune the profiles first
 with the fit coupon (`fit_coupon`, not gated): one of each fit, at its own
@@ -340,6 +342,39 @@ the resin printer.
 Not adjusted: counterbores, the carrier's Ø2.8 self-tap pilots, clearance bores with mm of play (`Hinge` Ø61 thrust pocket,
 carrier Ø32.5 bore, motor pilot slot), and gear teeth (I‑3, accepted). The
 `PLA_FDM` values are starting points for a 0.4 mm nozzle.
+
+### Assembly notes (for the build guide)
+
+How the fits above are meant to be assembled. These notes are the source for
+the arm's build guide; add to them as assembly experience comes in.
+
+**Threaded inserts in resin parts (bonded).** Cured resin doesn't melt, so
+heat-set inserts don't work in it. Resin parts take the same ruthex inserts
+bonded with slow-cure epoxy, in the `RESIN` holes (Ø4.8 M3, Ø7.3 M5: knurl
+diameter + 0.2, the glue gap).
+
+1. Check the insert goes into the hole by hand before mixing any epoxy. It
+   should slide in without force and without rattling. The Form 4 Grey V5
+   coupon (2026‑11‑03) was a good dry fit for both sizes.
+2. Coat the hole wall with epoxy, not the insert, so glue isn't pushed into
+   the insert's threads.
+3. Press the insert in until it is flush with the surface.
+4. Grease a screw of the insert's size and thread it into the insert while the
+   epoxy cures. It keeps glue out of the threads and holds the insert square.
+5. Remove the screw once the epoxy has fully cured.
+
+Bonding has not yet been tried on a printed part; record the first results
+here. In PLA (FDM) parts the inserts are heat-set with a soldering iron in the
+`PLA_FDM` holes (Ø4.2, Ø6.4).
+
+**Bushings in printed bores.** The 6 × 8 × 10 bushings in the `Planet` and
+dual-pulley Ø8 bores are a press fit: they must not turn in the part (the
+part turns on its 6 mm planet pin or dowel). In Form 4 Grey V5 (`press` 0.10)
+they need light tapping on the coupon. Press them in with a vise or arbor
+press, not a hammer, keeping the bushing square to the bore; the planets are
+9 mm deep and Grey V5 is brittle. Then check the pin or dowel still slides and
+turns freely through the full length of the bushing: a bushing pressed too
+hard closes its bore.
 
 ---
 

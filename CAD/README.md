@@ -25,7 +25,20 @@ at the fit profiles you choose and writes it to `tmp/print/` (git-ignored). It
 never edits `src/lib/tolerances.py` or writes to `STEP/`, so the committed
 files stay the nominal set.
 
-1. **Write a print config** in `tmp/print/`, for example `tmp/print/resin.json`:
+**Validated printer configs** are committed in `print_configs/`, one per
+printer and material, with the fit-coupon results in their `notes`:
+
+| Config | Printer, material | Status |
+|---|---|---|
+| `form4_grey_v5.json` | Formlabs Form 4, Grey Resin V5 | Validated 2026‑11‑03 |
+| `x1c_pla.json` | Bambu Lab X1C, PLA | Starting values, not yet validated |
+
+To print with a validated config, skip to step 3, for example
+`... tools/print_parts.py print_configs/form4_grey_v5.json --only planet_gear`.
+For a new printer or material, start at step 1.
+
+1. **Write a print config** in `tmp/print/` while you tune it, for example
+   `tmp/print/resin.json`:
 
    ```json
    {
@@ -48,15 +61,18 @@ files stay the nominal set.
    - `only`: the parts to build. Without it, every arm part is built (not the
      fit coupon).
 
-   A misspelled part, profile or value is an error.
+   A misspelled part, profile or value is an error. An optional `notes`
+   (text or a list of lines) is copied into the manifest.
 2. **Tune the fits first.** Build `fit_coupon` (one of each fit, including the
    threaded-insert holes) at the profile of each printer you will use. Try it
    with your bearings, pins, bushings, screws, M5 nut and inserts, and adjust
-   the profile's values in the config until each one fits.
+   the profile's values in the config until each one fits. Then move the
+   config to `print_configs/`, record what you tested in `notes`, and commit
+   it, so nobody has to tune that printer again.
 3. **Build.** From `CAD/`:
 
    ```bash
-   ~/.local/bin/cadgen +0.8.2 run tools/print_parts.py tmp/print/resin.json
+   ~/.local/bin/cadgen +0.8.2 run tools/print_parts.py print_configs/form4_grey_v5.json
    ```
 
    `--only PART ...` overrides the config's list, and `--out DIR` the output
@@ -98,4 +114,5 @@ inserts), and what is deliberately left alone (gear teeth), is in
 | `src/` | The Python models; catalog and run instructions in [`src/README.md`](src/README.md) |
 | `checks/` | Verification scripts: the Fusion comparison, interference and joint-clearance sweeps |
 | `tools/` | `print_parts.py`: builds print sets at chosen fit profiles into `tmp/print/` ([Printing the parts](#printing-the-parts)) |
+| `print_configs/` | Validated print configs, one per printer and material (`form4_grey_v5.json`, `x1c_pla.json`) |
 | `docs/` | [`claude-code-guide.md`](docs/claude-code-guide.md) (prints and edits with Claude Code), [`design.md`](docs/design.md) (parts, interfaces, gear and belt data, issue log) and [`migration-log.md`](docs/migration-log.md) (the Fusion → Python migration, session by session) |
