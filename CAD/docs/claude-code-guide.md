@@ -218,6 +218,11 @@ Each part comes out as:
 - an entry in **`manifest.json`**: the exact fit values used, how many to print
   per arm, the size and the volume.
 
+Each set also gets **`print_list.txt`**, a plain checklist for whoever runs the
+printer: every STL with how many to print for one arm, grouped by assembly,
+plus the config's notes. Hand the folder over with this file, rather than
+the manifest.
+
 Parts are centred on the origin with their base at z = 0, in the model's
 orientation. Orient them in the slicer.
 
@@ -225,8 +230,8 @@ orientation. Orient them in the slicer.
 
 Skip this step if `CAD/print_configs/` already has a validated config for your
 printer and material. Otherwise, print the fit coupon in the material you'll
-use, then post-process it exactly as you will the real parts (resin shrinks slightly in post-cure). Try every
-feature with the real hardware: the 6805, 608 and 6801 bearings in their seats,
+use, then post-process it exactly as you will the real parts (resin shrinks
+slightly in post-cure). Try every feature with the real hardware: the 6805, 608 and 6801 bearings in their seats,
 the Ø25 and Ø12 pegs in the 6805 and 6801 bores, the planet pin, bushing and
 dowel holes, M3 and M5 screws, the M5 nut slot, the hex socket with a printed
 `Pin`, and the threaded inserts. Then tell Claude what you found.
@@ -312,6 +317,53 @@ starts a print itself.
 - Gears and pulleys print better on the Form 4: its finer layers give cleaner
   teeth.
 
+#### Avoiding warped flat parts
+
+Long, thin, flat parts warp most: the material shrinks a little as it cures or
+cools, and a thin plate has little stiffness to resist it. Uneven material
+makes it worse, for example a plate with holes concentrated on one side or
+pegs on one face. The first Grey V5 fit coupons (172 × 64 × 6 mm) came out
+bowed. The models are flat, so warping comes from printing and
+post-processing, not from the files. The arm parts most at risk are `Base` and
+`Top` (240 × 80 × about 10 mm), `Box top` (180 × 150 × 12 mm), `Box bottom`
+and `Wall`. A warped `Base` or `Top` throws off the J3 bearings and the belt
+path, so check them on a flat surface before assembly.
+
+**Resin (Form 4)**
+
+- **Don't print large flat faces parallel to the build platform.** Tilt them
+  (PreForm's auto-orient usually does), so each layer is a small cross-section
+  with low peel force. The 240 mm plates have to be tilted anyway to fit.
+- **Leave the supports on until after post-cure.** They hold the part straight
+  while it cures; a plate freed from its supports first can curl in the curing
+  unit.
+- **Wash only for the recommended time.** Parts left in IPA too long swell and
+  distort.
+- **Dry fully before post-cure.** Curing a part that still holds IPA can
+  distort it.
+- **Post-cure at the resin's recommended time and temperature,** with light
+  reaching all sides evenly.
+
+**FDM (X1C, PLA)**
+
+- **Clean the build plate** with dish soap and water, and don't touch the
+  print surface: oil from fingers stops the first layer gripping.
+- **Add a brim** (about 5–8 mm) to long flat parts. The corners of a long
+  plate are where it lifts first.
+- **Keep the bed at the filament profile's temperature,** and keep drafts
+  (fans, air vents, an open window) away from the printer.
+- **Let the plate cool before removing the part.** Prying off a warm part
+  bends it.
+- **Use normal infill (15–25 %) and enough walls.** Solid infill isn't needed,
+  and it shrinks more, which builds in more stress.
+
+If a part warps anyway, tell Claude how it was oriented, which way it bows,
+and whether it bowed on the printer or after post-processing:
+
+> *"The Base came out bowed about 1 mm along its length, curling toward the
+> bearing side. It was tilted 45° in PreForm and I removed the supports before
+> curing. What should I change?"*
+
 ### Threaded inserts
 
 - **FDM (PLA):** heat-set the ruthex inserts with a soldering iron, as before.
@@ -333,7 +385,8 @@ One arm needs: 1 each of `box_bottom`, `box_top`, `hinge`, `coupling_shaft`,
 `input_shaft`, `carrier_stage1_output` and `carrier_stage2_output`; 2 each of
 `carrier_plate`, `base`, `top`, `wall`, `dual_gt2_pulley`, `gt2_80_output` and
 `output_block`; 4 each of `pin`, `spacer_5mm` and `spacer_15mm`; and 6
-`planet_gear`. The manifest lists the same counts. Bought parts are in
+`planet_gear`: 44 prints per arm. Each print set's `print_list.txt` lists the
+same counts as a checklist. Bought parts are in
 [`inventory.md`](../../inventory.md).
 
 ---
@@ -482,6 +535,7 @@ skipped, it says so.
 | *"unknown profile"*, *"unknown parts"*, *"unknown fields"* | A typo in the print config. Ask Claude to fix it. |
 | Claude used the wrong config, or a part was printed in a different material | Name the printer and material in your request (*"on the Form 4 in Tough 2000"*). The manifest's `config_file` and `notes` show which config was used. |
 | Claude says there's no validated config for your printer | Pull the latest changes first. If there still isn't one, build and test the fit coupon (Step 1). |
+| A flat part or coupon came out warped | See [Avoiding warped flat parts](#avoiding-warped-flat-parts). Tell Claude the orientation, which way it bows, and whether it bowed on the printer or after post-processing. |
 | A resin part's fits are off but the coupon fitted | Check that the part had the same post-processing as the coupon, and that it was printed from the same config (the manifest records it). |
 | Claude wants to change something you didn't ask for | Say no. It should stay within the request; anything else belongs in its own issue and commit. |
 

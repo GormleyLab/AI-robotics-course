@@ -20,9 +20,10 @@ Everything runs in this process: the profiles are set before any part module
 is imported, and each part is its model's undecorated function, so no
 ``@step`` output is written and the committed STEPs are untouched. Output
 goes to ``tmp/print/<config name>/`` (or ``--out``): per part a STEP and an
-STL, moved so it is centred in XY on z = 0 (the slicer orients it), and
+STL, moved so it is centred in XY on z = 0 (the slicer orients it),
 ``manifest.json`` with each part's resolved profile values, count per arm,
-size, volume and mesh check.
+size, volume and mesh check, and ``print_list.txt``, a plain checklist of how
+many of each file to print for one arm (for whoever runs the printer).
 
 The STL is meshed at an absolute deflection with OCCT directly: build123d's
 ``export_stl`` and ``Mesher`` use a relative one, which leaves cracks between
@@ -151,6 +152,50 @@ def open_edges(path: Path) -> tuple[int, int]:
     return len(tris), sum(1 for count in edges.values() if count != 2)
 
 
+ASSEMBLY = {"joint12": "Base and J1", "gearbox": "J2 gearbox", "belt_arm": "Arm segments (J3, J4)"}
+
+
+def _assembly(part: str) -> str:
+    return ASSEMBLY.get(PRINTED[part][0].split(".")[0], "Other")
+
+
+def write_print_list(out: Path, manifest: dict) -> None:
+    """``print_list.txt``: how many of each file to print for one arm, grouped by assembly."""
+    config = manifest["config"]
+    notes = config.get("notes", [])
+    notes = [notes] if isinstance(notes, str) else notes
+    rows = [r for r in manifest["parts"] if r["count_per_arm"]]
+    tests = [r["part"] for r in manifest["parts"] if not r["count_per_arm"]]
+    lines = [f"PRINT LIST: {out.name}",
+             f"Settings: {manifest['config_file']} (profile {config.get('default', 'FUSION')})",
+             ""]
+    if rows:
+        lines += ["Print this many of each file for ONE arm (multiply for more arms).",
+                  "Tick each line off as the prints come off the printer.", ""]
+    width = max((len(r["part"]) for r in rows), default=6) + 4
+    pieces = 0
+    for group in dict.fromkeys(_assembly(r["part"]) for r in rows):
+        lines.append(group)
+        for r in rows:
+            if _assembly(r["part"]) == group:
+                size = " x ".join(f"{v:.1f}".removesuffix(".0") for v in r["size_mm"])
+                lines.append(f"  [ ] {r['part'] + '.stl':<{width}} x{r['count_per_arm']:<3} {size} mm")
+                pieces += r["count_per_arm"]
+        lines.append("")
+    if rows:
+        lines.append(f"{len(rows)} files, {pieces} prints per arm, about "
+                     f"{manifest['volume_per_arm_cm3']:.0f} cm3 of material per arm before supports.")
+    if tests:
+        lines.append(("Test pieces, not arm parts (print only if asked): " if rows else "Test pieces, print one of each: ")
+                     + ", ".join(t + ".stl" for t in tests))
+    lines += ["", "Use the .stl files. The .step files and manifest.json are for reference.",
+              "Orientation, supports and avoiding warped flat parts: CAD/docs/claude-code-guide.md,",
+              "section 3, Step 4 (Slice and print)."]
+    if notes:
+        lines += ["", "Notes from the print settings:"] + [f"  - {n}" for n in notes]
+    (out / "print_list.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("config", type=Path)
@@ -197,10 +242,11 @@ def main() -> None:
               + (f"  MESH NOT CLOSED: {bad} open edges" if bad else ""))
 
     total = sum(r["volume_cm3"] * r["count_per_arm"] for r in rows)
-    (out / "manifest.json").write_text(json.dumps(
-        {"config": config, "config_file": str(args.config),
-         "mesh_deflection": {"linear_mm": LINEAR, "angular_rad": ANGULAR},
-         "parts": rows, "volume_per_arm_cm3": round(total, 1)}, indent=2) + "\n")
+    manifest = {"config": config, "config_file": str(args.config),
+                "mesh_deflection": {"linear_mm": LINEAR, "angular_rad": ANGULAR},
+                "parts": rows, "volume_per_arm_cm3": round(total, 1)}
+    (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    write_print_list(out, manifest)
     print(f"\n{len(rows)} parts, {total:.0f} cm3 per arm (solid, no supports) -> {out}")
     if any(r["open_edges"] for r in rows):
         sys.exit("some meshes are not closed: repair them in the slicer or report the part")

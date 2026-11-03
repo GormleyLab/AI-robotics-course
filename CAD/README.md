@@ -88,6 +88,8 @@ For a new printer or material, start at step 1.
    base at z = 0 in the model's orientation; orient it in the slicer.
    `manifest.json` records each part's profile values, count per arm, size
    and volume, so a print can be traced to the settings that made it.
+   `print_list.txt` is the short version for whoever runs the printer: each
+   STL and how many to print for one arm, as a checklist.
 
 The script sets the profiles in its own process before it imports any part,
 and builds each part from its model's undecorated function. A normal model
