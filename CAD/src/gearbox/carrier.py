@@ -22,7 +22,7 @@ from lib.tolerances import FitProfile, hole as fit_hole
 
 PLATE_D = 56.0
 PIN_R = params.PLANET_CENTRE_R          # 22.5
-PIN_D = 6.0                             # planet pins (+ fit.press)
+PIN_D = 6.0                             # planet pins (+ fit.press_pin)
 POCKET_D = 29.5
 BORE_D = 32.5
 POCKET_FILLET = 1.0
@@ -53,7 +53,7 @@ def carrier_plate(z_bottom: float, pin_angle: float, fit: FitProfile) -> bd.Part
     body = disc(PLATE_D, z_bottom, z_top) - disc(BORE_D, z_bottom, z_top)
     for a in _three(pin_angle):
         body -= hole(POCKET_D, PIN_R, a, z_bottom, z_pocket_top)
-        body -= hole(fit_hole(PIN_D, fit.press), PIN_R, a, z_pocket_top, z_top)
+        body -= hole(fit_hole(PIN_D, fit.press_pin), PIN_R, a, z_pocket_top, z_top)
     # R1 rounds on the vertical edges where the pockets break into the bore and the OD
     edges = [
         e for e in body.edges()
@@ -79,7 +79,7 @@ def carrier_output_plate(z_top: float, pin_angle: float, fit: FitProfile) -> bd.
     body -= disc(fit_hole(21.0, fit.press), z_bottom, z_top)            # 6801 bearing recess
     body -= disc(18.0, z_bottom - 0.4, z_bottom)
     for a in _three(pin_angle):
-        body -= hole(fit_hole(PIN_D, fit.press), PIN_R, a, z_bottom, z_top)
+        body -= hole(fit_hole(PIN_D, fit.press_pin), PIN_R, a, z_bottom, z_top)
     for a in _three(pin_angle + SCREW_OFFSET):
         body -= hole(PILOT_D, SCREW_R, a, z_top - PILOT_DEPTH, z_top)
         csk = bd.Cone(CSK_D / 2, PILOT_D / 2, z_top - PILOT_DEPTH - z_bottom,

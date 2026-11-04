@@ -92,7 +92,8 @@ each process:
 
 | Class | What it covers | `PLA_FDM` | `RESIN` |
 |---|---|---|---|
-| `press` | Bearings, bushings and planet pins in printed holes | 0.10 | 0.05 |
+| `press` | Bearings and bushings in printed holes | 0.10 | 0.05 |
+| `press_pin` | Planet pins in printed holes | 0.10 | 0.05 |
 | `press_shaft` | Printed shafts in bearing bores (made smaller) | 0.10 | 0.05 |
 | `slip` | Parts that slide in by hand: dowel, M5 nut slot, washer recesses, motor shaft bore | 0.20 | 0.10 |
 | `clearance` | M3 and M5 screw holes and slots | 0.2 | 0.1 |
@@ -150,7 +151,7 @@ The settings live in a small JSON config:
   | Config | Printer, material | Status |
   |---|---|---|
   | `form4_grey_v5.json` | Formlabs Form 4, Grey Resin V5 | Validated 2026‑11‑03 |
-  | `x1c_pla.json` | Bambu Lab X1C, PLA | Starting values, not yet validated |
+  | `x1c_pla.json` | Bambu Lab X1C, PLA | Tuned after one coupon, not yet validated |
 
 - **Drafts** (a printer or material still being tuned, one-off experiments)
   go in `CAD/tmp/print/`, which git ignores.

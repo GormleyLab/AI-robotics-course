@@ -316,7 +316,7 @@ zero), so they stay the Fusion replica and the gate is unchanged. **To print:**
 `tools/print_parts.py` builds a print set from a JSON config (a default
 profile, per-part profiles, adjusted or added profiles) into `tmp/print/`.
 Configs validated with the fit coupon are committed in `print_configs/`; the
-Form 4 Grey V5 one (2026‑11‑03) is `RESIN` with `press` 0.10. The tool sets
+Form 4 Grey V5 one (2026‑11‑03) is `RESIN` with `press` and `press_pin` 0.10. The tool sets
 the profiles with `tolerances.configure()` in its own process before
 importing any part, so `DEFAULT` and `PART_PROFILES` are
 never edited and `STEP/` is never written (steps in
@@ -326,7 +326,8 @@ profile.
 
 | Class | `PLA_FDM` / `RESIN` (mm, on Ø) | Features |
 |---|---|---|
-| `press` | 0.10 / 0.05 | Bearing seats: 6807 Ø47 (`Box top`), 608 Ø22 (`Box bottom`), 6805 Ø37 (`Hinge` ×2, gearbox front cover, arm `Base`/`Top`), 6803 Ø26 (back cover), 6801 Ø21 (both carrier output halves). Bushings in `Planet` and dual-pulley Ø8 bores; planet pins in the carriers' Ø6 holes |
+| `press` | 0.10 / 0.05 | Bearing seats: 6807 Ø47 (`Box top`), 608 Ø22 (`Box bottom`), 6805 Ø37 (`Hinge` ×2, gearbox front cover, arm `Base`/`Top`), 6803 Ø26 (back cover), 6801 Ø21 (both carrier output halves). Bushings in `Planet` and dual-pulley Ø8 bores |
+| `press_pin` | 0.10 / 0.05 | Planet pins in the carriers' Ø6 holes. Separate from `press` because small holes can print tighter than bearing seats and the carrier output plates hold both: the first X1C PLA coupon (2026‑11‑04) had its seats right and its Ø6.10 pin hole too tight |
 | `press_shaft` | 0.10 / 0.05 | Printed shafts in bearing bores, made smaller: `Hinge` Ø35, coupling stub, stage‑2 output shaft and arm `Pin` Ø25, input shaft Ø11.94 / Ø16.94 (already 0.06 under in Fusion), stage‑1 carrier journal Ø12. Separate from `press` because a process can print holes and shafts off by different amounts: the first Form 4 Grey V5 coupon (2026‑11‑02) had its `press` holes tight and its shafts right |
 | `slip` | 0.20 / 0.10 | Dowel Ø6.1 (arm `Base`/`Top` bosses), M5 nut slot 8 (`Top`), thrust washer recesses Ø60 (`Box top`, `GT2-160` pocket), motor shaft D‑bore Ø5.3 (input shaft) |
 | `running` | 0.35 / 0.20 | Unused: nothing turns in a printed bore (planets run on bushings, J3 on 6805s) |
@@ -370,7 +371,8 @@ here. In PLA (FDM) parts the inserts are heat-set with a soldering iron in the
 **Bushings in printed bores.** The 6 × 8 × 10 bushings in the `Planet` and
 dual-pulley Ø8 bores are a press fit: they must not turn in the part (the
 part turns on its 6 mm planet pin or dowel). In Form 4 Grey V5 (`press` 0.10)
-they need light tapping on the coupon. Press them in with a vise or arbor
+they need light tapping on the coupon; in X1C PLA (`press` 0.10, 2026‑11‑04)
+they need a bit of pressure and the pin still inserts well. Press them in with a vise or arbor
 press, not a hammer, keeping the bushing square to the bore; the planets are
 9 mm deep and Grey V5 is brittle. Then check the pin or dowel still slides and
 turns freely through the full length of the bushing: a bushing pressed too

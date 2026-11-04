@@ -1,8 +1,12 @@
 {
   "notes": [
-    "Bambu Lab X1C, PLA, 0.4 mm nozzle. NOT YET VALIDATED: the PLA_FDM starting values.",
+    "Bambu Lab X1C, PLA, 0.4 mm nozzle. NOT YET VALIDATED: tuned after the first coupon (2026-11-04), second coupon not yet tested.",
+    "First coupon, at the PLA_FDM starting values. Good: 6805, 608 and 6801 bearing seats; Ø25 and Ø12 pegs in the 6805 and 6801 bores; dowel; M3 and M5 screw holes; M5 nut slot.",
+    "Bushing hole: needs a bit of pressure to insert; the pin still inserts well. Kept at press 0.10.",
+    "Changed for the second coupon: press_pin 0.10 to 0.20 (Ø6.10 too tight) and hex_socket 0.25 to 0.10 (slightly loose on the resin-printed male hex; not yet tried with a PLA male hex).",
+    "Threaded-insert holes (Ø4.2 / Ø6.4) are for heat-setting and kept; heat-setting not yet tried.",
     "Print and test the fit coupon (--only fit_coupon) before printing arm parts, then record the results here."
   ],
   "default": "X1C_PLA",
-  "profiles": {"X1C_PLA": {"base": "PLA_FDM"}}
+  "profiles": {"X1C_PLA": {"base": "PLA_FDM", "press_pin": 0.20, "hex_socket": 0.10}}
 }

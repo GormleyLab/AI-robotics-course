@@ -31,7 +31,7 @@ printer and material, with the fit-coupon results in their `notes`:
 | Config | Printer, material | Status |
 |---|---|---|
 | `form4_grey_v5.json` | Formlabs Form 4, Grey Resin V5 | Validated 2026‑11‑03 |
-| `x1c_pla.json` | Bambu Lab X1C, PLA | Starting values, not yet validated |
+| `x1c_pla.json` | Bambu Lab X1C, PLA | Tuned after one coupon, not yet validated |
 
 To print with a validated config, skip to step 3, for example
 `... tools/print_parts.py print_configs/form4_grey_v5.json --only planet_gear`.
@@ -55,7 +55,7 @@ For a new printer or material, start at step 1.
    - `parts`: a profile per part, by model name (the names in `PARTS` in
      `src/lib/tolerances.py`). Each part sizes only its own holes, seats and
      shafts, so a resin part next to a PLA part needs nothing else.
-   - `profiles`: changes to a preset's values (`press`, `press_shaft`, `slip`, `clearance`,
+   - `profiles`: changes to a preset's values (`press`, `press_pin`, `press_shaft`, `slip`, `clearance`,
      `hex_socket`, `insert_m3`, `insert_m5`, ...), or a new profile from a
      `base`. The committed presets are unchanged.
    - `only`: the parts to build. Without it, every arm part is built (not the

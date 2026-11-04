@@ -9,7 +9,7 @@ config before building the arm parts.
 Ø37 (press), output hex socket 21.65 AF (hex_socket, try the printed Pin or
 the stage-2 output hex), 608 seat Ø22 (press), 6801 seat Ø21 (press), and a
 Ø25 x 7 peg for the 6805 bore (printed shaft, press). Front row (y = 11):
-planet pin Ø6 (press), bushing Ø8 (press), dowel Ø6.1 (slip), M3 Ø3.3 and
+planet pin Ø6 (press_pin), bushing Ø8 (press), dowel Ø6.1 (slip), M3 Ø3.3 and
 M5 Ø5.3 (clearance), the 8 mm M5 nut slot (slip), M3 and M5 threaded-insert
 holes (heat-set in FDM, bonded in resin; the M5 insert stands 3.5 proud of
 the 6 mm plate), and a Ø12 x 5 peg for the 6801 bore (printed shaft, press).
@@ -40,7 +40,7 @@ def fit_coupon_body():
     hex_r = hex_socket_r(params.OUTPUT_HEX_SOCKET_R, FIT.hex_socket)
     body -= bd.Pos(60.0, BACK_Y, 0) * bd.extrude(bd.RegularPolygon(hex_r, 6), T)
     body += _cyl(shaft(params.OUTPUT_SHAFT_D, FIT.press_shaft), 155.0, BACK_Y, T, T + 7.0)
-    for d, x in ((hole(6.0, FIT.press), 10.0), (hole(8.0, FIT.press), 24.0), (hole(6.1, FIT.slip), 38.0),
+    for d, x in ((hole(6.0, FIT.press_pin), 10.0), (hole(8.0, FIT.press), 24.0), (hole(6.1, FIT.slip), 38.0),
                  (FIT.m3_clear, 52.0), (FIT.m5_clear, 66.0), (FIT.insert_m3, 106.0), (FIT.insert_m5, 122.0)):
         body -= _cyl(d, x, FRONT_Y, 0, T)
     nut_w = hole(8.0, FIT.slip)

@@ -7,5 +7,5 @@
     "Washed and post-cured as for the coupons. A new resin, printer or post-cure needs a new coupon."
   ],
   "default": "GREY_V5",
-  "profiles": {"GREY_V5": {"base": "RESIN", "press": 0.10}}
+  "profiles": {"GREY_V5": {"base": "RESIN", "press": 0.10, "press_pin": 0.10}}
 }
