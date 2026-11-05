@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-Course materials for **14:125:444 Smart Prosthetics and Robotic Systems** (Rutgers BME senior elective, instructor Dr. Adam Gormley). It is a documentation/content repo, not a software project: there is no build, lint, or test tooling. The `.gitignore` is the stock Python template, anticipating future Python code.
+Course materials for **14:125:444 Smart Prosthetics and Robotic Systems** (Rutgers BME senior elective, instructor Dr. Adam Gormley). It is mainly a documentation/content repo: outside `website/` and `CAD/` there is no build, lint, or test tooling. The root `.gitignore` is the stock Python template.
 
 Students build a multi-axis robotic arm (Arduino + Python, machine vision via OpenCV/Roboflow, natural-language control via an LLM API). The course is being updated for **Spring 2027** (Tuesdays, 2–5 PM); see the note in `README.md`.
 
@@ -16,6 +16,8 @@ Students build a multi-axis robotic arm (Arduino + Python, machine vision via Op
 - `inventory.md` — purchased-parts inventory from the Amazon order history, linked to the CAD parts, with per-arm counts and a 9-set count for 40 students (8 teams of 5 plus a spare set); §6 lists spares that are not in the CAD. `inventory.xlsx` is the counting sheet built from it (same rows, plus Actual count and To order columns); keep the two in step when items change.
 - `CAD/` — text-to-cad project for the robotic arm (`CAD/README.md`: layout and how to print). `src/` holds the Python models (catalog in `CAD/src/README.md`), `tools/print_parts.py` builds print sets into `tmp/print/` from the configs in `print_configs/`, `STEP/` the generated outputs (committed so students can use them without cadgen), `STEP/imported/fusion/` the original Fusion 360 exports (belt drive arm, joints 1–2, two-stage 16:1 planetary gearbox) that serve as the replica reference, and `STEP/imported/vendor/` the step.parts downloads. Earlier Fusion 360 `.f3z` versions remain in git history.
 - `CAD/docs/claude-code-guide.md` — user guide for preparing prints and editing parts with Claude Code (how the project works, example prompts); keep it in step with the print tool and the CAD rules below.
+- `CAD/docs/assembly-guide.md` — illustrated, step-by-step guide to building the arm from parts (gearbox chapter so far). Its pictures in `CAD/docs/img/assembly/` come from `CAD/tools/render_assembly.py` and a step list per chapter in `CAD/tools/assembly_steps/`; check a chapter with `CAD/checks/assembly_steps.py`. Re-render when a design change affects them.
+- `website/` — course site (Astro static, same stack as the drug delivery site; `website/README.md`), deployed to GitHub Pages at https://gormleylab.github.io/AI-robotics-course/ by `.github/workflows/site.yml` on pushes to `main`. Its assembly page renders `CAD/docs/assembly-guide.md` directly, with TA review forms from `website/src/data/review-questions.json`; if a step is added, removed or renumbered, update that file too or the build fails. Returned review files name the TA: don't commit them, because this repo is public.
 - `CAD/docs/design.md` — design documentation for the Fusion baseline: parts, interfaces, gear and belt data, issue log. `CAD/docs/migration-log.md` tracks the multi-session Fusion → text-to-cad migration; read its "Next session" section before continuing.
 
 ## CAD work (text-to-cad plugin)

@@ -1,0 +1,79 @@
+{
+  "reviewer": [
+    { "id": "name", "label": "Your name", "type": "text" },
+    { "id": "started", "label": "Date you started the build", "type": "date" },
+    { "id": "printer", "label": "Printer and material", "type": "text", "hint": "e.g. Form 4, Grey V5" },
+    { "id": "config", "label": "Print config used, from CAD/print_configs", "type": "text" }
+  ],
+  "steps": {
+    "0": [
+      { "id": "misfit", "label": "Which parts were warped, cracked, or far off in a dry fit? Reprinted any?", "type": "long" }
+    ],
+    "1": [
+      { "id": "method", "label": "How did you install the inserts?", "type": "choice", "options": ["Heat-set", "Epoxy", "Something else"] },
+      { "id": "short", "label": "Did the M3S × 4 short inserts fit the back cover's 4.5 mm holes?", "type": "choice", "options": ["Yes", "No", "Didn't have them"] }
+    ],
+    "2": [
+      { "id": "press", "label": "How did the bushings press in, and did any crack a planet?", "type": "long" },
+      { "id": "pin", "label": "Did a pin still slide and turn freely in every pressed bushing?", "type": "choice", "options": ["Yes, all six", "Some were tight", "No"] }
+    ],
+    "3": [
+      { "id": "screw", "label": "Which carrier screw did you actually use? Type and length.", "type": "text", "hint": "The guide assumes M3 × 10 button head" },
+      { "id": "thread", "label": "Did the screw cut its thread through the Ø2.8 hole without damage?", "type": "choice", "options": ["Yes", "It was very tight", "It cracked the part"] },
+      { "id": "bind", "label": "With the screws tight, do the planets spin freely? (The washer stack fills the 13.0 mm pocket exactly.)", "type": "choice", "options": ["Free, some end play", "Free, no end play", "Drag", "Bind"] }
+    ],
+    "4": [
+      { "id": "bind", "label": "With the screws tight, do the planets spin freely?", "type": "choice", "options": ["Free, some end play", "Free, no end play", "Drag", "Bind"] },
+      { "id": "sun", "label": "Were the stage-2 sun teeth easy to protect while pressing the pins?", "type": "choice", "options": ["Yes", "Awkward", "Damaged them"] }
+    ],
+    "5": [
+      { "id": "twist", "label": "How hard was it to twist the input shaft between the planets?", "type": "choice", "options": ["Easy", "Took some tries", "Very hard"] }
+    ],
+    "6": [
+      { "id": "direction", "label": "Was it clear which end of the ring gear goes up?", "type": "choice", "options": ["Yes", "No"] },
+      { "id": "ratio", "label": "Did the carrier turn about once per four input turns?", "type": "choice", "options": ["Yes", "No", "Couldn't tell"] }
+    ],
+    "7": [
+      { "id": "tries", "label": "How many attempts did this take?", "type": "number" },
+      { "id": "trick", "label": "What made it work? Any trick worth adding to the guide?", "type": "long" }
+    ],
+    "8": [
+      { "id": "grease", "label": "Which grease did you use?", "type": "text" },
+      { "id": "tight", "label": "Is there a tight spot that returns every turn?", "type": "choice", "options": ["No", "Yes, slight", "Yes, bad"] }
+    ],
+    "9": [
+      { "id": "screw", "label": "Which front cover screw did you use? Type and length.", "type": "text", "hint": "The guide assumes M3 × 12 button head" },
+      { "id": "free", "label": "Did the output still turn freely with the cover tight?", "type": "choice", "options": ["Yes", "Slightly tighter", "No"] }
+    ],
+    "10": [
+      { "id": "screw", "label": "Which back cover screw did you use? Type and length.", "type": "text", "hint": "The guide assumes M3 × 16 button head" },
+      { "id": "free", "label": "Did the input still turn freely with the cover tight?", "type": "choice", "options": ["Yes", "Slightly tighter", "No"] }
+    ],
+    "11": [
+      { "id": "ratio", "label": "Over 16 input turns, how far did the output turn?", "type": "text", "hint": "Should be exactly one turn, same direction" },
+      { "id": "effort", "label": "How does the gearbox feel, turned by hand at the input?", "type": "long" }
+    ],
+    "12": [
+      { "id": "size", "label": "Which set screw did you use?", "type": "text", "hint": "The guide assumes M4 × 5" },
+      { "id": "grip", "label": "Did it grip the Ø4.0 hole?", "type": "choice", "options": ["Yes, firmly", "Loosely", "No, it spun free"] }
+    ],
+    "13": [
+      { "id": "connector", "label": "Which way did you point the motor connector, relative to the access slot, and why?", "type": "long" }
+    ],
+    "14": [
+      { "id": "length", "label": "Did you have M3 × 18 and M3 × 22 screws, and did they fit as described?", "type": "choice", "options": ["Yes", "Had to use other lengths"] }
+    ],
+    "15": [
+      { "id": "reach", "label": "Could you reach the set screw through the access slot?", "type": "choice", "options": ["Yes, easily", "With difficulty", "No"] },
+      { "id": "slip", "label": "Does the motor shaft slip in the input shaft when you try the output by hand?", "type": "choice", "options": ["No slip", "Slips"] }
+    ]
+  },
+  "overall": [
+    { "id": "backlash", "label": "How much backlash does the finished gearbox have at the output?", "type": "long" },
+    { "id": "hardest", "label": "What was the hardest part of this chapter?", "type": "long" },
+    { "id": "student", "label": "Could a team of students do this unaided? What would they need that the guide doesn't give them?", "type": "long" },
+    { "id": "design", "label": "What would you change about the design itself?", "type": "long" },
+    { "id": "missing", "label": "Tools or parts the guide didn't list, or lists wrongly", "type": "long" },
+    { "id": "hours", "label": "Total hands-on hours, not counting printing and curing", "type": "number" }
+  ]
+}
