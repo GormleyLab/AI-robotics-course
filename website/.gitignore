@@ -2,3 +2,5 @@ node_modules/
 dist/
 .astro/
 qa/out/
+# The root .gitignore's Python template ignores every lib/ folder.
+!src/lib/
