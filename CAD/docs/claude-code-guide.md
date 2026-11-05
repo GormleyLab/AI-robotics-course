@@ -374,7 +374,7 @@ and whether it bowed on the printer or after post-processing:
   insert while it cures, so no glue gets into the threads.
 - The full bonding steps, and how to press in the bushings, are in
   [design.md §6, Assembly notes](design.md#assembly-notes-for-the-build-guide),
-  which will feed the arm's build guide.
+  which feeds the arm's [assembly guide](assembly-guide.md).
 - Two parts have thin walls around their insert holes in resin: the `Wall`
   (about 1.1 mm) and the ring gear (about 0.85 mm). Print them in a tough
   resin if a standard resin cracks there.
@@ -506,7 +506,9 @@ materially.
 - **Snapshots:** Claude renders images to check its own work, and you can ask
   for one: *"Render the belt arm from above."*
 - **Committed images:** `CAD/docs/img/` holds the images used in the docs; they
-  are re-rendered when the design changes.
+  are re-rendered when the design changes. The [assembly guide](assembly-guide.md)'s
+  pictures are built by `tools/render_assembly.py` from a step list in
+  `tools/assembly_steps/`: *"Re-render the gearbox assembly pictures."*
 
 ---
 

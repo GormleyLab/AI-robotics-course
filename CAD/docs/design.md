@@ -160,7 +160,7 @@ Face width is 9 (planets). Hands: the ring and planets are right-hand (the tooth
 
 | Part | Qty | Make | Envelope | Key features |
 |---|---|---|---|---|
-| `Ring gear` | 1 | Print | Ø85 × 47 | 45T internal, m1.5, runs both stages. Ø72 × 7.7 counterbore at the motor end. The counterbore's and the relief groove's 45° chamfers trim the tooth tips 0.05 deep (I‑24). 6 × M3 heat-set insert holes Ø4.2 × 10 at r = 39.25 in **both** end faces (30° + 60k). |
+| `Ring gear` | 1 | Print | Ø85 × 47 | 45T internal, m1.5, runs both stages. Ø72 × 7.7 counterbore at the output (front cover) end. The counterbore's and the relief groove's 45° chamfers trim the tooth tips 0.05 deep (I‑24). 6 × M3 heat-set insert holes Ø4.2 × 10 at r = 39.25 in **both** end faces (30° + 60k). |
 | `Back cover v2` | 1 | Print | Ø85 × 14 | Ø72 pilot into the ring. Ø26 seat (17×26×5 bearing). 6 × M3 Ø3.3 on r = 39.25 with Ø7.5 × 3.2 pockets that run out radially to the rim as open U-slots. Ø72 × 7 recess for the stage‑1 carrier. 4 × M3 inserts Ø4.2 × 4.5 on a 33 × 48 rectangle for `NEMA17 mount`, for the short ruthex M3S × 4.0 (I‑22; Fusion Ø4.2 × 6). |
 | `NEMA17 thicker mount` | 1 | Print | 41 × 56 × 18 | Gearbox z 14–32, so the motor face is at z 32 (Fusion `NEMA17 mount`: 41 × 56 × 10, face at z 24; I‑25). Motor 31 × 31 M3 pattern (Ø3.3), screwed from the back-cover side through Ø7 × 3 counterbores. Ø24 boss bore. 4 × Ø3.3 on 33 × 48 to the back-cover inserts. Ø7 radial access hole from −X at the set screw's z 16.8, run out through the cover face as an open U-slot (I‑26; Fusion z 19.5). Replica reference: `STEP/imported/fusion/NEMA17_thicker_mount.step`. |
 | `Input shaft v5` | 1 | Print | Ø25.5 × 36.4 | 15T sun, 10 wide. Journals Ø11.94 (12×21×5 bearing) and Ø16.94 (17×26×5 bearing). Ø5.3 motor bore; Ø4 cross hole for a set screw. |
@@ -346,8 +346,11 @@ carrier Ø32.5 bore, motor pilot slot), and gear teeth (I‑3, accepted). The
 
 ### Assembly notes (for the build guide)
 
-How the fits above are meant to be assembled. These notes are the source for
-the arm's build guide; add to them as assembly experience comes in.
+How the fits above are meant to be assembled. These notes are a source for
+the arm's [assembly guide](assembly-guide.md); add to them as assembly experience
+comes in. The gearbox's build order comes from the design's
+[source article](https://howtomechatronics.com/how-it-works/how-planetary-gears-work-3d-printed-planetary-gearbox-design-and-test/);
+what it leaves open is listed at the end of that guide's gearbox chapter.
 
 **Threaded inserts in resin parts (bonded).** Cured resin doesn't melt, so
 heat-set inserts don't work in it. Resin parts take the same ruthex inserts
