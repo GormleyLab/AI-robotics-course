@@ -265,6 +265,9 @@ y = 3.5 / 76.5 and z = 3.5 / 40.5), which form the 73 × 37 link interface.
 | 6805 bearing 25×37×7 | 2 | Buy | | J3 |
 | NEMA17, 20 mm shaft | 1 | Buy | | 48 mm body (`purchased/nema17.py`, I‑19). Segment 2 (J4): a 20 mm pancake NEMA17 instead (`purchased/nema17_pancake.py`, I‑18) |
 | GT2 closed belt, 6 mm | 2 | Buy | | ~280 mm *(inferred)* |
+| M3 × 10 button head (plates → Wall) | 14 | Buy | | Head seat 4 mm from the Wall, then through the 5.7 mm insert. Length calculated |
+| M3 × 8 button head (motor) | 4 | Buy | | 4 mm of `Base`, then 4 mm into the motor. Length calculated |
+| M3 × 25 button head (IF‑8, segment to coupling or Output block) | 4 | Buy | | Per link face. Coupling: 20 mm, then 5 mm into the 5.7 mm insert. Output block: 17 mm, then the full insert, 2.2 mm short of the 10 mm hole's floor. Length calculated |
 
 Segment 2 (J4) is an identical copy of this segment, except that J4 is driven by a pancake NEMA17 (I‑18): it is lighter, and J4 needs less torque. The full arm builds it with `segment_parts(pancake=True)`.
 
@@ -406,6 +409,34 @@ parts; the guide's [Chapter 2](assembly-2-base-joint1.md) and [Chapter 3](assemb
   I‑10). The holes at −30°, 90° and 210° are clear of the block with the coupling square;
   those at 30° and 150° are clear at about 40° (checked on the STEPs; the five are only
   all clear together in a window of a few degrees around ±30°).
+
+**Segment and final assembly order (worked out from the CAD, 2026‑11‑06).** Not yet followed
+on real parts; the guide's [Chapter 4](assembly-4-arm-segments.md) and [Chapter 5](assembly-5-final.md) carry the steps and open items. What sets the order:
+
+- The Wall has a right way round, although its screw pattern is symmetric: the jack-screw rail
+  goes on the side 20 mm from the idler slots (15 mm on the other side), with the motor-end
+  jack hole high and the joint-end hole low.
+- The Output block's slot is off-centre: the thick prong (z 8.2–21.7) goes toward the `Base`.
+- The output pulley goes into the slot before Pin 1, whose tip reaches 0.5 mm into the slot; passing
+  it would need all of the slot's 0.5 mm of play. The belt goes on the pulley first.
+- Pin 1 only just enters the pulley, so Pin 2, fitted after the `Top`, is what keys it.
+  Each Pin's journal stops against the block's boss, about 3 mm of flange gap, with no load through the plates.
+- The motor pulley can't be seen with the `Top` on, so the ratio is checked before closing:
+  4 motor turns = about 90° at the block.
+- The block with its bosses (30.0) exactly fills the space between flush 6805 inner races, and the
+  dowel (30.0) exactly fills the space between its sockets' floors. Not logged as issues: both may be fine with
+  real prints. The dual pulley also has 3.6 mm of end float on its dowel, as in Fusion.
+- The I‑15 pulley height (12 mm from the motor face) puts a set screw on a hub toward the motor at
+  about 8.5 mm from the face, if the hub is about 7 mm (not measured), which is on the round part of the shaft
+  (about 10 mm, I‑25). The guide asks the TA to report where it lands.
+- With the coupling square, a short-armed key reaches all four coupling screws from below, its long arm
+  out along y under the block's rounded end (checked on the STEPs: the long arm clears at swings from −45° to 75°).
+  A straight driver needs J2 at about ±45° for two screws at a time. A straight driver reaches the Output block's
+  four screws at any J3 tried, about 10° off straight.
+- Segment 1 lowers straight down between the cheeks, with its motor clear of the shorter cheek (checked to
+  80 mm of lift). The other way round the motor hits the gearbox (§7).
+- Segment 1 goes on the base first, then segment 2 onto its Output block (instructor, 2026‑11‑06). The screw
+  lengths in §4 stay calculated: the built arm's weren't recorded (instructor, 2026‑11‑06).
 
 ---
 

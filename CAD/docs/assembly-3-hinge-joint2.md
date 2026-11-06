@@ -2,7 +2,7 @@
 
 **14:125:444 Smart Prosthetics and Robotic Systems** — Dr. Adam Gormley
 
-[Assembly guide](assembly-guide.md) · [← Chapter 2: Base and joint 1](assembly-2-base-joint1.md)
+[Assembly guide](assembly-guide.md) · [← Chapter 2: Base and joint 1](assembly-2-base-joint1.md) · [Chapter 4: Belt-drive arm segments →](assembly-4-arm-segments.md)
 
 ---
 
@@ -170,8 +170,10 @@ because the motor's shaft is out of reach and the coupling can't make a full tur
 - **Joint 1:** turn the hinge about **120° either way**. The gearbox swings over the box
   without touching anything. It meets the J1 motor at about 125°, so don't go further.
 
-**The base and shoulder are finished.** Arm segment 1 bolts to the coupling's top face in
-Chapter 4. On the finished arm, joint 2's travel is about ±63°, set by the segment's motor.
+**The base and shoulder are finished.** Arm segment 1, built in
+[Chapter 4](assembly-4-arm-segments.md), bolts to the coupling's top face in
+[Chapter 5](assembly-5-final.md). On the finished arm, joint 2's travel is about ±63°, set by
+the segment's motor.
 
 ## Open items: hinge and joint 2
 

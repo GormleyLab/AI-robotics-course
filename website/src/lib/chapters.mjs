@@ -25,4 +25,20 @@ export const chapters = [
     steps: "Steps 27–33",
     blurb: "The coupling shaft between the hinge's cheeks, and the gearbox bolted on to drive it.",
   },
+  {
+    slug: "arm-segments",
+    file: "assembly-4-arm-segments.md",
+    number: 4,
+    title: "Belt-drive arm segments",
+    steps: "Steps 34–48",
+    blurb: "The two segments, each with its motor, two belts, idlers and output block.",
+  },
+  {
+    slug: "final-assembly",
+    file: "assembly-5-final.md",
+    number: 5,
+    title: "Final assembly",
+    steps: "Steps 49–52",
+    blurb: "Both segments bolted on in line, and a check of all four joints.",
+  },
 ];

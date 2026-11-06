@@ -132,6 +132,80 @@
       { "id": "j2", "label": "How does joint 2 feel, turned by hand?", "type": "choice", "options": ["Smooth", "Tight spot", "Stiff all the way", "Bind"] },
       { "id": "loosen", "label": "If it was stiff, did easing the five screws help?", "type": "choice", "options": ["It wasn't stiff", "Yes", "No"] },
       { "id": "j1", "label": "How far does the hinge turn each way with the gearbox on?", "type": "text", "hint": "The CAD says about ±124°" }
+    ],
+    "34": [
+      { "id": "nut", "label": "Did the M5 nut slide in the top plate's slot without turning?", "type": "choice", "options": ["Yes", "Tight", "Loose, it can turn"] },
+      { "id": "hex", "label": "Did the pin's hex enter both sockets?", "type": "choice", "options": ["Yes", "Tight", "No"] }
+    ],
+    "35": [
+      { "id": "ends", "label": "Did the end-face inserts bulge or crack the plates?", "type": "choice", "options": ["No", "A slight bulge", "Cracked"] },
+      { "id": "count", "label": "Did you need all 20 inserts?", "type": "text", "hint": "Wall 16, plates 2 each" }
+    ],
+    "36": [
+      { "id": "turns", "label": "Did the dowel still turn freely in both bushings?", "type": "choice", "options": ["Yes", "Tight", "No"] }
+    ],
+    "37": [
+      { "id": "flush", "label": "Did the bearings stop flush with both faces?", "type": "choice", "options": ["Yes", "One stood proud", "Pressed too far"] }
+    ],
+    "38": [
+      { "id": "way", "label": "Was it clear which way round the wall goes?", "type": "choice", "options": ["Yes", "Only after checking", "No, I fitted it the wrong way"] },
+      { "id": "length", "label": "Did M3 × 10 suit the plate screws?", "type": "choice", "options": ["Yes", "Too short", "Too long"] }
+    ],
+    "39": [
+      { "id": "setscrew", "label": "Where did the pulley's set screw land on the shaft?", "type": "choice", "options": ["On the flat", "On the round part", "Partly on each"] },
+      { "id": "hub", "label": "How long is the pulley's hub, and did it clear the hole in the base?", "type": "text" },
+      { "id": "length", "label": "Did M3 × 8 suit the motor screws?", "type": "choice", "options": ["Yes", "Too short", "Too long"] }
+    ],
+    "40": [
+      { "id": "belt", "label": "Could you get the pulley and belt into the fork's slot?", "type": "choice", "options": ["Yes, easily", "With difficulty", "No"] },
+      { "id": "pin", "label": "How did the pin go in?", "type": "choice", "options": ["By hand", "With the clamp", "Wouldn't go"] },
+      { "id": "gap", "label": "How big is the gap under the flange?", "type": "text", "hint": "Should be about 3 mm" }
+    ],
+    "41": [
+      { "id": "belts", "label": "Do both belts sit level between the flanges?", "type": "choice", "options": ["Yes", "One rides a flange", "Both ride a flange"] }
+    ],
+    "42": [
+      { "id": "ratio", "label": "How far did the block turn for 4 turns of the motor's pulley?", "type": "text", "hint": "Should be about 90°" },
+      { "id": "stacks", "label": "Was it clear which spacer goes where?", "type": "choice", "options": ["Yes", "Only after checking", "No"] }
+    ],
+    "43": [
+      { "id": "close", "label": "How hard was it to get the top plate on over everything?", "type": "long" },
+      { "id": "bind", "label": "Does the block turn freely with the top plate on?", "type": "choice", "options": ["Yes", "Stiff", "Bind"] }
+    ],
+    "44": [
+      { "id": "pin", "label": "How did the second pin go in?", "type": "choice", "options": ["By hand", "With the clamp", "Wouldn't go"] },
+      { "id": "stays", "label": "Do the pins stay in when you pull on them lightly?", "type": "choice", "options": ["Yes", "A bit loose", "They come out"] }
+    ],
+    "45": [
+      { "id": "square", "label": "Did the jack screws thread in square and easily?", "type": "choice", "options": ["Yes", "Tight", "Crooked"] }
+    ],
+    "46": [
+      { "id": "travel", "label": "About how far did each idler move from the slack end?", "type": "text", "hint": "A 280 mm belt should be about 14 mm" },
+      { "id": "tension", "label": "How much did each belt deflect when pressed, and did either skip?", "type": "text" },
+      { "id": "creep", "label": "Did the idler move while you tightened the M5?", "type": "choice", "options": ["No", "A little", "Yes, a lot"] }
+    ],
+    "47": [
+      { "id": "travel", "label": "How far does the block turn each way?", "type": "text", "hint": "The CAD says −94° to +103°" },
+      { "id": "feel", "label": "How does it feel, turned by hand?", "type": "choice", "options": ["Smooth", "Tight spot", "Stiff all the way", "Bind"] }
+    ],
+    "48": [
+      { "id": "shaft", "label": "How long is the pancake motor's shaft, from its face to its tip?", "type": "text" },
+      { "id": "changes", "label": "What was different the second time?", "type": "long" }
+    ],
+    "49": [
+      { "id": "hold", "label": "How did you fasten the base and hold the arm up?", "type": "long" }
+    ],
+    "50": [
+      { "id": "reach", "label": "Could you reach all four screws with the short-armed key?", "type": "choice", "options": ["Yes, easily", "With difficulty", "No"] },
+      { "id": "length", "label": "Did M3 × 25 suit these screws?", "type": "choice", "options": ["Yes", "Too short", "Too long"] }
+    ],
+    "51": [
+      { "id": "reach", "label": "Could you reach all four screws with the ball-end key?", "type": "choice", "options": ["Yes, easily", "With difficulty", "No"] },
+      { "id": "length", "label": "Did M3 × 25 suit these screws?", "type": "choice", "options": ["Yes", "Too short", "Too long"] }
+    ],
+    "52": [
+      { "id": "travel", "label": "How far does each joint turn each way?", "type": "long", "hint": "The CAD says J1 ±124°, J2 ±63°, J3 and J4 −94° to +103°" },
+      { "id": "falls", "label": "What does the arm do when you let go of it, with no power?", "type": "long" }
     ]
   },
   "chapterOverall": {
@@ -143,6 +217,13 @@
     ],
     "hinge-joint-2": [
       { "id": "play", "label": "How much play does joint 2 have at the coupling, turning it back and forth?", "type": "long" }
+    ],
+    "arm-segments": [
+      { "id": "tensioning", "label": "Is belt tensioning easier with the jack screws than on the arms you've built before?", "type": "long" },
+      { "id": "play", "label": "How much play does each segment have at the output block?", "type": "long" }
+    ],
+    "final-assembly": [
+      { "id": "safety", "label": "Did anything feel unsafe, or risk dropping the arm?", "type": "long" }
     ]
   },
   "overall": [

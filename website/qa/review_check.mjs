@@ -45,6 +45,8 @@ const PAGES = [
   { path: "gearbox/", forms: 17, pictures: 29 },
   { path: "base-joint-1/", forms: 12, pictures: 17 },
   { path: "hinge-joint-2/", forms: 8, pictures: 11 },
+  { path: "arm-segments/", forms: 16, pictures: 24 },
+  { path: "final-assembly/", forms: 5, pictures: 6 },
 ];
 const crossLinks = [];
 for (const { path, forms, pictures } of PAGES) {
@@ -96,7 +98,7 @@ await page.check('input[data-key="step3.fix"][value="Part design"]');
 await page.check('input[data-key="step3.fix"][value="Picture"]');
 await page.fill('[data-key="step3.notes"]', tricky);
 await page.fill('[data-key="step7.tries"]', "4");
-check((await page.textContent("#review-status")).includes("1 of 34"), "the bar counts reviewed steps");
+check((await page.textContent("#review-status")).includes("1 of 53"), "the bar counts reviewed steps");
 
 // Another chapter's answers go in the same store, even from a tab opened before this one saved.
 const other = await context.newPage();
@@ -106,7 +108,7 @@ await other.check('input[data-key="step17.status"][value="Worked as written"]');
 await page.reload();
 check(await page.inputValue('[data-key="step7.trick"]') === "from the first tab", "a second tab doesn't overwrite the first");
 await other.close();
-check((await page.textContent("#review-status")).includes("2 of 34"), "the count covers every chapter");
+check((await page.textContent("#review-status")).includes("2 of 53"), "the count covers every chapter");
 
 const step3 = page.locator('[data-review-slot="3"]');
 await step3.scrollIntoViewIfNeeded();

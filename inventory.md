@@ -59,10 +59,10 @@ Per-arm counts are approximate: design.md does not record every screw length (§
 
 | Item | ASIN | Bought | Spent | CAD part / use | Per arm | 9 sets |
 |---|---|---|---|---|---|---|
-| ruthex M3 × 5.7 heat-set insert (100-pack) | [B08BCRZZS3](https://www.amazon.com/dp/B08BCRZZS3) | 6 packs = **600** | $58.44 | `FIT.insert_m3`: ring gear (12), carrier plates (6), Wall (9 per segment), Base/Top proximal (4 per segment). The back cover takes the short M3 × 4 (note below) | ~44 | ~396 |
+| ruthex M3 × 5.7 heat-set insert (100-pack) | [B08BCRZZS3](https://www.amazon.com/dp/B08BCRZZS3) | 6 packs = **600** | $58.44 | `FIT.insert_m3`: ring gear (12), carrier plates (6), Wall (16 per segment: one at each end of 7 through holes, plus 2 jack screws), Base/Top proximal (4 per segment). The back cover takes the short M3 × 4 (note below) | 58 | 522 |
 | ruthex M5 × 9.5 heat-set insert (50-pack) | [B07YSVXWS8](https://www.amazon.com/dp/B07YSVXWS8) | **50** | $9.99 | `FIT.insert_m5`: box bottom (7) | 7 | 63 |
 | FFVRVSS brass insert assortment M2–M5 (328 pc) with heat-set tool | [B0FH4JQ3VB](https://www.amazon.com/dp/B0FH4JQ3VB) | 1 kit | $6.92 | Insert tips for soldering irons; spare inserts | — | — |
-| J-B Weld Original steel-reinforced epoxy, 8265S (2-pack) | [B0B5VNG2YT](https://www.amazon.com/dp/B0B5VNG2YT) | 1 pack = **2** | $8.29 | Bonds the threaded inserts in resin parts (`RESIN` holes Ø4.8 / Ø7.3; slow cure, 4–6 h set). Procedure: CAD/docs/design.md §6, Assembly notes. Not needed for PLA parts (heat-set) | A few mL (~51 inserts) | 2 |
+| J-B Weld Original steel-reinforced epoxy, 8265S (2-pack) | [B0B5VNG2YT](https://www.amazon.com/dp/B0B5VNG2YT) | 1 pack = **2** | $8.29 | Bonds the threaded inserts in resin parts (`RESIN` holes Ø4.8 / Ø7.3; slow cure, 4–6 h set). Procedure: CAD/docs/design.md §6, Assembly notes. Not needed for PLA parts (heat-set) | A few mL (~69 inserts) | 2 |
 | iexcell M3 × 8 button head, 12.9 (100-pack) | [B0CP4B16KF](https://www.amazon.com/dp/B0CP4B16KF) | 2 packs = **200** | $17.72 | M3 screws (lengths not recorded) | ~75 M3 screws in total, mixed lengths: motors (4 × 4), gearbox covers, mount and carriers (~22), segment plates (14 per segment), link interfaces (4 × 3) | ~675 |
 | iexcell M3 × 10 button head, 12.9 (100-pack) | [B0CP4BLD7Z](https://www.amazon.com/dp/B0CP4BLD7Z) | **100** | $8.86 | ″ | ″ | ″ |
 | iexcell M3 × 12 button head, 12.9 (100-pack) | [B0CP4B65CC](https://www.amazon.com/dp/B0CP4B65CC) | 2 packs = **200** | $17.72 | ″ | ″ | ″ |
@@ -79,7 +79,7 @@ Per-arm counts are approximate: design.md does not record every screw length (§
 >
 > **M5 × 40 button head:** 25 more (one pack, [B0GJJBQDCD](https://www.amazon.com/dp/B0GJJBQDCD)). The J1 clamp uses this length, so 9 sets need 72 against 50 bought.
 >
-> **M3 × 20 button head**, 5 per set (gearbox to hinge), and **M5 × 20 button head**, 7 per set (box): check the Kadrick assortments for both before ordering.
+> **M3 × 20 button head**, 5 per set (gearbox to hinge), **M3 × 25 button head**, 8 per set (link interfaces), and **M5 × 20 button head**, 7 per set (box): check the Kadrick assortments for these before ordering. The segments also use M3 × 10 (28 per set, plates to Wall) and M3 × 8 (8 per set, motors to Base), which are stocked.
 >
 > **Screws for the NEMA17 mount** (the 18 mm thicker mount, design.md I‑25), 4 + 4 per set. **Mount → back cover: M3 × 22.** The screw runs from the mount's motor face through the 18 mm plate into the cover, so M3 × 22 takes the full 4 mm insert and stops 0.5 mm short of the hole floor. M3 × 25 would bottom out on the floor; M3 × 20 engages only 2 mm. **Mount → motor: M3 × 18**, from the Ø7 counterbores on the cover side through 15 mm of plate, 3 mm into the motor (M3 × 20 would reach 5 mm, past a typical 4.5 mm NEMA17 tapping). Check the Kadrick M3 assortment for both lengths before ordering.
 
