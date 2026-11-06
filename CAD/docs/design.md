@@ -123,7 +123,10 @@ candidate for gears and pulleys in the redesign.
 | 6805 bearing 25×37×7 | 2 | Buy | | In the hinge cheeks (J2) |
 | NEMA17 + GT2 20T 5 mm bore (J1) | 1 | Buy | | Not in Fusion. Added in the recreation (Session 4): mounting face on `Box top`, at x = 158.04 for the 370 mm belt (Session 4–7: mid-slot, x = 150; I‑14), 20T band centred on the 160T band (z −12…−4) |
 | GT2 closed belt, 6 mm (J1) | 1 | Buy | | Pitch length 340–373 over the slot range (356 at mid-slot). Use 370–372 mm (185–186 T; to be ordered, see `inventory.md` §1), so the motor sits at x ≥ 158.0 and J1 clears ±124° (366 / 368 mm: ±122° / ±123° with the 48 mm motor, I‑19) (I‑4, I‑14; §2 Load path item 2). Modelled: 370 mm |
-| M5 bolts + inserts, M3 screws | — | Buy | | Lengths not recorded |
+| M5 × 40 button head + M5 nut (J1 clamp) | 4 + 4 | Buy | | Head in the hinge's Ø12 counterbore (z 23), nut under the pulley (z −13…−17.7), about 0.3 above the 608 seat. M5 × 45 would hit the 608 (instructor, 2026‑11‑06; Q2) |
+| M5 × 20 button head + M5 × 9.5 insert (box) | 7 + 7 | Buy | | 12 mm of `Box top`, then 8 mm into the 10.5 mm insert hole. Length calculated |
+| M3 × 16 button head (J1 motor) | 4 | Buy | | 12 mm of `Box top`, then 4 mm into the motor. Length calculated |
+| M3 × 20 button head (gearbox → hinge) | 5 | Buy | | Head at x = 44, through the cheek and front cover, full length of the ring's 5.7 mm insert (instructor, 2026‑11‑06) |
 
 ---
 
@@ -381,6 +384,29 @@ press, not a hammer, keeping the bushing square to the bore; the planets are
 turns freely through the full length of the bushing: a bushing pressed too
 hard closes its bore.
 
+**J1 stack and J2 order (worked out from the CAD, 2026‑11‑06; the instructor
+confirmed the J1 clamp and the gearbox-to-hinge screws).** Not yet followed on real
+parts; the guide's Chapters 2 and 3 carry the steps and open items. What sets the order:
+
+- The J1 stack goes together from the pulley up. It is exactly as tall as the hinge shaft
+  (13 + 7 + 13 = 33 mm), so a thick print binds it when clamped; the shaft's end must not be
+  sanded.
+- The `Box top` 6807 seat and both hinge 6805 seats are through holes with no shoulder.
+  A flat surface or plate is what stops the bearing, flush.
+- The left-cheek 6805 goes in before the stack, while the hinge still fits in a vise.
+- The coupling goes in before the gearbox. Bolted on, the hex tip reaches x = 66.8,
+  leaving 35.2 mm for the 44 mm block.
+- The coupling (56.0 mm) is exactly as long as the gap between the cheeks, and tilting makes
+  it worse at any practical angle (checked on the STEPs), so a cheek has to flex a little
+  during insertion, about 1 mm (flex confirmed by the instructor, 2026‑11‑06; not yet tried in resin).
+  The right seat stays empty until it is in. The right 6805 then goes in with the block held
+  against the left cheek, and a Ø24 spacer through the left 6805 presses the stub home.
+- Five of the front cover's M3 × 12 screws come out and M3 × 20 go into the same inserts
+  from inside the cheek. The sixth stays at the hinge's blind position (gearbox angle 90°,
+  I‑10). The holes at −30°, 90° and 210° are clear of the block with the coupling square;
+  those at 30° and 150° are clear at about 40° (checked on the STEPs; the five are only
+  all clear together in a window of a few degrees around ±30°).
+
 ---
 
 ## 7. Coordinate frames for the rewrite
@@ -439,9 +465,9 @@ the last offering are marked 🔧.
 
 ### Open questions (deferred)
 - Q1: The belt lengths actually bought, for J1 and the arm stages. J1 resolved (Session 7): the course stocks several GT2 6 mm loop lengths; use 366–372 mm (I‑14). The arm stages need about 280 mm (I‑4).
-- Q2: Where the nuts are for the hinge → GT2‑160 M5 bolts (both parts have only clearance holes).
+- Q2: Where the nuts are for the hinge → GT2‑160 M5 bolts (both parts have only clearance holes). Resolved (instructor, 2026‑11‑06): M5 × 40 button heads with a nut under the pulley (§2 Parts).
 - Q3: The idler part actually used (I‑5). Resolved (Session 7): a 5 mm bore idler on an M5 bolt, clamped by its head and a nut.
-- Q4: The Ø7.5 cover pockets are round counterbores that run out radially as open U-slots, not hex traps (resolved, Session 3). What sits in them, an M3 nut or a screw head, is still unknown.
+- Q4: The Ø7.5 cover pockets are round counterbores that run out radially as open U-slots, not hex traps (resolved, Session 3). What sits in them: the front cover's M3 × 12 screw heads until the gearbox goes on the hinge, then only the one at the hinge's blind position (instructor, 2026‑11‑06; assembly guide step 30).
 
 ---
 

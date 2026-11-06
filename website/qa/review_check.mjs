@@ -39,14 +39,14 @@ check(await page.locator("article h3").first().isVisible(), "the right password 
 
 // Every step has a form, and every picture loaded.
 await page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
-check(await page.locator("[data-review-slot]").count() === 17, "16 step forms and one overall form");
+check(await page.locator("[data-review-slot]").count() === 35, "34 step forms and one overall form");
 check(!(await page.locator("article h1").count()), "the guide's own title block is gone");
 const images = page.locator("article img");
 const pictures = await images.count();
 for (let i = 0; i < pictures; i++) await images.nth(i).scrollIntoViewIfNeeded();
 await page.waitForLoadState("networkidle");
 const broken = await images.evaluateAll((all) => all.filter((i) => !i.complete || !i.naturalWidth).map((i) => i.src));
-check(pictures === 29 && broken.length === 0, `all pictures load (${pictures}, broken ${broken.length})`);
+check(pictures === 57 && broken.length === 0, `all pictures load (${pictures}, broken ${broken.length})`);
 
 const hrefs = await page.locator("article a").evaluateAll((all) => all.map((a) => a.getAttribute("href")));
 const local = hrefs.filter((h) => !/^(https?:|#)/.test(h));
@@ -65,7 +65,7 @@ await page.check('input[data-key="step3.fix"][value="Picture"]');
 await page.fill('[data-key="step3.notes"]', tricky);
 await page.fill('[data-key="step7.tries"]', "4");
 await page.fill('[data-key="overall.hardest"]', "Step 7");
-check((await page.textContent("#review-status")).includes("1 of 16"), "the bar counts reviewed steps");
+check((await page.textContent("#review-status")).includes("1 of 34"), "the bar counts reviewed steps");
 
 const step3 = page.locator('[data-review-slot="3"]');
 await step3.scrollIntoViewIfNeeded();
@@ -81,7 +81,7 @@ const [download] = await Promise.all([page.waitForEvent("download"), page.click(
 const file = `${out}${download.suggestedFilename()}`;
 await download.saveAs(file);
 const text = fs.readFileSync(file, "utf8");
-check(/gearbox-review-\d{4}-\d\d-\d\d\.md$/.test(file), "the file has a dated name");
+check(/assembly-review-\d{4}-\d\d-\d\d\.md$/.test(file), "the file has a dated name");
 check(text.includes("## Step 3") && text.includes("**Which carrier screw") === false, "the file skips unanswered questions");
 check(text.includes("Part design, Picture") || text.includes("Picture, Part design"), "the file lists the ticks");
 check(/Guide revision \w+/.test(text), "the file records the guide revision");

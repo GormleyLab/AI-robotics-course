@@ -10,6 +10,11 @@
 - each printed model's count in the assembly equals its count in tools/print_parts.py;
 - the bought-part counts equal design.md's parts table;
 - every picture exists, and every picture the guide links does too.
+
+Chapters sharing one assembly (the joint chapters, whose assembly also holds the gearbox)
+name what they build in ``PARTS`` and what is already built in ``PREBUILT``. ``COVERAGE``
+lists every chapter part in the assembly, so a part can't fall between chapters, and
+``ALSO_COUNTED`` adds parts from another chapter to a bought part's count.
 """
 from __future__ import annotations
 
@@ -28,7 +33,10 @@ for extra in (ROOT, ROOT / "tools"):
 from checks.scene import read_scene
 
 # Assembly model -> its row in design.md's parts table.
-BOUGHT = {"gearbox": {"planet_pin": "Pin 6x11mm", "bushing": "Bushing 8mm", "washer": "Washer 6mm"}}
+BOUGHT = {"gearbox": {"planet_pin": "Pin 6x11mm", "bushing": "Bushing 8mm", "washer": "Washer 6mm"},
+          "joint1": {"thrust_bearing": "Thrust bearing 40×60×13", "bearing_6807": "6807 bearing 35×47×7",
+                     "bearing_608": "608 bearing 8×22×7"},
+          "joint2": {"bearing_6805": "6805 bearing 25×37×7"}}
 
 
 def printed_counts() -> dict[str, int]:
@@ -41,8 +49,13 @@ def printed_counts() -> dict[str, int]:
 
 def main(name: str) -> int:
     chapter = importlib.import_module(f"assembly_steps.{name}")
-    labels = [leaf.label for leaf in read_scene(str(ROOT / chapter.ASSEMBLY)).leaves()]
+    every = [leaf.label for leaf in read_scene(str(ROOT / chapter.ASSEMBLY)).leaves()]
+    scope = getattr(chapter, "PARTS", None)
+    labels = every if scope is None else [label for label in every if label in scope]
     problems: list[str] = []
+    if scope is not None:
+        problems += [f"named by {name} but not in the assembly: {label}" for label in scope if label not in every]
+        problems += [f"in no chapter: {label}" for label in every if label not in chapter.COVERAGE]
 
     numbered = [s for s in chapter.STEPS if s.number.isdigit()]
     adds = Counter(label for s in numbered for label in s.adds)
@@ -50,7 +63,7 @@ def main(name: str) -> int:
     problems += [f"never added: {label}" for label in labels if label not in adds]
     problems += [f"not in the assembly: {label}" for label in adds if label not in labels]
 
-    installed: set[str] = set()
+    installed: set[str] = set(getattr(chapter, "PREBUILT", ()))
     for step in numbered:
         for view in step.views:
             for label in view.built:
@@ -61,17 +74,18 @@ def main(name: str) -> int:
 
     printed = printed_counts()
     models = Counter(label.split(":")[0] for label in labels)
+    counted = models + Counter(label.split(":")[0] for label in getattr(chapter, "ALSO_COUNTED", ()))
     in_print_list = {m: n for m, n in models.items() if m in printed}
     problems += [f"{m}: {n} in the assembly, {printed[m]} in print_parts.py"
                  for m, n in in_print_list.items() if printed[m] != n]
 
     design = (ROOT / "docs" / "design.md").read_text(encoding="utf-8")
     for model, row in BOUGHT.get(name, {}).items():
-        match = re.search(rf"^\|\s*`{re.escape(row)}`\s*\|\s*(\d+)\s*\|", design, re.M)
+        match = re.search(rf"^\|\s*`?{re.escape(row)}`?\s*\|\s*(\d+)\s*\|", design, re.M)
         if not match:
             problems.append(f"design.md has no row for {row}")
-        elif int(match.group(1)) != models[model]:
-            problems.append(f"{model}: {models[model]} in the assembly, {match.group(1)} in design.md")
+        elif int(match.group(1)) != counted[model]:
+            problems.append(f"{model}: {counted[model]} in the assembly, {match.group(1)} in design.md")
 
     img = ROOT / "docs" / "img"
     for step in chapter.STEPS:

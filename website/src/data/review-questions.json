@@ -66,11 +66,77 @@
     "15": [
       { "id": "reach", "label": "Could you reach the set screw through the access slot?", "type": "choice", "options": ["Yes, easily", "With difficulty", "No"] },
       { "id": "slip", "label": "Does the motor shaft slip in the input shaft when you try the output by hand?", "type": "choice", "options": ["No slip", "Slips"] }
+    ],
+    "16": [
+      { "id": "hub", "label": "Did the pulley's Ø8 hub fit the 608? Did you sand it?", "type": "choice", "options": ["Fit as printed", "Sanded it", "Far too tight", "Too loose"] },
+      { "id": "misfit", "label": "Which parts were warped, cracked, or far off in a dry fit?", "type": "long" }
+    ],
+    "17": [
+      { "id": "method", "label": "How did you install the M5 inserts?", "type": "choice", "options": ["Heat-set", "Epoxy", "Something else"] }
+    ],
+    "18": [
+      { "id": "flush", "label": "Did pressing onto a flat surface leave the 6807 flush with the top face?", "type": "choice", "options": ["Yes", "Close", "No"] }
+    ],
+    "19": [
+      { "id": "press", "label": "How did the 6805 press into the cheek, and what did you put between the cheeks?", "type": "long" }
+    ],
+    "20": [
+      { "id": "force", "label": "How hard was it to press the hinge shaft through the 6807?", "type": "choice", "options": ["By hand", "Light press", "Hard press", "Damaged a part"] },
+      { "id": "balance", "label": "Did the bottom-up order work, with the pulley on a stand? Any trick worth adding?", "type": "long" }
+    ],
+    "21": [
+      { "id": "turn", "label": "With the screws snug, how does the stack turn? (Its height equals the shaft's length exactly.)", "type": "choice", "options": ["Free, no play", "Free, some play", "Drag", "Bind"] },
+      { "id": "clear", "label": "Which screw and nut did you use, and did the nut clear the 608 when the box closed?", "type": "text", "hint": "The guide assumes M5 × 40 with a standard nut" }
+    ],
+    "22": [
+      { "id": "height", "label": "Was 15 mm from the motor face to the flange easy to set and hold?", "type": "choice", "options": ["Yes", "Awkward", "No"] }
+    ],
+    "23": [
+      { "id": "length", "label": "Did M3 × 16 reach the motor's threads without bottoming out?", "type": "choice", "options": ["Yes", "Too short", "Too long"] }
+    ],
+    "24": [
+      { "id": "belt", "label": "Which belt length did you use, and did it sit level on both pulleys?", "type": "text", "hint": "The guide assumes 370 mm" }
+    ],
+    "25": [
+      { "id": "screw", "label": "Which box screw did you use? Type and length.", "type": "text", "hint": "The guide assumes M5 × 20 button head" },
+      { "id": "hub", "label": "Did the hub go into the 608 as the box closed?", "type": "choice", "options": ["Easily", "With some force", "No"] }
+    ],
+    "26": [
+      { "id": "reach", "label": "Could you reach and tighten all four motor screws through the window?", "type": "choice", "options": ["Yes, easily", "With difficulty", "No"] },
+      { "id": "ratio", "label": "How many times did the 20T pulley turn for one hinge turn?", "type": "text", "hint": "Should be 8" },
+      { "id": "tension", "label": "How much did the belt deflect when pressed, and did it skip?", "type": "text" }
+    ],
+    "27": [
+      { "id": "hex", "label": "Did the output hex slide into the coupling's socket?", "type": "choice", "options": ["Yes", "Tight", "No"] }
+    ],
+    "28": [
+      { "id": "spring", "label": "How did the coupling get between the cheeks? (It's the same length as the gap.)", "type": "long" },
+      { "id": "damage", "label": "Did easing the cheek outward crack or mark anything?", "type": "choice", "options": ["No", "Marked it", "Cracked it"] }
+    ],
+    "29": [
+      { "id": "force", "label": "How did the stub go into the bearing?", "type": "choice", "options": ["By hand", "With the clamp and spacer", "Couldn't do it"] },
+      { "id": "spacer", "label": "What did you use as the spacer?", "type": "text", "hint": "The guide assumes about Ø24" }
+    ],
+    "30": [
+      { "id": "clear", "label": "Was it clear which screw stays in?", "type": "choice", "options": ["Yes", "No"] }
+    ],
+    "31": [
+      { "id": "draw", "label": "Did the three screws draw the gearbox in until the cover sat flat?", "type": "choice", "options": ["Yes, easily", "With effort", "Pulled an insert", "No"] },
+      { "id": "key", "label": "Which key reached the screws in the gap?", "type": "text" }
+    ],
+    "32": [
+      { "id": "angle", "label": "At what coupling angle could you reach the last two screws?", "type": "text", "hint": "The guide says about 40°" },
+      { "id": "back", "label": "How hard was it to turn the coupling by hand, against the gearbox?", "type": "choice", "options": ["Easy", "Stiff", "Too stiff"] }
+    ],
+    "33": [
+      { "id": "j2", "label": "How does joint 2 feel, turned by hand?", "type": "choice", "options": ["Smooth", "Tight spot", "Stiff all the way", "Bind"] },
+      { "id": "loosen", "label": "If it was stiff, did easing the five screws help?", "type": "choice", "options": ["It wasn't stiff", "Yes", "No"] },
+      { "id": "j1", "label": "How far does the hinge turn each way with the gearbox on?", "type": "text", "hint": "The CAD says about ±124°" }
     ]
   },
   "overall": [
     { "id": "backlash", "label": "How much backlash does the finished gearbox have at the output?", "type": "long" },
-    { "id": "hardest", "label": "What was the hardest part of this chapter?", "type": "long" },
+    { "id": "hardest", "label": "What was the hardest part of the build?", "type": "long" },
     { "id": "student", "label": "Could a team of students do this unaided? What would they need that the guide doesn't give them?", "type": "long" },
     { "id": "design", "label": "What would you change about the design itself?", "type": "long" },
     { "id": "missing", "label": "Tools or parts the guide didn't list, or lists wrongly", "type": "long" },

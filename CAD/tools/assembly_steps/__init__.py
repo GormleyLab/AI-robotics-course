@@ -11,6 +11,8 @@ A picture (``View``) places parts of three kinds:
   model. They exist only in these pictures.
 
 Everything is in the assembly's own frame. For the gearbox: axis +Z, toward the motor.
+A chapter can set ``ORIGIN`` (a point in the assembly's frame) to work with that point
+at the origin, as the joint chapters do with J1.
 """
 from __future__ import annotations
 
@@ -32,11 +34,18 @@ class Hw:
     built: bool = False            # drawn pale, like ``built``
     offset: Vec = (0.0, 0.0, 0.0)
     radial: bool = False           # body points in toward the axis, seat at r, instead of along z
+    seat: Vec | None = None        # with ``direction``: a seat and body direction, in place of r, angle, z
+    direction: Vec | None = None
 
     @classmethod
     def at(cls, kind: str, x: float, y: float, z: float = 0.0) -> "Hw":
         """Hardware laid out at (x, y), for the parts sheets."""
         return cls(kind, math.hypot(x, y), math.degrees(math.atan2(y, x)), z)
+
+    @classmethod
+    def line(cls, kind: str, seat: Vec, direction: Vec, offset: Vec = (0.0, 0.0, 0.0), built: bool = False) -> "Hw":
+        """Hardware along any direction, for screws that don't run along the chapter's axis."""
+        return cls(kind, 0.0, 0.0, 0.0, built=built, offset=offset, seat=seat, direction=direction)
 
 
 @dataclass(frozen=True)
@@ -46,6 +55,12 @@ class Guide:
     angle: float
     z0: float
     z1: float
+    p0: Vec | None = None          # with ``p1``: a line between two points, in place of the above
+    p1: Vec | None = None
+
+    @classmethod
+    def between(cls, p0: Vec, p1: Vec) -> "Guide":
+        return cls(0.0, 0.0, 0.0, 0.0, p0=p0, p1=p1)
 
 
 @dataclass(frozen=True)
@@ -63,6 +78,10 @@ class Label:
 class View:
     name: str
     added: dict[str, Vec] = field(default_factory=dict)
+    # label -> (point on the axis, axis direction, degrees), applied before any offset:
+    # a part shown turned on its joint.
+    turned: dict[str, tuple[Vec, Vec, float]] = field(default_factory=dict)
+    trim_x: dict[str, float] = field(default_factory=dict)  # label -> keep only x below this: a cut-away part
     built: tuple[str, ...] = ()
     hardware: tuple[Hw, ...] = ()
     guides: tuple[Guide, ...] = ()

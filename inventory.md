@@ -68,14 +68,18 @@ Per-arm counts are approximate: design.md does not record every screw length (§
 | iexcell M3 × 12 button head, 12.9 (100-pack) | [B0CP4B65CC](https://www.amazon.com/dp/B0CP4B65CC) | 2 packs = **200** | $17.72 | ″ | ″ | ″ |
 | iexcell M3 × 16 button head, 12.9 (100-pack) | [B0CP48RN8K](https://www.amazon.com/dp/B0CP48RN8K) | 2 packs = **200** | $17.92 | ″ | ″ | ″ |
 | Kadrick M3 assortment, 4–35 mm, with nuts and washers (2240 pc) | [B0CQNN6NY3](https://www.amazon.com/dp/B0CQNN6NY3) | 1 kit | $22.99 | Includes M3 × 35 for the idler jack screws (`purchased/socket_head_m3x35.py`, 2 per segment) | 4 × M3 × 35 | 36 |
-| M5 × 40 button head, black oxide SS (25-pack) | [B0GJJBQDCD](https://www.amazon.com/dp/B0GJJBQDCD) | 2 packs = **50** | $17.36 | `purchased/button_head_m5x40.py`: idler axles (2 per segment) | 4 | 36 |
-| M5 × 45 button head (25-pack) | [B0GJJKXJG5](https://www.amazon.com/dp/B0GJJKXJG5) | **25** | $8.68 | Probably the J1 pulley–hinge clamp (4 × M5, length not recorded) | 4? | 36? |
-| M5 × 50 button head (25-pack) | [B0GJJDKQLZ](https://www.amazon.com/dp/B0GJJDKQLZ) | **25** | $8.68 | ″ | ″ | ″ |
-| Kadrick M5 assortment, 8–40 mm, with nuts and washers (960 pc) | [B0DRCBVH8K](https://www.amazon.com/dp/B0DRCBVH8K) | 1 kit | $22.99 | Box top–bottom screws (7), M5 nuts for the idler axles (`purchased/hex_nut_m5.py`, 2 per segment) | 7 screws + 4 nuts | 63 + 36 |
+| M5 × 40 button head, black oxide SS (25-pack) | [B0GJJBQDCD](https://www.amazon.com/dp/B0GJJBQDCD) | 2 packs = **50** | $17.36 | `purchased/button_head_m5x40.py`: idler axles (2 per segment), J1 pulley–hinge clamp (4) | 8 | 72 |
+| M5 × 45 button head (25-pack) | [B0GJJKXJG5](https://www.amazon.com/dp/B0GJJKXJG5) | **25** | $8.68 | Not used: too long for the J1 clamp, it would hit the 608 (design.md §2) | — | — |
+| M5 × 50 button head (25-pack) | [B0GJJDKQLZ](https://www.amazon.com/dp/B0GJJDKQLZ) | **25** | $8.68 | ″ | — | — |
+| Kadrick M5 assortment, 8–40 mm, with nuts and washers (960 pc) | [B0DRCBVH8K](https://www.amazon.com/dp/B0DRCBVH8K) | 1 kit | $22.99 | Box top–bottom screws (7 × M5 × 20), M5 nuts for the idler axles (`purchased/hex_nut_m5.py`, 2 per segment) and the J1 clamp (4) | 7 screws + 8 nuts | 63 + 72 |
 | ZDingTech M4 × 5 set screw (110-pack) | [B0CF299SDT](https://www.amazon.com/dp/B0CF299SDT) | **110** | $6.69 | Probably the gearbox input-shaft set screw (Ø4 cross hole) | 1 | 9 |
 | 304 SS flat washer assortment M2–M12 (1100 pc) | [B0DZ5H9T4Z](https://www.amazon.com/dp/B0DZ5H9T4Z) | 1 kit | $6.99 | General | — | — |
 
 > **To order:** ruthex **M3S × 4.0** short heat-set insert (100-pack), **36** (4 per set, so one pack covers 9 sets). The back cover's four NEMA17-mount insert holes are 4.5 mm deep since design.md I‑22, so that 2.5 mm of plastic remains over the carrier recess; the M3 × 5.7 no longer fits there. Same knurl as the M3 × 5.7 (Ø4.6, Ø4.0 hole), so `FIT.insert_m3` is unchanged. Not found on Amazon: [3DJake US](https://www.3djake.com/ruthex/threaded-insert-m3s-100-pieces), ruthex GE‑M3Sx40‑002 (EAN 4260528721238).
+>
+> **M5 × 40 button head:** 25 more (one pack, [B0GJJBQDCD](https://www.amazon.com/dp/B0GJJBQDCD)). The J1 clamp uses this length, so 9 sets need 72 against 50 bought.
+>
+> **M3 × 20 button head**, 5 per set (gearbox to hinge), and **M5 × 20 button head**, 7 per set (box): check the Kadrick assortments for both before ordering.
 >
 > **Screws for the NEMA17 mount** (the 18 mm thicker mount, design.md I‑25), 4 + 4 per set. **Mount → back cover: M3 × 22.** The screw runs from the mount's motor face through the 18 mm plate into the cover, so M3 × 22 takes the full 4 mm insert and stops 0.5 mm short of the hole floor. M3 × 25 would bottom out on the floor; M3 × 20 engages only 2 mm. **Mount → motor: M3 × 18**, from the Ø7 counterbores on the cover side through 15 mm of plate, 3 mm into the motor (M3 × 20 would reach 5 mm, past a typical 4.5 mm NEMA17 tapping). Check the Kadrick M3 assortment for both lengths before ordering.
 

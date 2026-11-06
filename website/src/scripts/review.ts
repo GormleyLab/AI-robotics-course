@@ -77,7 +77,7 @@ function overallForm(): HTMLElement {
   return el(
     "div",
     { className: "fb" },
-    el("p", { className: "fb-title" }, "Review: the whole chapter"),
+    el("p", { className: "fb-title" }, "Review: the whole guide"),
     ...questions.overall.map((q) => field("overall", q)),
     el("p", { className: "fb-q" }, "When you're done, or at a good stopping point, use ",
       el("strong", {}, "Download my answers"),
@@ -121,7 +121,7 @@ function record(input: HTMLInputElement | HTMLTextAreaElement) {
 function download() {
   const today = new Date().toISOString().slice(0, 10);
   const blob = new Blob([toFile(questions, answers, __GUIDE_REVISION__, today)], { type: "text/markdown" });
-  const link = el("a", { href: URL.createObjectURL(blob), download: `gearbox-review-${today}.md` });
+  const link = el("a", { href: URL.createObjectURL(blob), download: `assembly-review-${today}.md` });
   link.click();
   URL.revokeObjectURL(link.href);
 }

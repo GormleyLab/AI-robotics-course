@@ -29,6 +29,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from assembly_steps import Guide, Hw, Label, View
 from checks.scene import read_scene
+from lib import gt2, params
 
 PALE = "#d5d9df"
 GHOST_ALPHA = 0.28
@@ -41,12 +42,40 @@ TMP = ROOT / "tmp" / "assembly"
 # --- hardware stand-ins, for pictures only -------------------------------------------------
 
 
-def _button_head(length: float) -> bd.Part:
-    """ISO 7380 M3 button head, seat at z 0, shank toward +z (Ø5.7 x 1.65 head)."""
-    head = bd.Pos(0, 0, -1.65) * bd.Cylinder(2.85, 1.65, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
-    shank = bd.Cylinder(1.5, length, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
-    socket = bd.Pos(0, 0, -1.65) * bd.Cylinder(1.15, 1.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
+def _button_head(length: float, thread: float = 3.0, head_d: float = 5.7, head_h: float = 1.65,
+                 socket_d: float = 2.3) -> bd.Part:
+    """ISO 7380 button head, seat at z 0, shank toward +z (M3 unless told otherwise)."""
+    head = bd.Pos(0, 0, -head_h) * bd.Cylinder(head_d / 2, head_h, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
+    shank = bd.Cylinder(thread / 2, length, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
+    socket = bd.Pos(0, 0, -head_h) * bd.Cylinder(socket_d / 2, 1.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
     return head + shank - socket
+
+
+def _m5(length: float) -> bd.Part:
+    return _button_head(length, thread=5.0, head_d=9.5, head_h=2.75, socket_d=3.4)
+
+
+def _nut_m5() -> bd.Part:
+    """ISO 4032 M5 nut, 8 AF x 4.7, from z 0 toward +z."""
+    return (bd.extrude(bd.RegularPolygon(4.62, 6), 4.7)
+            - bd.Cylinder(2.5, 4.7, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)))
+
+
+def _j1_belt() -> bd.Part:
+    """The J1 belt, in the assembly CAD only as this stand-in (I-8): J1 at the origin, 6 mm wide from z 0."""
+    centres = gt2.centre_distance(370.0, params.GT2_TEETH_J1, params.GT2_TEETH_MOTOR)
+    return gt2.belt_envelope([(0.0, 0.0, gt2.pitch_diameter(params.GT2_TEETH_J1) / 2),
+                              (centres, 0.0, gt2.pitch_diameter(params.GT2_TEETH_MOTOR) / 2)])
+
+
+def _spacer() -> bd.Part:
+    """A round press spacer, Ø24 x 40, from z 0 toward +z."""
+    return bd.Cylinder(12.0, 40.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
+
+
+def _plate() -> bd.Part:
+    """A flat press plate, 60 x 60 x 4, from z 0 toward +z."""
+    return bd.Box(60.0, 60.0, 4.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
 
 
 def _insert(length: float, knurl_d: float = 4.6, bore_d: float = 3.0) -> bd.Part:
@@ -66,9 +95,17 @@ HARDWARE = {
     "m3x12": (lambda: _button_head(12.0), "#2e3540"),
     "m3x16": (lambda: _button_head(16.0), "#2e3540"),
     "m3x18": (lambda: _button_head(18.0), "#2e3540"),
+    "m3x20": (lambda: _button_head(20.0), "#2e3540"),
     "m3x22": (lambda: _button_head(22.0), "#2e3540"),
+    "m5x20": (lambda: _m5(20.0), "#2e3540"),
+    "m5x40": (lambda: _m5(40.0), "#2e3540"),
+    "nut_m5": (_nut_m5, "#5c6670"),
     "insert_m3": (lambda: _insert(5.7), "#c9a227"),
     "insert_m3s": (lambda: _insert(4.0), "#c9a227"),
+    "insert_m5": (lambda: _insert(9.5, knurl_d=7.1, bore_d=5.0), "#c9a227"),
+    "belt_j1": (_j1_belt, "#3b3f46"),
+    "spacer": (_spacer, "#c4b59a"),
+    "plate": (_plate, "#c4b59a"),
     "set_screw": (_set_screw, "#2e3540"),
 }
 
@@ -88,6 +125,9 @@ def _hardware(hw: Hw) -> bd.Shape:
     x, y = _polar(hw.r, hw.angle)
     made, _ = HARDWARE[hw.kind]
     dx, dy, dz = hw.offset
+    if hw.seat is not None:
+        origin = bd.Vector(*hw.seat) + bd.Vector(*hw.offset)
+        return bd.Location(bd.Plane(origin=origin, z_dir=bd.Vector(*hw.direction))) * made()
     if hw.radial:
         turn = bd.Rot(0, 0, hw.angle) * bd.Rot(0, -90, 0)
     else:
@@ -96,6 +136,16 @@ def _hardware(hw: Hw) -> bd.Shape:
 
 
 def _guide(guide: Guide, dash: float = 3.5, gap: float = 2.5, radius: float = 0.28) -> list[bd.Shape]:
+    if guide.p0 is not None:
+        start = bd.Vector(*guide.p0)
+        along = bd.Vector(*guide.p1) - start
+        pieces, d = [], 0.0
+        while d < along.length:
+            plane = bd.Plane(origin=start + along.normalized() * d, z_dir=along.normalized())
+            pieces.append(bd.Location(plane) * bd.Cylinder(radius, min(dash, along.length - d),
+                                                           align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)))
+            d += dash + gap
+        return pieces
     x, y = _polar(guide.r, guide.angle)
     low, high = sorted((guide.z0, guide.z1))
     pieces, z = [], low
@@ -109,9 +159,19 @@ def _guide(guide: Guide, dash: float = 3.5, gap: float = 2.5, radius: float = 0.
 # --- the scene ------------------------------------------------------------------------------
 
 
-def compose(view: View, leaves: dict, colour_of) -> tuple[bd.Compound, dict[str, bd.Shape]]:
+def compose(view: View, leaves: dict, colour_of, origin=(0.0, 0.0, 0.0)) -> tuple[bd.Compound, dict[str, bd.Shape]]:
     """The view's parts, in their colours and offsets. Also returns each by name, for callouts."""
     spin = bd.Rot(0, 0, view.turn)
+    to_origin = bd.Pos(-origin[0], -origin[1], -origin[2])
+
+    def placed(label: str) -> bd.Shape:
+        shape = to_origin * leaves[label].shape()
+        if label in view.turned:
+            point, axis, degrees = view.turned[label]
+            shape = shape.rotate(bd.Axis(point, axis), degrees)
+        if label in view.trim_x:
+            shape = shape & bd.Pos(view.trim_x[label] - 1000.0, 0, 0) * bd.Box(2000, 2000, 2000)
+        return shape
     parts: list[bd.Shape] = []
     named: dict[str, bd.Shape] = {}
 
@@ -123,12 +183,12 @@ def compose(view: View, leaves: dict, colour_of) -> tuple[bd.Compound, dict[str,
         named[label] = shape
 
     for label in view.built:
-        add(leaves[label].shape(), label,
+        add(placed(label), label,
             _colour(colour_of(label), GHOST_ALPHA) if view.ghost else _colour(PALE))
     for label, offset in view.added.items():
-        add(bd.Pos(*offset) * leaves[label].shape(), label, _colour(colour_of(label)))
+        add(bd.Pos(*offset) * placed(label), label, _colour(colour_of(label)))
     for label, (x, y) in view.layout.items():
-        shape = leaves[label].shape()
+        shape = placed(label)
         box = shape.bounding_box()
         centre = box.center()
         add(bd.Pos(x - centre.X, y - centre.Y, -box.min.Z) * shape, label, _colour(colour_of(label)))
@@ -251,7 +311,7 @@ def draw_labels(path: Path, view: View, camera: Camera, named: dict[str, bd.Shap
 
 
 def render(view: View, chapter, leaves: dict, out_dir: Path) -> Path:
-    shape, named = compose(view, leaves, chapter.colour_of)
+    shape, named = compose(view, leaves, chapter.colour_of, getattr(chapter, "ORIGIN", (0.0, 0.0, 0.0)))
     scene_file = TMP / chapter.NAME / f"{view.name}.step"
     scene_file.parent.mkdir(parents=True, exist_ok=True)
     bd.export_step(shape, str(scene_file))
