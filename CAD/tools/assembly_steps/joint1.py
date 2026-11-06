@@ -1,4 +1,4 @@
-"""The base and joint 1 chapter's steps and pictures (docs/assembly-guide.md).
+"""The base and joint 1 chapter's steps and pictures (docs/assembly-2-base-joint1.md).
 
 Assembly: the base frame of joint12/joint_1_and_2.py, with ORIGIN putting J1 at (0, 0).
 +Z up, and the J1 motor toward +X. z = 0 is the top of the box bottom. Positions are

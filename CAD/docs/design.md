@@ -353,7 +353,7 @@ How the fits above are meant to be assembled. These notes are a source for
 the arm's [assembly guide](assembly-guide.md); add to them as assembly experience
 comes in. The gearbox's build order comes from the design's
 [source article](https://howtomechatronics.com/how-it-works/how-planetary-gears-work-3d-printed-planetary-gearbox-design-and-test/);
-what it leaves open is listed at the end of that guide's gearbox chapter.
+what it leaves open is listed at the end of the guide's [gearbox chapter](assembly-1-gearbox.md).
 
 **Threaded inserts in resin parts (bonded).** Cured resin doesn't melt, so
 heat-set inserts don't work in it. Resin parts take the same ruthex inserts
@@ -386,7 +386,7 @@ hard closes its bore.
 
 **J1 stack and J2 order (worked out from the CAD, 2026‑11‑06; the instructor
 confirmed the J1 clamp and the gearbox-to-hinge screws).** Not yet followed on real
-parts; the guide's Chapters 2 and 3 carry the steps and open items. What sets the order:
+parts; the guide's [Chapter 2](assembly-2-base-joint1.md) and [Chapter 3](assembly-3-hinge-joint2.md) carry the steps and open items. What sets the order:
 
 - The J1 stack goes together from the pulley up. It is exactly as tall as the hinge shaft
   (13 + 7 + 13 = 33 mm), so a thick print binds it when clamped; the shaft's end must not be

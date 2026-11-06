@@ -134,9 +134,19 @@
       { "id": "j1", "label": "How far does the hinge turn each way with the gearbox on?", "type": "text", "hint": "The CAD says about ±124°" }
     ]
   },
+  "chapterOverall": {
+    "gearbox": [
+      { "id": "backlash", "label": "How much backlash does the finished gearbox have at the output?", "type": "long" }
+    ],
+    "base-joint-1": [
+      { "id": "play", "label": "How much play does joint 1 have at the hinge, rocking it and turning it back and forth?", "type": "long" }
+    ],
+    "hinge-joint-2": [
+      { "id": "play", "label": "How much play does joint 2 have at the coupling, turning it back and forth?", "type": "long" }
+    ]
+  },
   "overall": [
-    { "id": "backlash", "label": "How much backlash does the finished gearbox have at the output?", "type": "long" },
-    { "id": "hardest", "label": "What was the hardest part of the build?", "type": "long" },
+    { "id": "hardest", "label": "What was the hardest part of this chapter?", "type": "long" },
     { "id": "student", "label": "Could a team of students do this unaided? What would they need that the guide doesn't give them?", "type": "long" },
     { "id": "design", "label": "What would you change about the design itself?", "type": "long" },
     { "id": "missing", "label": "Tools or parts the guide didn't list, or lists wrongly", "type": "long" },

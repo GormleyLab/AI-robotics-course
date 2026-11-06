@@ -1,4 +1,4 @@
-"""The hinge and joint 2 chapter's steps and pictures (docs/assembly-guide.md).
+"""The hinge and joint 2 chapter's steps and pictures (docs/assembly-3-hinge-joint2.md).
 
 Assembly: as joint1.py, J1 at (0, 0). J2 runs along X at y = 0, z = 70.5, and the gearbox
 is on the -X side. Cheek x: left -36..-29, right 27..34. The gearbox comes from Chapter 1

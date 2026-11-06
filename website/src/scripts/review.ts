@@ -1,7 +1,7 @@
 // Fills the review slots in the guide, saves every answer in this browser as it's
 // typed, and writes or restores the file the reviewer sends back.
 import data from "../data/review-questions.json";
-import { FIXES, fromFile, standard, stepsDone, toFile, type Answers, type Question, type Questions } from "../lib/review";
+import { FIXES, fromFile, overallGroup, overallQuestions, standard, stepsDone, toFile, type Answers, type Question, type Questions } from "../lib/review";
 
 declare const __GUIDE_REVISION__: string;
 
@@ -73,12 +73,12 @@ function stepForm(step: string): HTMLElement {
   );
 }
 
-function overallForm(): HTMLElement {
+function overallForm(slug: string): HTMLElement {
   return el(
     "div",
     { className: "fb" },
-    el("p", { className: "fb-title" }, "Review: the whole guide"),
-    ...questions.overall.map((q) => field("overall", q)),
+    el("p", { className: "fb-title" }, "Review: the whole chapter"),
+    ...overallQuestions(questions, slug).map((q) => field(overallGroup(slug), q)),
     el("p", { className: "fb-q" }, "When you're done, or at a good stopping point, use ",
       el("strong", {}, "Download my answers"),
       " in the bar below and send the file to Dr. Gormley, with any photos. Name each photo after its step, such as step07-1.jpg."),
@@ -111,6 +111,10 @@ function record(input: HTMLInputElement | HTMLTextAreaElement) {
     answers[key] = input.value;
   }
   try {
+    // Another chapter may be open in another tab, so merge rather than overwrite what it saved.
+    const value = answers[key];
+    answers = load();
+    answers[key] = value;
     localStorage.setItem(KEY, JSON.stringify(answers));
     progress();
   } catch {
@@ -138,9 +142,10 @@ async function restore(file: File) {
 
 document.querySelectorAll<HTMLElement>("[data-review-slot]").forEach((slot) => {
   const id = slot.dataset.reviewSlot!;
-  slot.append(id === "overall" ? overallForm() : stepForm(id));
+  slot.append(id.startsWith("overall:") ? overallForm(id.slice("overall:".length)) : stepForm(id));
 });
-document.getElementById("review-reviewer")!.append(...questions.reviewer.map((q) => field("reviewer", q)));
+// Only the overview page asks who the reviewer is.
+document.getElementById("review-reviewer")?.append(...questions.reviewer.map((q) => field("reviewer", q)));
 
 document.addEventListener("input", (event) => {
   const target = event.target as HTMLInputElement | HTMLTextAreaElement;

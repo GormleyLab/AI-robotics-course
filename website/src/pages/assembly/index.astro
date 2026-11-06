@@ -1,83 +1,46 @@
 ---
-import Base from "../../layouts/Base.astro";
+// The guide's front page: the chapters as cards, then CAD/docs/assembly-guide.md.
+import Guide from "../../layouts/Guide.astro";
+import { chapters } from "../../lib/chapters.mjs";
 import { Content, getHeadings } from "../../../../CAD/docs/assembly-guide.md";
 
-const toc = getHeadings().filter((h) => h.depth === 2 || h.depth === 3);
+const base = import.meta.env.BASE_URL;
 ---
-<Base title="Assembly guide · Smart Prosthetics and Robotic Systems" description="Illustrated guide to building the robotic arm from parts.">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:grid lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-12">
-    <aside class="hidden lg:block">
-      <nav class="sticky top-20 max-h-[calc(100vh-9rem)] overflow-y-auto py-10 pr-2 text-sm" aria-label="Guide contents">
-        <ol class="space-y-1.5">
-          {toc.map((h) => (
-            <li class={h.depth === 3 ? "pl-3" : "mt-3 first:mt-0"}>
-              <a href={`#${h.slug}`} class={`block leading-snug no-underline hover:text-scarlet ${h.depth === 2 ? "font-semibold text-ink" : "text-muted"}`}>{h.text}</a>
-            </li>
-          ))}
-        </ol>
-      </nav>
-    </aside>
+<Guide title="Assembly guide · Smart Prosthetics and Robotic Systems"
+       eyebrow="Draft for TA review"
+       heading="Robotic Arm Assembly Guide"
+       intro="From a pile of printed and bought parts to a complete arm. The gearbox, base and shoulder are written so far."
+       headings={getHeadings()}>
+  <Fragment slot="before">
+    <ol class="mt-8 space-y-5">
+      {chapters.map((c) => (
+        <li>
+          <a href={`${base}assembly/${c.slug}/`} class="group block rounded-2xl border border-line p-6 no-underline transition hover:border-scarlet hover:shadow-[0_8px_30px_-12px_rgba(204,0,51,0.25)]">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <p class="text-xs font-bold uppercase tracking-wider text-scarlet">Chapter {c.number}</p>
+              <p class="text-sm text-muted">{c.steps}</p>
+            </div>
+            <h2 class="mt-1.5 text-2xl font-bold text-ink group-hover:text-scarlet">{c.title}</h2>
+            <p class="mt-2 font-serif text-[1.05rem] leading-relaxed text-body">{c.blurb}</p>
+          </a>
+        </li>
+      ))}
+    </ol>
 
-    <main class="min-w-0 pb-10 pt-10 lg:pt-14">
-      <div class="mx-auto max-w-[46rem]">
-        <p class="text-xs font-bold uppercase tracking-wider text-scarlet">Draft for TA review</p>
-        <h1 class="mt-2 text-4xl font-extrabold leading-tight tracking-tight text-ink sm:text-5xl">Robotic Arm Assembly Guide</h1>
-        <p class="mt-4 font-serif text-xl leading-relaxed text-body">From a pile of printed and bought parts to a complete arm. The gearbox, base and shoulder are written so far.</p>
-
-        <div class="fb">
-          <p class="fb-title">How to review this guide</p>
-          <p class="fb-q">
-            Build each chapter by following the guide exactly as written. Where it's wrong or unclear, don't
-            work around it silently: say what you did in that step's review box. Students will have only these pages.
-          </p>
-          <p class="fb-q">
-            <strong>Pause at each step's box</strong> and answer what you can. Tell us whether a problem is with the
-            guide or with the design. Answers save in this browser as you type, so you can stop and come back on
-            the same device. To continue on another device, download your answers here and use
-            <strong>Restore</strong> there.
-          </p>
-          <div id="review-reviewer"></div>
-        </div>
-
-        <details class="mt-6 rounded-lg border border-line px-4 py-3 text-sm lg:hidden">
-          <summary class="cursor-pointer font-semibold text-ink">Contents</summary>
-          <ol class="mt-2 space-y-1">
-            {toc.map((h) => (
-              <li class={h.depth === 3 ? "pl-3" : ""}><a href={`#${h.slug}`} class="text-body no-underline hover:text-scarlet">{h.text}</a></li>
-            ))}
-          </ol>
-        </details>
-
-        <article class="prose-ch mt-10"><Content /></article>
-      </div>
-    </main>
-  </div>
-
-  <div class="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 backdrop-blur">
-    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5 px-4 py-2 text-sm sm:px-6">
-      <span id="review-status" class="text-muted" role="status"></span>
-      <span class="flex gap-2">
-        <button id="review-restore" type="button" class="fb-btn">Restore</button>
-        <button id="review-download" type="button" class="fb-btn fb-btn-main">Download my answers</button>
-        <input id="review-file" type="file" accept=".md,text/markdown" class="hidden" aria-label="Review file to restore" />
-      </span>
+    <div class="fb">
+      <p class="fb-title">How to review this guide</p>
+      <p class="fb-q">
+        Build each chapter by following the guide exactly as written. Where it's wrong or unclear, don't
+        work around it silently: say what you did in that step's review box. Students will have only these pages.
+      </p>
+      <p class="fb-q">
+        <strong>Pause at each step's box</strong> and answer what you can. Tell us whether a problem is with the
+        guide or with the design. Answers from every chapter save together in this browser as you type, so you can
+        stop and come back on the same device. To continue on another device, download your answers here and use
+        <strong>Restore</strong> there. Each chapter ends with a review of the whole chapter.
+      </p>
+      <div id="review-reviewer"></div>
     </div>
-  </div>
-
-  <dialog id="zoom"><img alt="" /></dialog>
-  <script>
-    // Tap a picture to see it full size: their part labels are small on a phone.
-    const zoom = document.getElementById("zoom") as HTMLDialogElement;
-    const big = zoom.querySelector("img")!;
-    document.querySelector(".prose-ch")!.addEventListener("click", (event) => {
-      const target = event.target as HTMLElement;
-      if (target instanceof HTMLImageElement) {
-        big.src = target.currentSrc || target.src;
-        big.alt = target.alt;
-        zoom.showModal();
-      }
-    });
-    zoom.addEventListener("click", () => zoom.close());
-  </script>
-  <script src="../../scripts/review.ts"></script>
-</Base>
+  </Fragment>
+  <Content />
+</Guide>

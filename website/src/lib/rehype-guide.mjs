@@ -1,41 +1,68 @@
-// Turns CAD/docs/assembly-guide.md into the site's page, so the guide stays one
-// document and the site can't drift from it:
+// Turns the assembly guide's Markdown (CAD/docs/assembly-*.md) into the site's pages, so each
+// file stays the one copy of its text and the site can't drift from it:
 //
-// - drops the title block and contents list (the layout supplies both);
-// - points links to other repo files at GitHub, since those files aren't on the site;
+// - drops the title block (the layout supplies it), keeping the overview's draft notice;
+// - points links between chapters at their pages, and links to other repo files at GitHub,
+//   since those files aren't on the site;
 // - marks TO CONFIRM so it stands out;
-// - while the TA review runs, puts an empty form slot at the end of each step and
-//   after the open items. src/scripts/review.ts fills the slots from
-//   src/data/review-questions.json. To remove the review for students, drop
-//   addReviewSlots here and the script from src/pages/assembly/index.astro.
+// - while the TA review runs, puts an empty form slot at the end of each step, and one at the
+//   end of each chapter for the whole chapter. src/scripts/review.ts fills the slots from
+//   src/data/review-questions.json. To remove the review for students, drop addReviewSlots
+//   here and the script from src/layouts/Guide.astro.
 //
-// The build fails if a step has no questions, or questions have no step, so a
-// renumbered guide can't quietly file answers under the wrong step.
+// The build fails if a step has no questions, or questions have no step, so a renumbered
+// guide can't quietly file answers under the wrong step.
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { chapters } from "./chapters.mjs";
 
 const REPO = "https://github.com/GormleyLab/AI-robotics-course/blob/main/";
 const GUIDE_DIR = "CAD/docs/";
+const SITE_BASE = "/AI-robotics-course/";
+const OVERVIEW = "assembly-guide.md";
 
 const questions = JSON.parse(readFileSync(new URL("../data/review-questions.json", import.meta.url), "utf8"));
+const pageOf = new Map([[OVERVIEW, "assembly/"], ...chapters.map((c) => [c.file, `assembly/${c.slug}/`])]);
+
+const stepPattern = /^Step (\d+):/;
+
+// Every step in every chapter against the questions file. Each page only sees its own steps,
+// so this reads the files directly. It runs once, as the build starts.
+function checkAllSteps() {
+  const found = chapters.flatMap((c) => {
+    const text = readFileSync(new URL(`../../../CAD/docs/${c.file}`, import.meta.url), "utf8");
+    return [...text.matchAll(/^## (Step \d+:)/gm)].map((m) => m[1].match(stepPattern)[1]);
+  });
+  const wanted = Object.keys(questions.steps);
+  const problems = [
+    ...found.filter((s, i) => found.indexOf(s) !== i).map((s) => `step ${s} appears twice in the guide`),
+    ...found.filter((s) => !wanted.includes(s)).map((s) => `step ${s} has no entry in review-questions.json`),
+    ...wanted.filter((s) => !found.includes(s)).map((s) => `review-questions.json has step ${s}, the guide doesn't`),
+    ...chapters.filter((c) => !questions.chapterOverall[c.slug]).map((c) => `chapter ${c.slug} has no chapterOverall in review-questions.json`),
+  ];
+  if (problems.length) throw new Error(problems.join("; "));
+}
+checkAllSteps();
 
 const textOf = (node) =>
   node.type === "text" ? node.value : (node.children ?? []).map(textOf).join("");
-const isHeading = (node, ...tags) => node.type === "element" && tags.includes(node.tagName);
+const isTag = (node, ...tags) => node.type === "element" && tags.includes(node.tagName);
 
-function dropTitleBlock(root) {
-  // Everything before the draft notice's blockquote, then "Contents" up to its rule.
-  const notice = root.children.findIndex((n) => isHeading(n, "blockquote"));
-  const rule = root.children.findIndex((n) => isHeading(n, "hr"));
-  if (notice < 0 || rule < notice) throw new Error("assembly-guide.md: expected title, draft notice, contents, rule");
-  root.children = [root.children[notice], ...root.children.slice(rule + 1)];
+function dropTitleBlock(root, isOverview) {
+  const rule = root.children.findIndex((n) => isTag(n, "hr"));
+  if (rule < 0) throw new Error("assembly guide: expected a title block ending in a rule");
+  const notice = isOverview ? root.children.filter((n, i) => i < rule && isTag(n, "blockquote")) : [];
+  root.children = [...notice, ...root.children.slice(rule + 1)];
 }
 
 function rewrite(node) {
   if (node.type === "element" && node.tagName === "a") {
     const href = node.properties?.href ?? "";
     if (href && !/^(https?:|mailto:|#)/.test(href)) {
-      node.properties.href = REPO + path.posix.normalize(GUIDE_DIR + href);
+      const [file, anchor] = href.split("#");
+      node.properties.href = pageOf.has(file)
+        ? `${SITE_BASE}${pageOf.get(file)}${anchor ? `#${anchor}` : ""}`
+        : REPO + path.posix.normalize(GUIDE_DIR + href);
     }
   }
   if (node.type === "element" && node.tagName === "strong" && textOf(node).includes("TO CONFIRM")) {
@@ -51,40 +78,31 @@ const slot = (id) => ({
   children: [],
 });
 
-function addReviewSlots(root) {
+function addReviewSlots(root, chapter) {
   const out = [];
-  const seen = new Set();
   let open = null; // the step whose form is still to be placed
   const close = () => {
     if (open !== null) out.push(slot(open));
     open = null;
   };
   for (const node of root.children) {
-    if (isHeading(node, "h2", "h3", "hr")) close();
+    if (isTag(node, "h2", "hr")) close();
     out.push(node);
-    const match = isHeading(node, "h3") && textOf(node).match(/^Step (\d+):/);
-    if (match) {
-      open = match[1];
-      seen.add(open);
-    }
+    const match = isTag(node, "h2") && textOf(node).match(stepPattern);
+    if (match) open = match[1];
   }
   close();
-  out.push(slot("overall"));
+  if (chapter) out.push(slot(`overall:${chapter.slug}`));
   root.children = out;
-
-  const wanted = Object.keys(questions.steps);
-  const problems = [
-    ...[...seen].filter((s) => !wanted.includes(s)).map((s) => `step ${s} has no entry in review-questions.json`),
-    ...wanted.filter((s) => !seen.has(s)).map((s) => `review-questions.json has step ${s}, the guide doesn't`),
-  ];
-  if (problems.length) throw new Error(problems.join("; "));
 }
 
 export default function rehypeGuide() {
   return (root, file) => {
-    if (!String(file.path ?? "").replaceAll("\\", "/").endsWith("/assembly-guide.md")) return;
-    dropTitleBlock(root);
+    const name = path.posix.basename(String(file.path ?? "").replaceAll("\\", "/"));
+    if (!pageOf.has(name)) return;
+    const isOverview = name === OVERVIEW;
+    dropTitleBlock(root, isOverview);
     rewrite(root);
-    addReviewSlots(root);
+    addReviewSlots(root, chapters.find((c) => c.file === name));
   };
 }

@@ -93,11 +93,10 @@ def main(name: str) -> int:
             path = img / view.path if view.path else img / "assembly" / chapter.NAME / f"{view.name}.png"
             if not path.exists():
                 problems.append(f"missing picture: {path.relative_to(ROOT)}")
-    guide = ROOT / "docs" / "assembly-guide.md"
-    if guide.exists():
+    for guide in sorted((ROOT / "docs").glob("assembly-*.md")):
         for link in re.findall(r"!\[[^\]]*\]\(([^)]+)\)", guide.read_text(encoding="utf-8")):
             if not (guide.parent / link).exists():
-                problems.append(f"the guide links a missing picture: {link}")
+                problems.append(f"{guide.name} links a missing picture: {link}")
 
     print(f"{name}: {len(labels)} parts, {sum(adds.values())} added across {len(numbered)} steps; "
           f"printed: {sum(in_print_list.values())} parts of {len(in_print_list)} models")

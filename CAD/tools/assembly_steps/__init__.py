@@ -1,4 +1,4 @@
-"""Step lists for the assembly guide (docs/assembly-guide.md), rendered by tools/render_assembly.py.
+"""Step lists for the assembly guide (docs/assembly-*.md), rendered by tools/render_assembly.py.
 
 One module per chapter. A chapter names its assembly STEP, its image folder and a
 list of ``Step``. Each step says which assembly parts it adds (``adds``, checked

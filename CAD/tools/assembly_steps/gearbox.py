@@ -1,4 +1,4 @@
-"""The gearbox chapter's steps and pictures (docs/assembly-guide.md).
+"""The gearbox chapter's steps and pictures (docs/assembly-1-gearbox.md).
 
 Gearbox frame: +Z toward the motor, so a picture stands on the output with the
 motor end up. Positions are from gearbox/planetary_gearbox.py (STAGES),

@@ -13,8 +13,8 @@ function revision() {
   }
 }
 
-// Static site. The guide is CAD/docs/assembly-guide.md, read from outside this
-// folder, so it stays one document (see src/lib/rehype-guide.mjs).
+// Static site. The guide is CAD/docs/assembly-*.md, read from outside this folder, so
+// each page has one source (see src/lib/rehype-guide.mjs).
 // Hosted on GitHub Pages under the repo's name: build every internal URL from
 // import.meta.env.BASE_URL, never a bare "/...".
 export default defineConfig({

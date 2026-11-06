@@ -1,0 +1,116 @@
+---
+// One page of the assembly guide: the overview or a chapter. The sidebar lists every chapter
+// and opens up the current page's sections, as the drug delivery site's chapters do.
+import Base from "./Base.astro";
+import { chapters } from "../lib/chapters.mjs";
+
+interface Heading { depth: number; slug: string; text: string }
+interface Props {
+  title: string;
+  eyebrow: string;
+  heading: string;
+  intro: string;
+  headings: Heading[];
+  current?: string; // the chapter's slug; left out on the overview
+}
+const { title, eyebrow, heading, intro, headings, current } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const home = `${base}assembly/`;
+const pages = [
+  { slug: undefined, href: home, label: "Overview" },
+  ...chapters.map((c) => ({ slug: c.slug, href: `${home}${c.slug}/`, label: `${c.number}. ${c.title}` })),
+];
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const at = chapters.findIndex((c) => c.slug === current);
+const prev = current ? (at > 0 ? { href: `${home}${chapters[at - 1].slug}/`, label: `Chapter ${chapters[at - 1].number}: ${chapters[at - 1].title}` } : { href: home, label: "Overview" }) : undefined;
+const nextChapter = current ? chapters[at + 1] : chapters[0];
+const next = nextChapter && { href: `${home}${nextChapter.slug}/`, label: `Chapter ${nextChapter.number}: ${nextChapter.title}` };
+---
+<Base title={title} description="Illustrated guide to building the robotic arm from parts.">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:grid lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-12">
+    <aside class="hidden lg:block">
+      <nav class="sticky top-20 max-h-[calc(100vh-9rem)] overflow-y-auto py-10 pr-2 text-sm" aria-label="Guide contents">
+        <ol class="space-y-1.5">
+          {pages.map((p) => (
+            <li class="mt-3 first:mt-0">
+              <a href={p.href} aria-current={p.slug === current ? "page" : undefined}
+                 class={`block font-semibold leading-snug no-underline hover:text-scarlet ${p.slug === current ? "text-scarlet" : "text-ink"}`}>{p.label}</a>
+              {p.slug === current && (
+                <ol class="mt-2 space-y-1.5">
+                  {toc.map((h) => (
+                    <li class={h.depth === 3 ? "pl-6" : "pl-3"}>
+                      <a href={`#${h.slug}`} class="block leading-snug text-muted no-underline hover:text-scarlet">{h.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </aside>
+
+    <main class="min-w-0 pb-10 pt-10 lg:pt-14">
+      <div class="mx-auto max-w-[46rem]">
+        <p class="text-xs font-bold uppercase tracking-wider text-scarlet">{eyebrow}</p>
+        <h1 class="mt-2 text-4xl font-extrabold leading-tight tracking-tight text-ink sm:text-5xl">{heading}</h1>
+        <p class="mt-4 font-serif text-xl leading-relaxed text-body">{intro}</p>
+
+        <slot name="before" />
+
+        <details class="mt-6 rounded-lg border border-line px-4 py-3 text-sm lg:hidden">
+          <summary class="cursor-pointer font-semibold text-ink">Contents</summary>
+          <ol class="mt-2 space-y-1">
+            {pages.map((p) => (
+              <li class="mt-2 first:mt-0">
+                <a href={p.href} class={`font-semibold no-underline hover:text-scarlet ${p.slug === current ? "text-scarlet" : "text-ink"}`}>{p.label}</a>
+                {p.slug === current && (
+                  <ol class="mt-1 space-y-1">
+                    {toc.map((h) => (
+                      <li class={h.depth === 3 ? "pl-6" : "pl-3"}><a href={`#${h.slug}`} class="text-body no-underline hover:text-scarlet">{h.text}</a></li>
+                    ))}
+                  </ol>
+                )}
+              </li>
+            ))}
+          </ol>
+        </details>
+
+        <article class="prose-ch mt-10"><slot /></article>
+
+        <nav class="mt-12 flex justify-between gap-4 border-t border-line pt-6 text-sm" aria-label="Other chapters">
+          {prev ? <a href={prev.href} class="text-body no-underline hover:text-scarlet">← {prev.label}</a> : <span />}
+          {next && <a href={next.href} class="text-right text-body no-underline hover:text-scarlet">{next.label} →</a>}
+        </nav>
+      </div>
+    </main>
+  </div>
+
+  <div class="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5 px-4 py-2 text-sm sm:px-6">
+      <span id="review-status" class="text-muted" role="status"></span>
+      <span class="flex gap-2">
+        <button id="review-restore" type="button" class="fb-btn">Restore</button>
+        <button id="review-download" type="button" class="fb-btn fb-btn-main">Download my answers</button>
+        <input id="review-file" type="file" accept=".md,text/markdown" class="hidden" aria-label="Review file to restore" />
+      </span>
+    </div>
+  </div>
+
+  <dialog id="zoom"><img alt="" /></dialog>
+  <script>
+    // Tap a picture to see it full size: their part labels are small on a phone.
+    const zoom = document.getElementById("zoom") as HTMLDialogElement;
+    const big = zoom.querySelector("img")!;
+    document.querySelector(".prose-ch")!.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      if (target instanceof HTMLImageElement) {
+        big.src = target.currentSrc || target.src;
+        big.alt = target.alt;
+        zoom.showModal();
+      }
+    });
+    zoom.addEventListener("click", () => zoom.close());
+  </script>
+  <script src="../scripts/review.ts"></script>
+</Base>

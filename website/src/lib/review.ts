@@ -1,4 +1,5 @@
 // The review's answers and the file they travel in. No DOM here.
+import { chapters } from "./chapters.mjs";
 
 export type Question = {
   id: string;
@@ -10,7 +11,8 @@ export type Question = {
 export type Questions = {
   reviewer: Question[];
   steps: Record<string, Question[]>;
-  overall: Question[];
+  chapterOverall: Record<string, Question[]>; // a chapter's own questions, by slug
+  overall: Question[]; // asked of every chapter
 };
 /** Keyed "<group>.<question>": "reviewer.name", "step3.bind", "overall.hardest". */
 export type Answers = Record<string, string | string[]>;
@@ -22,6 +24,10 @@ export const standard: Question[] = [
   { id: "status", label: "How did this step go?", type: "choice", options: STATUS },
   { id: "minutes", label: "Minutes", type: "number" },
 ];
+
+// The gearbox was once the only chapter, and its answers are already saved as "overall.*".
+export const overallGroup = (slug: string) => (slug === "gearbox" ? "overall" : `overall-${slug}`);
+export const overallQuestions = (q: Questions, slug: string) => [...q.chapterOverall[slug], ...q.overall];
 
 const DATA_START = "<!-- review-data ";
 const DATA_END = " -->";
@@ -39,7 +45,7 @@ function lines(heading: string, group: string, questions: Question[], answers: A
 /** A file that reads as Markdown and carries the raw answers, so it can be restored. */
 export function toFile(q: Questions, answers: Answers, revision: string, savedOn: string): string {
   const parts = [
-    "# Assembly guide review: planetary gearbox",
+    "# Assembly guide review",
     "",
     `Guide revision ${revision}. Saved ${savedOn}.`,
     "",
@@ -54,7 +60,9 @@ export function toFile(q: Questions, answers: Answers, revision: string, savedOn
     ];
     parts.push(...lines(`Step ${step}`, `step${step}`, asked, answers));
   }
-  parts.push(...lines("Overall", "overall", q.overall, answers));
+  for (const c of chapters) {
+    parts.push(...lines(`Chapter ${c.number} overall: ${c.title}`, overallGroup(c.slug), overallQuestions(q, c.slug), answers));
+  }
   // "--" can't appear inside an HTML comment, and a reviewer may well type it.
   const raw = JSON.stringify(answers).replaceAll("--", "-\\u002d");
   parts.push(`${DATA_START}${raw}${DATA_END}`, "");

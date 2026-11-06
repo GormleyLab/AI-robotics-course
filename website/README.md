@@ -17,9 +17,12 @@ node qa/review_check.mjs                          # with preview running; uses i
 
 ## The assembly guide
 
-The page is `CAD/docs/assembly-guide.md` itself, read at build time by
-`src/pages/assembly/index.astro`. There is no second copy: edit the Markdown and rebuild.
-`src/lib/rehype-guide.mjs` adapts it for the site.
+The pages are the Markdown files themselves, read at build time, so there is no second copy:
+edit the Markdown and rebuild. `CAD/docs/assembly-guide.md` is the overview
+(`src/pages/assembly/index.astro`), and each chapter is its own `CAD/docs/assembly-<n>-*.md`
+(`src/pages/assembly/[slug].astro`). `src/lib/chapters.mjs` lists the chapters: add a new
+one there. `src/layouts/Guide.astro` is the shared page, and `src/lib/rehype-guide.mjs` adapts
+the Markdown for the site.
 
 ## The TA review
 
@@ -30,8 +33,11 @@ The page is `CAD/docs/assembly-guide.md` itself, read at build time by
   server, so nothing is sent anywhere. **Download my answers** makes one Markdown file to
   send to Dr. Gormley, and **Restore** loads that file on another device.
 - **Keep returned files out of this repo.** It's public, and the files hold the reviewer's name.
-- **Students:** remove `addReviewSlots` from the plugin, the script and review boxes from
-  the guide page, and the draft labels.
+- **One store:** answers from every chapter save together, so one file covers the whole guide.
+  The reviewer's details are on the overview page, and each chapter ends with its own overall
+  review (`chapterOverall` and `overall` in the questions file).
+- **Students:** remove `addReviewSlots` from the plugin, the script and review bar from
+  `Guide.astro`, the review box from the overview page, and the draft labels.
 
 The password gate in `src/layouts/Base.astro` only turns away passers-by: its password is in
 this public repo.

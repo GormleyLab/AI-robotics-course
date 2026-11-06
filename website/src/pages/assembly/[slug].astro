@@ -1,0 +1,26 @@
+---
+// One page per chapter, each rendering its own Markdown file in CAD/docs/.
+import Guide from "../../layouts/Guide.astro";
+import { chapters } from "../../lib/chapters.mjs";
+
+const files = import.meta.glob("../../../../CAD/docs/assembly-*.md", { eager: true }) as Record<string, any>;
+const moduleFor = (file: string) => {
+  const key = Object.keys(files).find((k) => k.endsWith(`/${file}`));
+  if (!key) throw new Error(`no guide file named ${file}`);
+  return files[key];
+};
+
+export function getStaticPaths() {
+  return chapters.map((chapter) => ({ params: { slug: chapter.slug }, props: { chapter } }));
+}
+const { chapter } = Astro.props;
+const { Content, getHeadings } = moduleFor(chapter.file);
+---
+<Guide title={`${chapter.title} · Assembly guide · Smart Prosthetics and Robotic Systems`}
+       eyebrow={`Chapter ${chapter.number} · ${chapter.steps} · Draft for TA review`}
+       heading={chapter.title}
+       intro={chapter.blurb}
+       headings={getHeadings()}
+       current={chapter.slug}>
+  <Content />
+</Guide>
