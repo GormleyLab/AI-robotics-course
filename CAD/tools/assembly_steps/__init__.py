@@ -82,6 +82,7 @@ class View:
     # a part shown turned on its joint.
     turned: dict[str, tuple[Vec, Vec, float]] = field(default_factory=dict)
     trim_x: dict[str, float] = field(default_factory=dict)  # label -> keep only x below this: a cut-away part
+    trim_x_from: dict[str, float] = field(default_factory=dict)  # label -> keep only x above this
     built: tuple[str, ...] = ()
     hardware: tuple[Hw, ...] = ()
     guides: tuple[Guide, ...] = ()

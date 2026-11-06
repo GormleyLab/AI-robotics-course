@@ -14,7 +14,9 @@
 Chapters sharing one assembly (the joint chapters, whose assembly also holds the gearbox)
 name what they build in ``PARTS`` and what is already built in ``PREBUILT``. ``COVERAGE``
 lists every chapter part in the assembly, so a part can't fall between chapters, and
-``ALSO_COUNTED`` adds parts from another chapter to a bought part's count.
+``ALSO_COUNTED`` adds parts from another chapter to a bought part's count. ``COPIES`` is how
+many of the assembly the arm has, for its print-list counts. ``leaf_key`` names a chapter's
+parts when labels repeat in its assembly, as the two segments' do in the full arm.
 """
 from __future__ import annotations
 
@@ -36,7 +38,9 @@ from checks.scene import read_scene
 BOUGHT = {"gearbox": {"planet_pin": "Pin 6x11mm", "bushing": "Bushing 8mm", "washer": "Washer 6mm"},
           "joint1": {"thrust_bearing": "Thrust bearing 40×60×13", "bearing_6807": "6807 bearing 35×47×7",
                      "bearing_608": "608 bearing 8×22×7"},
-          "joint2": {"bearing_6805": "6805 bearing 25×37×7"}}
+          "joint2": {"bearing_6805": "6805 bearing 25×37×7"},
+          "segment": {"bearing_6805": "6805 bearing 25×37×7", "bushing": "Bushing 6x8x10mm",
+                      "dowel_pin": "dowel pin 6x30mm", "gt2_idler_20t": "GT2-20 idler", "gt2_pulley_20t": "GT2-20"}}
 
 
 def printed_counts() -> dict[str, int]:
@@ -49,7 +53,8 @@ def printed_counts() -> dict[str, int]:
 
 def main(name: str) -> int:
     chapter = importlib.import_module(f"assembly_steps.{name}")
-    every = [leaf.label for leaf in read_scene(str(ROOT / chapter.ASSEMBLY)).leaves()]
+    key = getattr(chapter, "leaf_key", lambda leaf: leaf.label)
+    every = [key(leaf) for leaf in read_scene(str(ROOT / chapter.ASSEMBLY)).leaves()]
     scope = getattr(chapter, "PARTS", None)
     labels = every if scope is None else [label for label in every if label in scope]
     problems: list[str] = []
@@ -76,8 +81,9 @@ def main(name: str) -> int:
     models = Counter(label.split(":")[0] for label in labels)
     counted = models + Counter(label.split(":")[0] for label in getattr(chapter, "ALSO_COUNTED", ()))
     in_print_list = {m: n for m, n in models.items() if m in printed}
-    problems += [f"{m}: {n} in the assembly, {printed[m]} in print_parts.py"
-                 for m, n in in_print_list.items() if printed[m] != n]
+    copies = getattr(chapter, "COPIES", 1)
+    problems += [f"{m}: {n} in the assembly × {copies}, {printed[m]} in print_parts.py"
+                 for m, n in in_print_list.items() if printed[m] != n * copies]
 
     design = (ROOT / "docs" / "design.md").read_text(encoding="utf-8")
     for model, row in BOUGHT.get(name, {}).items():

@@ -91,12 +91,14 @@ def _set_screw() -> bd.Part:
 
 
 HARDWARE = {
+    "m3x8": (lambda: _button_head(8.0), "#2e3540"),
     "m3x10": (lambda: _button_head(10.0), "#2e3540"),
     "m3x12": (lambda: _button_head(12.0), "#2e3540"),
     "m3x16": (lambda: _button_head(16.0), "#2e3540"),
     "m3x18": (lambda: _button_head(18.0), "#2e3540"),
     "m3x20": (lambda: _button_head(20.0), "#2e3540"),
     "m3x22": (lambda: _button_head(22.0), "#2e3540"),
+    "m3x25": (lambda: _button_head(25.0), "#2e3540"),
     "m5x20": (lambda: _m5(20.0), "#2e3540"),
     "m5x40": (lambda: _m5(40.0), "#2e3540"),
     "nut_m5": (_nut_m5, "#5c6670"),
@@ -171,6 +173,8 @@ def compose(view: View, leaves: dict, colour_of, origin=(0.0, 0.0, 0.0)) -> tupl
             shape = shape.rotate(bd.Axis(point, axis), degrees)
         if label in view.trim_x:
             shape = shape & bd.Pos(view.trim_x[label] - 1000.0, 0, 0) * bd.Box(2000, 2000, 2000)
+        if label in view.trim_x_from:
+            shape = shape & bd.Pos(view.trim_x_from[label] + 1000.0, 0, 0) * bd.Box(2000, 2000, 2000)
         return shape
     parts: list[bd.Shape] = []
     named: dict[str, bd.Shape] = {}
@@ -340,7 +344,8 @@ def main() -> None:
     args = parser.parse_args()
 
     chapter = importlib.import_module(f"assembly_steps.{args.chapter}")
-    leaves = {leaf.label: leaf for leaf in read_scene(str(ROOT / chapter.ASSEMBLY)).leaves()}
+    key = getattr(chapter, "leaf_key", lambda leaf: leaf.label)
+    leaves = {key(leaf): leaf for leaf in read_scene(str(ROOT / chapter.ASSEMBLY)).leaves()}
     out_dir = ROOT / "docs" / "img" / "assembly" / chapter.NAME
     out_dir.mkdir(parents=True, exist_ok=True)
     drawn = 0

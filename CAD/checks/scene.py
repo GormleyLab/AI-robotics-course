@@ -30,6 +30,7 @@ class Occurrence:
     children: list[Occurrence] = field(default_factory=list)
     kind: str = "occurrence"
     prototype_id: str = ""  # the same for every occurrence of one shared part
+    path: tuple[str, ...] = ()  # labels from the root's child down to this occurrence
 
     def shape(self) -> bd.Shape:
         return self.node.located(self.world)
@@ -49,10 +50,12 @@ class Scene:
             else:
                 leaf.prototype_id = same.prototype_id
 
-    def _walk(self, node, holder, ref) -> Occurrence:
+    def _walk(self, node, holder, ref, parents=()) -> Occurrence:
         here = holder * node.location
-        occ = Occurrence(f"{self.path}#{ref}", node.label or "", node, here)
-        occ.children = [self._walk(c, here, f"{ref}.{i}") for i, c in enumerate(node.children or (), 1)]
+        label = node.label or ""
+        path = (*parents, label) if ref != "o1" else ()
+        occ = Occurrence(f"{self.path}#{ref}", label, node, here, path=path)
+        occ.children = [self._walk(c, here, f"{ref}.{i}", path) for i, c in enumerate(node.children or (), 1)]
         return occ
 
     def _all(self):
