@@ -76,6 +76,20 @@ export function fromFile(text: string): Answers {
   return JSON.parse(text.slice(start + DATA_START.length, end));
 }
 
+export const hasAnswers = (answers: Answers) => Object.values(answers).some(has);
+
+/** Asked before a restore overwrites answers: a stale file would otherwise lose newer work. */
+export function restoreWarning(q: Questions, current: Answers, incoming: Answers): string {
+  const count = (a: Answers) => {
+    const n = stepsDone(q, a);
+    return `${n} ${n === 1 ? "step" : "steps"}`;
+  };
+  return (
+    `This browser has ${count(current)} reviewed. The file has ${count(incoming)}.\n\n` +
+    "Restoring replaces everything in this browser with the file, and any answers that aren't in the file are lost. Restore it?"
+  );
+}
+
 export function stepsDone(q: Questions, answers: Answers): number {
   const done = (s: string) => {
     const status = answers[`step${s}.status`];

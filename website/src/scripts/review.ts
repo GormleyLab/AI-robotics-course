@@ -1,7 +1,7 @@
 // Fills the review slots in the guide, saves every answer in this browser as it's
 // typed, and writes or restores the file the reviewer sends back.
 import data from "../data/review-questions.json";
-import { FIXES, fromFile, overallGroup, overallQuestions, standard, stepsDone, toFile, type Answers, type Question, type Questions } from "../lib/review";
+import { FIXES, fromFile, hasAnswers, overallGroup, overallQuestions, restoreWarning, standard, stepsDone, toFile, type Answers, type Question, type Questions } from "../lib/review";
 
 declare const __GUIDE_REVISION__: string;
 
@@ -79,9 +79,9 @@ function overallForm(slug: string): HTMLElement {
     { className: "fb" },
     el("p", { className: "fb-title" }, "Review: the whole chapter"),
     ...overallQuestions(questions, slug).map((q) => field(overallGroup(slug), q)),
-    el("p", { className: "fb-q" }, "When you're done, or at a good stopping point, use ",
+    el("p", { className: "fb-q" }, "At the end of every session, use ",
       el("strong", {}, "Download my answers"),
-      " in the bar below and send the file to Dr. Gormley, with any photos. Name each photo after its step, such as step07-1.jpg."),
+      " in the bar below and send the file to Dr. Gormley, with any photos. Each file holds everything so far, so the newest replaces the earlier ones. Name each photo after its step, such as step07-1.jpg."),
   );
 }
 
@@ -132,7 +132,13 @@ function download() {
 
 async function restore(file: File) {
   try {
-    answers = fromFile(await file.text());
+    const incoming = fromFile(await file.text());
+    const current = load();
+    if (hasAnswers(current) && !window.confirm(restoreWarning(questions, current, incoming))) {
+      progress("Restore cancelled. Your answers are unchanged.");
+      return;
+    }
+    answers = incoming;
     localStorage.setItem(KEY, JSON.stringify(answers));
     paint();
   } catch (error) {

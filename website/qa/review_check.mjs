@@ -145,6 +145,29 @@ await fresh.page.setInputFiles("#review-file", { name: "x.md", mimeType: "text/m
 await fresh.page.waitForFunction(() => document.getElementById("review-status").textContent.includes("isn't a review file"));
 check(await fresh.page.inputValue('[data-key="step3.notes"]') === tricky, "a wrong file changes nothing");
 
+// Restoring over existing answers asks first: an old file would otherwise lose newer work.
+const answerDialog = (accept) => new Promise((resolve) => {
+  fresh.page.once("dialog", async (dialog) => {
+    const message = dialog.message();
+    await (accept ? dialog.accept() : dialog.dismiss());
+    resolve(message);
+  });
+});
+await fresh.page.fill('[data-key="step3.notes"]', "newer work");
+let asked = answerDialog(false);
+await fresh.page.setInputFiles("#review-file", file);
+const warning = await asked;
+check(warning.includes("replaces everything") && warning.includes("2 steps"), "restoring over answers warns, with the counts");
+await fresh.page.waitForFunction(() => document.getElementById("review-status").textContent.includes("cancelled"));
+check(await fresh.page.inputValue('[data-key="step3.notes"]') === "newer work", "cancelling keeps the newer answers");
+await fresh.page.reload();
+check(await fresh.page.inputValue('[data-key="step3.notes"]') === "newer work", "cancelling leaves the saved answers alone too");
+asked = answerDialog(true);
+await fresh.page.setInputFiles("#review-file", file);
+await asked;
+await fresh.page.waitForFunction((want) => document.querySelector('[data-key="step3.notes"]').value === want, tricky);
+check(true, "accepting replaces them with the file");
+
 // Phone: nothing wider than the screen, and pictures open full size.
 const overflow = await fresh.page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
 check(overflow <= 0, `no sideways scroll on a phone (${overflow}px over)`);

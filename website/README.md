@@ -31,7 +31,9 @@ the Markdown for the site.
   this file disagree.
 - **Answers:** saved in the reviewer's browser (`src/scripts/review.ts`). The site has no
   server, so nothing is sent anywhere. **Download my answers** makes one Markdown file to
-  send to Dr. Gormley, and **Restore** loads that file on another device.
+  send to Dr. Gormley, and **Restore** loads that file on another device. Each download holds
+  everything so far, so TAs send one after every session and the newest replaces the rest.
+  Restore replaces the browser's answers, so it asks first if the browser already has some.
 - **Keep returned files out of this repo.** It's public, and the files hold the reviewer's name.
 - **One store:** answers from every chapter save together, so one file covers the whole guide.
   The reviewer's details are on the overview page, and each chapter ends with its own overall
