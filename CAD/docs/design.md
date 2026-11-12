@@ -322,7 +322,8 @@ zero), so they stay the Fusion replica and the gate is unchanged. **To print:**
 `tools/print_parts.py` builds a print set from a JSON config (a default
 profile, per-part profiles, adjusted or added profiles) into `tmp/print/`.
 Configs validated with the fit coupon are committed in `print_configs/`; the
-Form 4 Grey V5 one (2026‑11‑03) is `RESIN` with `press` and `press_pin` 0.10. The tool sets
+Form 4 Grey V5 one (2026‑11‑03) is `RESIN` with `press` and `press_pin` 0.10; the X1C PLA one (2026‑11‑12) is
+`PLA_FDM` with `press_pin` 0.20, `hex_socket` 0.10 and `press_shaft` 0.00. The tool sets
 the profiles with `tolerances.configure()` in its own process before
 importing any part, so `DEFAULT` and `PART_PROFILES` are
 never edited and `STEP/` is never written (steps in
@@ -333,8 +334,8 @@ profile.
 | Class | `PLA_FDM` / `RESIN` (mm, on Ø) | Features |
 |---|---|---|
 | `press` | 0.10 / 0.05 | Bearing seats: 6807 Ø47 (`Box top`), 608 Ø22 (`Box bottom`), 6805 Ø37 (`Hinge` ×2, gearbox front cover, arm `Base`/`Top`), 6803 Ø26 (back cover), 6801 Ø21 (both carrier output halves). Bushings in `Planet` and dual-pulley Ø8 bores |
-| `press_pin` | 0.10 / 0.05 | Planet pins in the carriers' Ø6 holes. Separate from `press` because small holes can print tighter than bearing seats and the carrier output plates hold both: the first X1C PLA coupon (2026‑11‑04) had its seats right and its Ø6.10 pin hole too tight |
-| `press_shaft` | 0.10 / 0.05 | Printed shafts in bearing bores, made smaller: `Hinge` Ø35, coupling stub, stage‑2 output shaft and arm `Pin` Ø25, input shaft Ø11.94 / Ø16.94 (already 0.06 under in Fusion), stage‑1 carrier journal Ø12. Separate from `press` because a process can print holes and shafts off by different amounts: the first Form 4 Grey V5 coupon (2026‑11‑02) had its `press` holes tight and its shafts right |
+| `press_pin` | 0.10 / 0.05 | Planet pins in the carriers' Ø6 holes. Separate from `press` because small holes can print tighter than bearing seats and the carrier output plates hold both: the first X1C PLA coupon (2026‑11‑04) had its seats right and its Ø6.10 pin hole too tight; the second (2026‑11‑12) was tight but manageable at Ø6.20 |
+| `press_shaft` | 0.10 / 0.05 | Printed shafts in bearing bores, made smaller: `Hinge` Ø35, coupling stub, stage‑2 output shaft and arm `Pin` Ø25, input shaft Ø11.94 / Ø16.94 (already 0.06 under in Fusion), stage‑1 carrier journal Ø12. Separate from `press` because a process can print holes and shafts off by different amounts: the first Form 4 Grey V5 coupon (2026‑11‑02) had its `press` holes tight and its shafts right. On the X1C in PLA, 0.10 left the Ø25 and Ø12 pegs and the arm `Pin` journal loose in their bearings (coupons of 2026‑11‑04 and 2026‑11‑12), so `x1c_pla.json` uses 0.00 (finalized 2026‑11‑12 without a third coupon) |
 | `slip` | 0.20 / 0.10 | Dowel Ø6.1 (arm `Base`/`Top` bosses), M5 nut slot 8 (`Top`), thrust washer recesses Ø60 (`Box top`, `GT2-160` pocket), motor shaft D‑bore Ø5.3 (input shaft) |
 | `running` | 0.35 / 0.20 | Unused: nothing turns in a printed bore (planets run on bushings, J3 on 6805s) |
 | `clearance` | 0.2 / 0.1 | M3 Ø3.3 and M5 Ø5.3 holes and slots, idler slots |
@@ -375,7 +376,12 @@ diameter + 0.2, the glue gap).
 
 Bonding has not yet been tried on a printed part; record the first results
 here. In PLA (FDM) parts the inserts are heat-set with a soldering iron in the
-`PLA_FDM` holes (Ø4.2, Ø6.4).
+`PLA_FDM` holes (Ø4.2, Ø6.4): the inserts won't go in by hand, which is
+expected. On the X1C PLA coupon (2026‑11‑12) both sizes heat-set well.
+
+**Planet pins in the carriers.** The Ø6 pins are a press fit in the carriers'
+holes. In X1C PLA (`press_pin` 0.20, 2026‑11‑12) they are tight but
+manageable on the coupon; press them in square with a vise.
 
 **Bushings in printed bores.** The 6 × 8 × 10 bushings in the `Planet` and
 dual-pulley Ø8 bores are a press fit: they must not turn in the part (the

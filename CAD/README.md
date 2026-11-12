@@ -31,7 +31,7 @@ printer and material, with the fit-coupon results in their `notes`:
 | Config | Printer, material | Status |
 |---|---|---|
 | `form4_grey_v5.json` | Formlabs Form 4, Grey Resin V5 | Validated 2026‑11‑03 |
-| `x1c_pla.json` | Bambu Lab X1C, PLA | Tuned after one coupon, not yet validated |
+| `x1c_pla.json` | Bambu Lab X1C, PLA | Validated 2026‑11‑12 |
 
 To print with a validated config, skip to step 3, for example
 `... tools/print_parts.py print_configs/form4_grey_v5.json --only planet_gear`.

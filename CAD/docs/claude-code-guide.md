@@ -151,7 +151,7 @@ The settings live in a small JSON config:
   | Config | Printer, material | Status |
   |---|---|---|
   | `form4_grey_v5.json` | Formlabs Form 4, Grey Resin V5 | Validated 2026‑11‑03 |
-  | `x1c_pla.json` | Bambu Lab X1C, PLA | Tuned after one coupon, not yet validated |
+  | `x1c_pla.json` | Bambu Lab X1C, PLA | Validated 2026‑11‑12 |
 
 - **Drafts** (a printer or material still being tuned, one-off experiments)
   go in `CAD/tmp/print/`, which git ignores.
@@ -170,7 +170,7 @@ printer, for example *"Print a new planet gear on the Form 4"*, Claude:
 2. asks which material is loaded if you didn't say and more than one config
    fits that printer (for example, a Grey V5 config and a Tough 2000 config
    for the Form 4);
-3. tells you if the only matching config isn't validated (the X1C today) or
+3. tells you if the only matching config isn't validated or
    nothing matches, and offers to build the fit coupon before any arm parts;
 4. builds only the parts you asked for, from that config as it is, without
    editing it;

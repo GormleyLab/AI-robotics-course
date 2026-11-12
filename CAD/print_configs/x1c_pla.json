@@ -1,12 +1,14 @@
 {
   "notes": [
-    "Bambu Lab X1C, PLA, 0.4 mm nozzle. NOT YET VALIDATED: tuned after the first coupon (2026-11-04), second coupon not yet tested.",
-    "First coupon, at the PLA_FDM starting values. Good: 6805, 608 and 6801 bearing seats; Ø25 and Ø12 pegs in the 6805 and 6801 bores; dowel; M3 and M5 screw holes; M5 nut slot.",
-    "Bushing hole: needs a bit of pressure to insert; the pin still inserts well. Kept at press 0.10.",
-    "Changed for the second coupon: press_pin 0.10 to 0.20 (Ø6.10 too tight) and hex_socket 0.25 to 0.10 (slightly loose on the resin-printed male hex; not yet tried with a PLA male hex).",
-    "Threaded-insert holes (Ø4.2 / Ø6.4) are for heat-setting and kept; heat-setting not yet tried.",
-    "Print and test the fit coupon (--only fit_coupon) before printing arm parts, then record the results here."
+    "Bambu Lab X1C, PLA, 0.4 mm nozzle. Validated 2026-11-12 with two fit coupons and a printed PLA Pin; press_shaft 0.00 was set after them and finalized without a third coupon.",
+    "Good on both coupons: 6805, 608 and 6801 bearing seats; dowel; M3 and M5 screw holes; M5 nut slot.",
+    "Bushing hole (press 0.10): needs a bit of pressure to insert; the pin still inserts well.",
+    "Planet pin hole: too tight at press_pin 0.10; tight but manageable at 0.20 (second coupon).",
+    "Output hex socket: slightly loose at hex_socket 0.25 on the resin Pin; fits well at 0.10 (second coupon).",
+    "Threaded-insert holes (Ø4.2 / Ø6.4): ruthex M3 and M5 heat-set well (second coupon).",
+    "Printed shafts: the Ø25 and Ø12 pegs and the PLA Pin journal were borderline loose in the 6805 and 6801 bores at press_shaft 0.10 on the first coupon and noticeably loose on the second, so press_shaft is 0.00 (the Fusion sizes). If printed shafts are still loose or too tight to press in, tune press_shaft first.",
+    "Heat-set the inserts with a soldering iron; press bushings and planet pins in square with a vise. A new printer, nozzle or filament needs a new coupon."
   ],
   "default": "X1C_PLA",
-  "profiles": {"X1C_PLA": {"base": "PLA_FDM", "press_pin": 0.20, "hex_socket": 0.10}}
+  "profiles": {"X1C_PLA": {"base": "PLA_FDM", "press_pin": 0.20, "hex_socket": 0.10, "press_shaft": 0.00}}
 }
