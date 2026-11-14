@@ -84,3 +84,20 @@ Several sessions will be reserved for full-class free build time, allowing exten
 - **Progress Milestones & Documentation** — Demonstrated iterative progress, code documentation, and project logs.
 - **Participation and Teamwork** — Engagement during class, collaboration, and peer contribution.
 - **Homework** — Course modules for programming and AI each week through DataCamp.
+
+
+## Contributing with coding agents
+
+[AGENTS.md](AGENTS.md) contains the shared project rules; `CLAUDE.md` is its compatibility import. Keep detailed CAD history in [CAD/docs/migration-log.md](CAD/docs/migration-log.md).
+
+Author any future repository development skills in `.agents/skills/`. The `.claude/skills/` mirror and `.agents/skills-sync-manifest.json` are generated; commit them with the canonical skills and do not edit them directly. No repository skills are currently configured. Claude-specific settings remain in `.claude/settings.json`.
+
+From the repository root, use Python 3.10+ (no packages required):
+
+```bash
+python3 -m unittest discover -s scripts -p test_sync_agent_config.py
+python3 scripts/sync_agent_config.py --write
+python3 scripts/sync_agent_config.py --check
+```
+
+Review generated changes before committing. Configuration CI runs the regression suite and drift check on pull requests and pushes to `main`.
