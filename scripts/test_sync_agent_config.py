@@ -23,6 +23,23 @@ class SyncAgentConfigTests(unittest.TestCase):
             with self.subTest(operation=operation.__name__):
                 self.assertTrue(any("missing required" in error for error in operation(self.root)))
 
+    def test_first_skill_creates_mirror_and_manifest(self):
+        canonical = self.root / ".agents/skills/demo"
+        canonical.mkdir(parents=True)
+        (canonical / "SKILL.md").write_text("Demo\n")
+        self.assertEqual(sync.write(self.root), [])
+        self.assertEqual((self.root / ".claude/skills/demo/SKILL.md").read_text(), "Demo\n")
+        self.assertTrue((self.root / ".agents/skills-sync-manifest.json").is_file())
+        self.assertEqual(sync.check(self.root), [])
+
+    def test_initial_sync_refuses_differing_existing_mirror(self):
+        for location, text in ((".agents", "Demo\n"), (".claude", "Claude-only\n")):
+            directory = self.root / location / "skills/demo"
+            directory.mkdir(parents=True)
+            (directory / "SKILL.md").write_text(text)
+        self.assertTrue(sync.write(self.root))
+        self.assertEqual((self.root / ".claude/skills/demo/SKILL.md").read_text(), "Claude-only\n")
+
     def test_sync_excludes_local_artifacts_and_preserves_skill_assets(self):
         canonical = self.root / ".agents/skills/demo"
         mirror = self.root / ".claude/skills/demo"

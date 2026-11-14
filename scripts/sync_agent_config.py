@@ -135,7 +135,8 @@ def write(root: Path) -> list[str]:
     manifest = load_manifest(manifest_path)
 
     if manifest is None:
-        if mirror != canonical:
+        # An empty or missing mirror has nothing to lose: let the first sync create it.
+        if mirror and mirror != canonical:
             return [
                 "refusing initial sync because .claude/skills and .agents/skills differ; "
                 "review the differences and make them identical first"
